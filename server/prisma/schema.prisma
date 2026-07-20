@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// User - untuk login (Admin & Tenaga Kerja)
+// ============================================
+model User {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  fullName  String
+  role      String   @default("worker") // "admin" | "worker"
+  workerId  Int?     @unique
+  worker    Worker?  @relation(fields: [workerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// Worker - Data Tenaga Kerja Kesehatan
+// ============================================
+model Worker {
+  id              Int          @id @default(autoincrement())
+  name            String
+  workerType      String       // "perawat" | "bidan"
+  skillLevel      String       // "junior" | "senior"
+  isActive        Boolean      @default(true)
+  user            User?
+  assignments     Assignment[]
+  shiftRequests   ShiftRequest[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+// ============================================
+// Shift - Konfigurasi Shift Jaga
+// ============================================
+model Shift {
+  id          Int          @id @default(autoincrement())
+  name        String       // "Pagi" | "Siang" | "Malam"
+  startTime   String       // "07:00" | "14:00" | "21:30"
+  endTime     String       // "14:00" | "21:30" | "07:00"
+  durationHrs Float        // 7 | 7.5 | 9.5
+  minNurses   Int          @default(2) // minimal perawat
+  minMidwives Int          @default(1) // minimal bidan
+  minSeniors  Int          @default(1) // minimal senior
+  assignments Assignment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// ============================================
+// Schedule - Jadwal yang di-generate
+// ============================================
+model Schedule {
+  id              Int          @id @default(autoincrement())
+  month           Int          // 1-12
+  year            Int
+  fitnessScore    Float
+  generationCount Int
+  gaConfig        String       @db.Text // JSON string of GA parameters
+  isSelected      Boolean      @default(false) // jadwal terpilih oleh admin
+  assignments     Assignment[]
+  createdAt       DateTime     @default(now())
+}
+
+// ============================================
+// Assignment - Penugasan pekerja ke shift
+// ============================================
+model Assignment {
+  id         Int      @id @default(autoincrement())
+  scheduleId Int
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  workerId   Int
+  worker     Worker   @relation(fields: [workerId], references: [id])
+  shiftId    Int
+  shift      Shift    @relation(fields: [shiftId], references: [id])
+  date       DateTime // tanggal assignment
+  dayOfMonth Int      // 1-31
+
+  @@unique([scheduleId, workerId, date]) // 1 pekerja max 1 shift per hari per jadwal
+}
+
+// ============================================
+// ShiftRequest - Permintaan tenaga kerja
+// ============================================
+model ShiftRequest {
+  id              Int      @id @default(autoincrement())
+  workerId        Int
+  worker          Worker   @relation(fields: [workerId], references: [id])
+  date            DateTime
+  type            String   // "off" = minta libur, "preference" = preferensi shift
+  shiftPref       String?  // shift yang diinginkan (jika type = "preference")
+  reason          String?  @db.Text
+  status          String   @default("pending") // "pending" | "approved" | "rejected"
+  rejectionReason String?  @db.Text // alasan penolakan oleh admin
+  createdAt       DateTime @default(now())
+}
