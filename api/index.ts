@@ -10,11 +10,11 @@ if (!process.env.JWT_SECRET) {
 if (!process.env.DATABASE_URL) {
   console.warn('[Vercel Serverless] DATABASE_URL is missing. Please set DATABASE_URL in Vercel Environment Variables.');
 } else {
-  if (!process.env.DATABASE_URL.includes('connect_timeout')) {
+  if (!process.env.DATABASE_URL.includes('pgbouncer=true')) {
     const separator = process.env.DATABASE_URL.includes('?') ? '&' : '?';
-    process.env.DATABASE_URL += `${separator}connect_timeout=15&sslmode=require`;
+    process.env.DATABASE_URL += `${separator}pgbouncer=true&connect_timeout=15`;
   }
-  console.log('[Vercel Serverless] Using configured DATABASE_URL connection.');
+  console.log('[Vercel Serverless] Using configured DATABASE_URL connection with PgBouncer optimization.');
 }
 
 import app from '../server/src/index';
