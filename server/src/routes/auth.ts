@@ -45,7 +45,8 @@ router.post('/login', async (req: AuthRequest, res: Response) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Terjadi kesalahan server' });
+    const errMsg = error instanceof Error ? error.message : 'Terjadi kesalahan server';
+    res.status(500).json({ error: `Kesalahan Database/Server: ${errMsg}` });
   }
 });
 
