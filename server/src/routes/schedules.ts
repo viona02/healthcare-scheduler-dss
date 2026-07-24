@@ -175,11 +175,42 @@ router.get('/', async (_req: AuthRequest, res: Response) => {
   }
 });
 
+// GET /api/schedules/selected/active - Ambil jadwal yang terpilih (untuk worker dashboard)
+router.get('/selected/active', async (_req: AuthRequest, res: Response) => {
+  try {
+    const schedule = await prisma.schedule.findFirst({
+      where: { isSelected: true },
+      include: {
+        assignments: {
+          include: {
+            worker: true,
+            shift: true,
+          },
+          orderBy: [{ dayOfMonth: 'asc' }, { shiftId: 'asc' }],
+        },
+      },
+    });
+    if (!schedule) {
+      res.status(404).json({ error: 'Belum ada jadwal yang dipilih admin' });
+      return;
+    }
+    res.json(schedule);
+  } catch (error) {
+    console.error('Get selected schedule error:', error);
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
+  }
+});
+
 // GET /api/schedules/:id - Detail jadwal dengan assignments
 router.get('/:id', async (req: AuthRequest, res: Response) => {
   try {
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+      res.status(400).json({ error: 'ID jadwal tidak valid' });
+      return;
+    }
     const schedule = await prisma.schedule.findUnique({
-      where: { id: parseInt(req.params.id as string) },
+      where: { id },
       include: {
         assignments: {
           include: {
@@ -208,8 +239,13 @@ router.delete('/:id', async (req: AuthRequest, res: Response) => {
       res.status(403).json({ error: 'Akses hanya untuk admin' });
       return;
     }
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+      res.status(400).json({ error: 'ID jadwal tidak valid' });
+      return;
+    }
     await prisma.schedule.delete({
-      where: { id: parseInt(req.params.id as string) },
+      where: { id },
     });
     res.json({ message: 'Jadwal berhasil dihapus' });
   } catch (error) {
@@ -260,32 +296,6 @@ router.put('/:id/select', async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Jadwal berhasil dipilih sebagai jadwal aktif', schedule });
   } catch (error) {
     console.error('Select schedule error:', error);
-    res.status(500).json({ error: 'Terjadi kesalahan server' });
-  }
-});
-
-// GET /api/schedules/selected - Ambil jadwal yang terpilih (untuk worker dashboard)
-router.get('/selected/active', async (_req: AuthRequest, res: Response) => {
-  try {
-    const schedule = await prisma.schedule.findFirst({
-      where: { isSelected: true },
-      include: {
-        assignments: {
-          include: {
-            worker: true,
-            shift: true,
-          },
-          orderBy: [{ dayOfMonth: 'asc' }, { shiftId: 'asc' }],
-        },
-      },
-    });
-    if (!schedule) {
-      res.status(404).json({ error: 'Belum ada jadwal yang dipilih admin' });
-      return;
-    }
-    res.json(schedule);
-  } catch (error) {
-    console.error('Get selected schedule error:', error);
     res.status(500).json({ error: 'Terjadi kesalahan server' });
   }
 });
