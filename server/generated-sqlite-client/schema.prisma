@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated-sqlite-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("SQLITE_DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  fullName String
+  role     String
+  workerId Int?
+}
+
+model Worker {
+  id                Int     @id @default(autoincrement())
+  name              String
+  workerType        String
+  skillLevel        String
+  isActive          Boolean
+  fixedShift        String?
+  weekendHolidayOff Boolean
+  sundayHolidayOff  Boolean
+}
+
+model Shift {
+  id          Int    @id @default(autoincrement())
+  name        String
+  startTime   String
+  endTime     String
+  durationHrs Float
+  minNurses   Int
+  minMidwives Int
+  minSeniors  Int
+}
+
+model Schedule {
+  id              Int     @id @default(autoincrement())
+  month           Int
+  year            Int
+  status          String?
+  isSelected      Boolean @default(false)
+  fitnessScore    Float
+  generationCount Int
+}
+
+model Assignment {
+  id         Int @id @default(autoincrement())
+  scheduleId Int
+  workerId   Int
+  dayOfMonth Int
+  shiftId    Int
+}
+
+model ShiftRequest {
+  id              Int       @id @default(autoincrement())
+  workerId        Int
+  date            DateTime
+  endDate         DateTime?
+  type            String
+  shiftPref       String?
+  reason          String?
+  status          String
+  rejectionReason String?
+}

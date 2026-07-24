@@ -175,10 +175,10 @@ router.get('/', async (_req: AuthRequest, res: Response) => {
   }
 });
 
-// GET /api/schedules/selected/active - Ambil jadwal yang terpilih (untuk worker dashboard)
+// GET /api/schedules/selected/active - Ambil jadwal yang terpilih (atau terbaru) untuk worker dashboard
 router.get('/selected/active', async (_req: AuthRequest, res: Response) => {
   try {
-    const schedule = await prisma.schedule.findFirst({
+    let schedule = await prisma.schedule.findFirst({
       where: { isSelected: true },
       include: {
         assignments: {
@@ -190,8 +190,25 @@ router.get('/selected/active', async (_req: AuthRequest, res: Response) => {
         },
       },
     });
+
     if (!schedule) {
-      res.status(404).json({ error: 'Belum ada jadwal yang dipilih admin' });
+      // Fallback: jika belum ada yang di-select, ambil jadwal terbaru
+      schedule = await prisma.schedule.findFirst({
+        orderBy: { id: 'desc' },
+        include: {
+          assignments: {
+            include: {
+              worker: true,
+              shift: true,
+            },
+            orderBy: [{ dayOfMonth: 'asc' }, { shiftId: 'asc' }],
+          },
+        },
+      });
+    }
+
+    if (!schedule) {
+      res.status(404).json({ error: 'Belum ada jadwal yang tersedia' });
       return;
     }
     res.json(schedule);

@@ -154,7 +154,7 @@ INSERT INTO "User" ("id", "username", "password", "fullName", "role", "workerId"
 (95, 'nayia', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Nayia Syafitry, A.Md.Kab', 'worker', 93)
 ON CONFLICT ("id") DO NOTHING;
 
--- 5. Insert Schedules
+-- 5. Insert Schedules (8 total)
 INSERT INTO "Schedule" ("id", "month", "year", "status", "isSelected", "fitnessScore", "generationCount") VALUES
 (47, 6, 2026, 'published', false, -37500, 1000),
 (48, 7, 2026, 'published', false, -17600, 1000),
@@ -166,7 +166,7 @@ INSERT INTO "Schedule" ("id", "month", "year", "status", "isSelected", "fitnessS
 (56, 6, 2026, 'published', true, -22236.21468047337, 500)
 ON CONFLICT ("id") DO NOTHING;
 
--- 6. Insert Assignments
+-- 6. Insert Assignments (2126 total)
 INSERT INTO "Assignment" ("id", "scheduleId", "workerId", "dayOfMonth", "shiftId") VALUES
 (12832, 47, 81, 1, 1),
 (12833, 47, 90, 1, 1),
@@ -2359,7 +2359,7 @@ INSERT INTO "Assignment" ("id", "scheduleId", "workerId", "dayOfMonth", "shiftId
 (15523, 56, 88, 30, 3)
 ON CONFLICT ("id") DO NOTHING;
 
--- 7. Insert ShiftRequests
+-- 7. Insert ShiftRequests (9 total)
 INSERT INTO "ShiftRequest" ("id", "workerId", "date", "endDate", "type", "shiftPref", "reason", "status", "rejectionReason") VALUES
 (42, 86, '2026-07-02T00:00:00.000Z', '2026-07-07T00:00:00.000Z', 'off', NULL, NULL, 'approved', NULL),
 (43, 86, '2026-07-14T00:00:00.000Z', NULL, 'off', NULL, NULL, 'approved', NULL),
