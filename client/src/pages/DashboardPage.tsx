@@ -17,6 +17,9 @@ export default function DashboardPage() {
   const [myRequests, setMyRequests] = useState<ShiftRequest[]>([]);
   const [myWorkerInfo, setMyWorkerInfo] = useState<Worker | null>(null);
   const [activeSchedule, setActiveSchedule] = useState<Schedule | null>(null);
+  const [calendarMode, setCalendarMode] = useState<'period' | 'monthly'>('period');
+  const [selectedMonth, setSelectedMonth] = useState<number>(6);
+  const [selectedYear] = useState<number>(2026);
 
   useEffect(() => {
     loadData();
@@ -89,21 +92,30 @@ export default function DashboardPage() {
     const currentMonth = activeSchedule ? activeSchedule.month : 6;
     const currentYear = activeSchedule ? activeSchedule.year : 2026;
     const periodDates = buildPeriodDates(currentMonth, currentYear);
-    const totalPeriodDays = periodDates.length;
 
-    // Build schedule grid for worker
-    const myScheduleMap: Record<number, string> = {};
-    for (let d = 1; d <= totalPeriodDays; d++) {
-      myScheduleMap[d] = 'LIBUR';
-    }
-    for (const a of myAssignments) {
-      myScheduleMap[a.dayOfMonth] = a.shift?.name || '?';
+    // Build ISO Date string (YYYY-MM-DD) -> shiftName map
+    const dateShiftMap: Record<string, string> = {};
+    if (activeSchedule) {
+      for (const a of myAssignments) {
+        const periodIdx = a.dayOfMonth - 1;
+        if (periodDates[periodIdx]) {
+          const d = periodDates[periodIdx];
+          const yyyy = d.getFullYear();
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const dd = String(d.getDate()).padStart(2, '0');
+          dateShiftMap[`${yyyy}-${mm}-${dd}`] = a.shift?.name || 'LIBUR';
+        }
+      }
     }
 
-    // Stats
+    // Stats for active schedule period
     let pagiCount = 0, siangCount = 0, malamCount = 0, offCount = 0;
-    for (let d = 1; d <= totalPeriodDays; d++) {
-      const val = myScheduleMap[d];
+    for (let d = 1; d <= periodDates.length; d++) {
+      const pDate = periodDates[d - 1];
+      const yyyy = pDate.getFullYear();
+      const mm = String(pDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(pDate.getDate()).padStart(2, '0');
+      const val = dateShiftMap[`${yyyy}-${mm}-${dd}`] || 'LIBUR';
       if (val === 'Pagi') pagiCount++;
       else if (val === 'Siang') siangCount++;
       else if (val === 'Malam') malamCount++;
@@ -120,7 +132,7 @@ export default function DashboardPage() {
         case 'Siang': return { background: 'rgba(34, 211, 238, 0.2)', color: '#22d3ee', borderColor: 'rgba(34, 211, 238, 0.3)' };
         case 'Malam': return { background: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa', borderColor: 'rgba(139, 92, 246, 0.3)' };
         case 'LIBUR': return { background: 'rgba(16, 185, 129, 0.1)', color: '#6ee7b7', borderColor: 'rgba(16, 185, 129, 0.2)' };
-        default: return {};
+        default: return { background: 'rgba(255, 255, 255, 0.03)', color: 'var(--text-muted)' };
       }
     };
 
@@ -130,9 +142,21 @@ export default function DashboardPage() {
         case 'Siang': return '🌤️ Siang';
         case 'Malam': return '🌙 Malam';
         case 'LIBUR': return '😴 Libur';
-        default: return name;
+        default: return '-';
       }
     };
+
+    // Calculate calendar grid dates based on view mode
+    let calendarDisplayDates: Date[] = [];
+    if (calendarMode === 'period') {
+      calendarDisplayDates = periodDates;
+    } else {
+      // Monthly view for selectedMonth & selectedYear
+      const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+      for (let day = 1; day <= daysInMonth; day++) {
+        calendarDisplayDates.push(new Date(selectedYear, selectedMonth - 1, day));
+      }
+    }
 
     return (
       <div className="animate-fadeIn">
@@ -212,17 +236,51 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* My Monthly Schedule Calendar */}
+        {/* My Schedule Calendar */}
         <div className="card mb-3">
-          <div className="card-header">
+          <div className="card-header" style={{ flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="card-title">
-              📅 Jadwal Saya — Periode {getPeriodLabel(currentMonth, currentYear)}
+              📅 {calendarMode === 'period'
+                ? `Jadwal Saya — Periode ${getPeriodLabel(currentMonth, currentYear)}`
+                : `Jadwal Saya — Kalender ${MONTHS[selectedMonth - 1]} ${selectedYear}`}
             </div>
-            {activeSchedule && (
-              <span className="badge badge-approved" style={{ fontSize: '0.7rem' }}>
-                ⭐ Jadwal Aktif
-              </span>
-            )}
+
+            {/* Mode Selector Controls */}
+            <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <button
+                className={`btn btn-sm ${calendarMode === 'period' ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => setCalendarMode('period')}
+                style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
+              >
+                📅 Mode Periode (26-25)
+              </button>
+              <button
+                className={`btn btn-sm ${calendarMode === 'monthly' ? 'btn-primary' : 'btn-outline'}`}
+                onClick={() => setCalendarMode('monthly')}
+                style={{ fontSize: '0.75rem', padding: '0.3rem 0.6rem' }}
+              >
+                🗓️ Mode Kalender Bulan
+              </button>
+
+              {calendarMode === 'monthly' && (
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+                  className="form-control"
+                  style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', width: 'auto', background: 'var(--bg-card)', color: 'var(--text-primary)' }}
+                >
+                  {MONTHS.map((m, idx) => (
+                    <option key={idx} value={idx + 1}>{m} 2026</option>
+                  ))}
+                </select>
+              )}
+
+              {activeSchedule && (
+                <span className="badge badge-approved" style={{ fontSize: '0.7rem' }}>
+                  ⭐ Jadwal Aktif
+                </span>
+              )}
+            </div>
           </div>
 
           {myAssignments.length > 0 ? (
@@ -245,23 +303,28 @@ export default function DashboardPage() {
                   </div>
                 ))}
 
-                {/* Empty cells before first date of period */}
-                {Array.from({ length: periodDates[0]?.getDay() || 0 }, (_, i) => (
+                {/* Empty cells before first date */}
+                {Array.from({ length: calendarDisplayDates[0]?.getDay() || 0 }, (_, i) => (
                   <div key={`empty-${i}`}></div>
                 ))}
 
-                {/* Day cells for period */}
-                {periodDates.map((date, i) => {
-                  const d = i + 1;
-                  const shiftName = myScheduleMap[d];
+                {/* Day cells */}
+                {calendarDisplayDates.map((date, i) => {
+                  const yyyy = date.getFullYear();
+                  const mm = String(date.getMonth() + 1).padStart(2, '0');
+                  const dd = String(date.getDate()).padStart(2, '0');
+                  const isoKey = `${yyyy}-${mm}-${dd}`;
+                  const shiftName = dateShiftMap[isoKey] || 'LIBUR';
+                  const hasAssignedShift = Boolean(dateShiftMap[isoKey]);
+
                   const isToday = new Date().toDateString() === date.toDateString();
                   const isWkend = date.getDay() === 0 || date.getDay() === 6;
                   const dayNum = date.getDate();
                   const monthShort = MONTHS[date.getMonth()].slice(0, 3);
 
                   return (
-                    <div key={d} style={{
-                      ...getShiftStyle(shiftName),
+                    <div key={i} style={{
+                      ...(hasAssignedShift ? getShiftStyle(shiftName) : { background: 'rgba(255, 255, 255, 0.02)', color: 'var(--text-muted)' }),
                       padding: '0.4rem',
                       borderRadius: '8px',
                       textAlign: 'center',
@@ -274,16 +337,16 @@ export default function DashboardPage() {
                       gap: '0.15rem',
                       ...(isWkend && shiftName === 'LIBUR' ? { background: 'rgba(244, 63, 94, 0.08)', borderColor: 'rgba(244, 63, 94, 0.15)' } : {}),
                     }}
-                      title={`Hari ke-${d} (${dayNum} ${monthShort}): ${shiftName}`}
+                      title={`${dayNum} ${monthShort} ${yyyy}: ${hasAssignedShift ? shiftName : 'Tidak ada jadwal'}`}
                     >
                       <div style={{
                         fontWeight: 700, fontSize: '0.8rem',
                         color: isWkend ? 'var(--accent-rose)' : 'var(--text-primary)',
                       }}>
-                        {dayNum} {monthShort}
+                        {dayNum} {calendarMode === 'period' ? monthShort : ''}
                       </div>
                       <div style={{ fontSize: '0.7rem', fontWeight: 600 }}>
-                        {getShiftLabel(shiftName)}
+                        {hasAssignedShift ? getShiftLabel(shiftName) : '-'}
                       </div>
                     </div>
                   );
@@ -310,9 +373,14 @@ export default function DashboardPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {periodDates.map((date, i) => {
-                      const d = i + 1;
-                      const shiftName = myScheduleMap[d];
+                    {calendarDisplayDates.map((date, i) => {
+                      const yyyy = date.getFullYear();
+                      const mm = String(date.getMonth() + 1).padStart(2, '0');
+                      const dd = String(date.getDate()).padStart(2, '0');
+                      const isoKey = `${yyyy}-${mm}-${dd}`;
+                      const shiftName = dateShiftMap[isoKey] || 'LIBUR';
+                      const hasAssignedShift = Boolean(dateShiftMap[isoKey]);
+
                       const dayOfWeek = date.getDay();
                       const isWkend = dayOfWeek === 0 || dayOfWeek === 6;
                       const shiftInfo = shifts.find(s => s.name === shiftName);
@@ -320,8 +388,8 @@ export default function DashboardPage() {
                       const monthShort = MONTHS[date.getMonth()].slice(0, 3);
 
                       return (
-                        <tr key={d} style={isWkend ? { background: 'rgba(244, 63, 94, 0.03)' } : {}}>
-                          <td style={{ fontWeight: 700 }}>{dayNum} {monthShort}</td>
+                        <tr key={i} style={isWkend ? { background: 'rgba(244, 63, 94, 0.03)' } : {}}>
+                          <td style={{ fontWeight: 700 }}>{dayNum} {monthShort} {yyyy}</td>
                           <td style={{
                             color: isWkend ? 'var(--accent-rose)' : 'var(--text-muted)',
                             fontWeight: isWkend ? 600 : 400,
@@ -330,11 +398,11 @@ export default function DashboardPage() {
                           </td>
                           <td>
                             <span className={`badge badge-${shiftName.toLowerCase()}`}>
-                              {shiftName === 'LIBUR' ? '😴 Libur' : shiftName}
+                              {hasAssignedShift ? (shiftName === 'LIBUR' ? '😴 Libur' : shiftName) : '-'}
                             </span>
                           </td>
                           <td style={{ color: 'var(--text-muted)' }}>
-                            {shiftInfo ? `${shiftInfo.startTime} - ${shiftInfo.endTime} (${shiftInfo.durationHrs} jam)` : '-'}
+                            {hasAssignedShift && shiftInfo ? `${shiftInfo.startTime} - ${shiftInfo.endTime} (${shiftInfo.durationHrs} jam)` : '-'}
                           </td>
                         </tr>
                       );

@@ -289,24 +289,24 @@ export default function RequestsPage() {
           <span className="text-muted text-sm">
             Dibuat: {formatDateShort(req.createdAt)}
           </span>
-          {isAdmin && req.status === 'pending' && (
+          {req.status?.toLowerCase() === 'pending' && (
             <div className="request-card__actions">
-              <button
-                className="btn btn-success btn-sm"
-                onClick={() => handleApprove(req.id)}
-              >
-                ✅ Setujui
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => openRejectModal(req.id)}
-              >
-                ❌ Tolak
-              </button>
-            </div>
-          )}
-          {!isAdmin && req.status === 'pending' && (
-            <div className="request-card__actions">
+              {isAdmin && (
+                <>
+                  <button
+                    className="btn btn-success btn-sm"
+                    onClick={() => handleApprove(req.id)}
+                  >
+                    ✅ Setujui
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => openRejectModal(req.id)}
+                  >
+                    ❌ Tolak
+                  </button>
+                </>
+              )}
               <button
                 className="btn btn-outline btn-sm"
                 style={{ color: '#f43f5e', borderColor: 'rgba(244, 63, 94, 0.4)', background: 'rgba(244, 63, 94, 0.08)' }}
