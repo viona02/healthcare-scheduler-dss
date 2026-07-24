@@ -31,11 +31,13 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', message: 'DSS Healthcare Scheduler API berjalan' });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`\n🏥 DSS Healthcare Scheduler API`);
-  console.log(`   Server berjalan di http://localhost:${PORT}`);
-  console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
-});
+// Start server (hanya saat berjalan lokal)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`\n🏥 DSS Healthcare Scheduler API`);
+    console.log(`   Server berjalan di http://localhost:${PORT}`);
+    console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
+  });
+}
 
 export default app;
