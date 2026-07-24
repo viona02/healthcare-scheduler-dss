@@ -203,4 +203,46 @@ router.put('/:id/status', async (req: AuthRequest, res: Response) => {
   }
 });
 
+// DELETE /api/shift-requests/:id - Batalkan permintaan (hanya jika status masih 'pending')
+router.delete('/:id', async (req: AuthRequest, res: Response) => {
+  try {
+    const id = parseInt(req.params.id as string);
+    if (isNaN(id)) {
+      res.status(400).json({ error: 'ID request tidak valid' });
+      return;
+    }
+
+    const targetRequest = await prisma.shiftRequest.findUnique({
+      where: { id },
+      include: { worker: true },
+    });
+
+    if (!targetRequest) {
+      res.status(404).json({ error: 'Permintaan tidak ditemukan' });
+      return;
+    }
+
+    // Pastikan request milik worker yang login jika bukan admin
+    if (req.userRole !== 'admin') {
+      const user = await prisma.user.findUnique({ where: { id: req.userId } });
+      if (user?.workerId !== targetRequest.workerId) {
+        res.status(403).json({ error: 'Anda hanya dapat membatalkan permintaan milik Anda sendiri' });
+        return;
+      }
+    }
+
+    // Hanya bisa dibatalkan jika statusnya masih 'pending'
+    if (targetRequest.status !== 'pending') {
+      res.status(400).json({ error: 'Permintaan yang sudah disetujui atau ditolak tidak dapat dibatalkan' });
+      return;
+    }
+
+    await prisma.shiftRequest.delete({ where: { id } });
+    res.json({ message: 'Permintaan berhasil dibatalkan', id });
+  } catch (error) {
+    console.error('Delete shift request error:', error);
+    res.status(500).json({ error: 'Terjadi kesalahan server' });
+  }
+});
+
 export default router;

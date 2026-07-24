@@ -177,6 +177,9 @@ export const shiftRequestsAPI = {
     const res = await api.put(`/shift-requests/${id}/status`, { status, rejectionReason });
     return res.data;
   },
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/shift-requests/${id}`);
+  },
 };
 
 export default api;

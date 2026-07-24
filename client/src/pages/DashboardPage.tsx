@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { workersAPI, shiftsAPI, schedulesAPI, shiftRequestsAPI } from '../services/api';
 import type { Worker, Shift, Schedule, Assignment, ShiftRequest } from '../types';
-import { MONTHS, DAYS_OF_WEEK } from '../types';
+import { MONTHS, DAYS_OF_WEEK, buildPeriodDates, getPeriodLabel } from '../types';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -86,13 +86,14 @@ export default function DashboardPage() {
 
   // ======= WORKER DASHBOARD =======
   if (!isAdmin) {
-    const currentMonth = activeSchedule ? activeSchedule.month : new Date().getMonth() + 1;
-    const currentYear = activeSchedule ? activeSchedule.year : new Date().getFullYear();
-    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+    const currentMonth = activeSchedule ? activeSchedule.month : 6;
+    const currentYear = activeSchedule ? activeSchedule.year : 2026;
+    const periodDates = buildPeriodDates(currentMonth, currentYear);
+    const totalPeriodDays = periodDates.length;
 
     // Build schedule grid for worker
     const myScheduleMap: Record<number, string> = {};
-    for (let d = 1; d <= daysInMonth; d++) {
+    for (let d = 1; d <= totalPeriodDays; d++) {
       myScheduleMap[d] = 'LIBUR';
     }
     for (const a of myAssignments) {
@@ -101,7 +102,7 @@ export default function DashboardPage() {
 
     // Stats
     let pagiCount = 0, siangCount = 0, malamCount = 0, offCount = 0;
-    for (let d = 1; d <= daysInMonth; d++) {
+    for (let d = 1; d <= totalPeriodDays; d++) {
       const val = myScheduleMap[d];
       if (val === 'Pagi') pagiCount++;
       else if (val === 'Siang') siangCount++;
@@ -215,7 +216,7 @@ export default function DashboardPage() {
         <div className="card mb-3">
           <div className="card-header">
             <div className="card-title">
-              📅 Jadwal Saya — {MONTHS[currentMonth - 1]} {currentYear}
+              📅 Jadwal Saya — Periode {getPeriodLabel(currentMonth, currentYear)}
             </div>
             {activeSchedule && (
               <span className="badge badge-approved" style={{ fontSize: '0.7rem' }}>
@@ -244,18 +245,19 @@ export default function DashboardPage() {
                   </div>
                 ))}
 
-                {/* Empty cells before first day */}
-                {Array.from({ length: new Date(currentYear, currentMonth - 1, 1).getDay() }, (_, i) => (
+                {/* Empty cells before first date of period */}
+                {Array.from({ length: periodDates[0]?.getDay() || 0 }, (_, i) => (
                   <div key={`empty-${i}`}></div>
                 ))}
 
-                {/* Day cells */}
-                {Array.from({ length: daysInMonth }, (_, i) => {
+                {/* Day cells for period */}
+                {periodDates.map((date, i) => {
                   const d = i + 1;
                   const shiftName = myScheduleMap[d];
-                  const date = new Date(currentYear, currentMonth - 1, d);
                   const isToday = new Date().toDateString() === date.toDateString();
                   const isWkend = date.getDay() === 0 || date.getDay() === 6;
+                  const dayNum = date.getDate();
+                  const monthShort = MONTHS[date.getMonth()].slice(0, 3);
 
                   return (
                     <div key={d} style={{
@@ -272,15 +274,15 @@ export default function DashboardPage() {
                       gap: '0.15rem',
                       ...(isWkend && shiftName === 'LIBUR' ? { background: 'rgba(244, 63, 94, 0.08)', borderColor: 'rgba(244, 63, 94, 0.15)' } : {}),
                     }}
-                      title={`Tgl ${d}: ${shiftName}`}
+                      title={`Hari ke-${d} (${dayNum} ${monthShort}): ${shiftName}`}
                     >
                       <div style={{
-                        fontWeight: 700, fontSize: '0.85rem',
+                        fontWeight: 700, fontSize: '0.8rem',
                         color: isWkend ? 'var(--accent-rose)' : 'var(--text-primary)',
                       }}>
-                        {d}
+                        {dayNum} {monthShort}
                       </div>
-                      <div style={{ fontSize: '0.65rem', fontWeight: 600 }}>
+                      <div style={{ fontSize: '0.7rem', fontWeight: 600 }}>
                         {getShiftLabel(shiftName)}
                       </div>
                     </div>
@@ -308,17 +310,18 @@ export default function DashboardPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {Array.from({ length: daysInMonth }, (_, i) => {
+                    {periodDates.map((date, i) => {
                       const d = i + 1;
                       const shiftName = myScheduleMap[d];
-                      const date = new Date(currentYear, currentMonth - 1, d);
                       const dayOfWeek = date.getDay();
                       const isWkend = dayOfWeek === 0 || dayOfWeek === 6;
                       const shiftInfo = shifts.find(s => s.name === shiftName);
+                      const dayNum = date.getDate();
+                      const monthShort = MONTHS[date.getMonth()].slice(0, 3);
 
                       return (
                         <tr key={d} style={isWkend ? { background: 'rgba(244, 63, 94, 0.03)' } : {}}>
-                          <td style={{ fontWeight: 700 }}>{d}</td>
+                          <td style={{ fontWeight: 700 }}>{dayNum} {monthShort}</td>
                           <td style={{
                             color: isWkend ? 'var(--accent-rose)' : 'var(--text-muted)',
                             fontWeight: isWkend ? 600 : 400,

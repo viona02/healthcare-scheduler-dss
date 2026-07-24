@@ -130,6 +130,18 @@ export default function RequestsPage() {
     }
   };
 
+  const handleCancelRequest = async (id: number) => {
+    if (!confirm('Apakah Anda yakin ingin membatalkan permintaan ini?')) return;
+    try {
+      await shiftRequestsAPI.delete(id);
+      loadRequests();
+      alert('✅ Permintaan berhasil dibatalkan');
+    } catch (error) {
+      console.error('Error cancelling request:', error);
+      alert('Gagal membatalkan permintaan');
+    }
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending': return '⏳';
@@ -290,6 +302,17 @@ export default function RequestsPage() {
                 onClick={() => openRejectModal(req.id)}
               >
                 ❌ Tolak
+              </button>
+            </div>
+          )}
+          {!isAdmin && req.status === 'pending' && (
+            <div className="request-card__actions">
+              <button
+                className="btn btn-outline btn-sm"
+                style={{ color: '#f43f5e', borderColor: 'rgba(244, 63, 94, 0.4)', background: 'rgba(244, 63, 94, 0.08)' }}
+                onClick={() => handleCancelRequest(req.id)}
+              >
+                🗑️ Batalkan Permintaan
               </button>
             </div>
           )}
