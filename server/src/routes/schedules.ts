@@ -113,16 +113,14 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
         year,
         fitnessScore: result.fitness,
         generationCount: result.generations,
-        gaConfig: JSON.stringify(config),
       },
     });
 
-    // Simpan assignments — gunakan tanggal aktual dari periodDates
+    // Simpan assignments
     const assignmentData: Array<{
       scheduleId: number;
       workerId: number;
       shiftId: number;
-      date: Date;
       dayOfMonth: number;
     }> = [];
 
@@ -134,7 +132,6 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
             scheduleId: schedule.id,
             workerId,
             shiftId: dbShifts[s].id,
-            date: periodDates[day],
             dayOfMonth: day + 1, // 1-based index dalam periode
           });
         }
@@ -366,7 +363,6 @@ router.put('/:id/assignment', async (req: AuthRequest, res: Response) => {
         scheduleId,
         workerId,
         shiftId: shift.id,
-        date,
         dayOfMonth,
       },
       include: { worker: true, shift: true },
