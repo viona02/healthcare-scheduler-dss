@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -45,67 +45,70 @@ model Worker {
 }
 
 // ============================================
-// Shift - Konfigurasi Shift Jaga
+// Shift - Definisi Shift Kerja
 // ============================================
 model Shift {
-  id          Int          @id @default(autoincrement())
-  name        String       // "Pagi" | "Siang" | "Malam"
-  startTime   String       // "07:00" | "14:00" | "21:30"
-  endTime     String       // "14:00" | "21:30" | "07:00"
-  durationHrs Float        // 7 | 7.5 | 9.5
-  minNurses   Int          @default(2) // minimal perawat
-  minMidwives Int          @default(1) // minimal bidan
-  minSeniors  Int          @default(1) // minimal senior
-  assignments Assignment[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id           Int          @id @default(autoincrement())
+  name         String       // "Pagi" | "Siang" | "Malam"
+  startTime    String       // "07:00"
+  endTime      String       // "14:00"
+  durationHrs  Float        // 7.0
+  minNurses    Int          // Minimal perawat (mis. 2)
+  minMidwives  Int          // Minimal bidan (mis. 1)
+  minSeniors   Int          // Minimal senior (mis. 1)
+  assignments  Assignment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 // ============================================
-// Schedule - Jadwal yang di-generate
+// Schedule - Master Hasil Jadwal Ter-generate
 // ============================================
 model Schedule {
   id              Int          @id @default(autoincrement())
-  month           Int          // 1-12
-  year            Int
+  month           Int          // 1 - 12
+  year            Int          // 2026
+  status          String       @default("draft") // "draft" | "published"
+  isSelected      Boolean      @default(false)   // Jadwal aktif pilihan admin
   fitnessScore    Float
   generationCount Int
-  gaConfig        String       // JSON string of GA parameters
-  isSelected      Boolean      @default(false) // jadwal terpilih oleh admin
   assignments     Assignment[]
   createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 // ============================================
-// Assignment - Penugasan pekerja ke shift
+// Assignment - Detail Penugasan Shift per Hari
 // ============================================
 model Assignment {
   id         Int      @id @default(autoincrement())
   scheduleId Int
   schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   workerId   Int
-  worker     Worker   @relation(fields: [workerId], references: [id])
+  worker     Worker   @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  dayOfMonth Int      // 1 - 31 (atau 1 - 30 untuk periode)
   shiftId    Int
   shift      Shift    @relation(fields: [shiftId], references: [id])
-  date       DateTime // tanggal assignment
-  dayOfMonth Int      // 1-31
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
-  @@unique([scheduleId, workerId, date]) // 1 pekerja max 1 shift per hari per jadwal
+  @@unique([scheduleId, workerId, dayOfMonth])
 }
 
 // ============================================
-// ShiftRequest - Permintaan tenaga kerja
+// ShiftRequest - Permintaan Libur / Shift Nakes
 // ============================================
 model ShiftRequest {
-  id              Int      @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   workerId        Int
-  worker          Worker   @relation(fields: [workerId], references: [id])
-  date            DateTime
-  endDate         DateTime? // tanggal selesai jika multi-hari
-  type            String   // "off" = minta libur, "preference" = preferensi shift
-  shiftPref       String?  // shift yang diinginkan (jika type = "preference")
-  reason          String?
-  status          String   @default("pending") // "pending" | "approved" | "rejected"
-  rejectionReason String?  // alasan penolakan oleh admin
-  createdAt       DateTime @default(now())
+  worker          Worker    @relation(fields: [workerId], references: [id], onDelete: Cascade)
+  date            DateTime  // Tanggal mulai
+  endDate         DateTime? // Tanggal selesai (null jika 1 hari saja)
+  type            String    // "off" | "preference"
+  shiftPref       String?   // "Pagi" | "Siang" | "Malam" (jika type = preference)
+  reason          String?   // Alasan opsional
+  status          String    @default("pending") // "pending" | "approved" | "rejected"
+  rejectionReason String?   // Alasan penolakan dari admin
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
