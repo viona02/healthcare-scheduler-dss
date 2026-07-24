@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { AuthRequest, generateToken } from '../middleware/auth';
 
 const router = Router();
-const prisma = new PrismaClient();
+import prisma from '../prisma';
 
 // POST /api/auth/login
 router.post('/login', async (req: AuthRequest, res: Response) => {

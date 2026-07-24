@@ -14,7 +14,7 @@ import {
 import { getHolidaysInRange } from '../services/holidayService';
 
 const router = Router();
-const prisma = new PrismaClient();
+import prisma from '../prisma';
 
 // POST /api/schedules/generate - Generate jadwal baru (admin only)
 router.post('/generate', async (req: AuthRequest, res: Response) => {

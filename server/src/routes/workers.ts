@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth';
 
 const router = Router();
-const prisma = new PrismaClient();
+import prisma from '../prisma';
 
 // GET /api/workers - Daftar semua tenaga kerja
 router.get('/', async (_req: AuthRequest, res: Response) => {

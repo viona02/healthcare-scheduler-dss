@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import { AuthRequest } from '../middleware/auth';
 
 const router = Router();
-const prisma = new PrismaClient();
+import prisma from '../prisma';
 
 // Batas maksimal entri request per pekerja per periode
 const MAX_REQUESTS_PER_PERIOD = 2;
