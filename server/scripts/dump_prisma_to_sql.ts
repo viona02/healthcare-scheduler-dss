@@ -23,6 +23,9 @@ async function dump() {
 -- Berisi seluruh data Shift, Worker, User, Schedule (Jadwal), Assignment (Detail Shift), dan ShiftRequest
 -- ============================================
 
+-- Drop tabel lama jika ada agar tidak bentrok (Clean Reset)
+DROP TABLE IF EXISTS "Assignment", "ShiftRequest", "User", "Worker", "Schedule", "Shift" CASCADE;
+
 -- 1. Buat Tabel User
 CREATE TABLE IF NOT EXISTS "User" (
     "id" SERIAL NOT NULL,
@@ -188,7 +191,7 @@ SELECT setval(pg_get_serial_sequence('"ShiftRequest"', 'id'), COALESCE(MAX(id), 
 
   const outputPath = path.join(__dirname, '..', 'supabase_full_setup.sql');
   fs.writeFileSync(outputPath, sql);
-  console.log('🎉 SUCCESS! Exported FULL SQL to:', outputPath);
+  console.log('🎉 SUCCESS! Exported FULL SQL with CASCADE DROP to:', outputPath);
 }
 
 dump()

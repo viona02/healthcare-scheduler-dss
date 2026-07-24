@@ -3,6 +3,9 @@
 -- Berisi seluruh data Shift, Worker, User, Schedule (Jadwal), Assignment (Detail Shift), dan ShiftRequest
 -- ============================================
 
+-- Drop tabel lama jika ada agar tidak bentrok (Clean Reset)
+DROP TABLE IF EXISTS "Assignment", "ShiftRequest", "User", "Worker", "Schedule", "Shift" CASCADE;
+
 -- 1. Buat Tabel User
 CREATE TABLE IF NOT EXISTS "User" (
     "id" SERIAL NOT NULL,
