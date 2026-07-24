@@ -8,7 +8,7 @@
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "build": "npx prisma generate --schema=server/prisma/schema.prisma && cd client && npm install && npm run build"
+    "build": "npx prisma generate --schema=server/prisma/schema.prisma && npx prisma db push --schema=server/prisma/schema.prisma --accept-data-loss && npx tsx server/prisma/seed.ts && cd client && npm install && npm run build"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -16,7 +16,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "tsx": "^4.22.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

@@ -11,7 +11,14 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...\n');
 
-  // ===== Hapus data lama untuk re-seed bersih =====
+  // Cek apakah database sudah memiliki data (misal admin)
+  const existingAdmin = await prisma.user.findUnique({ where: { username: 'admin' } });
+  if (existingAdmin) {
+    console.log('✅ Database Supabase sudah terisi data, melewati auto-seed.');
+    return;
+  }
+
+  // ===== Hapus data lama untuk re-seed bersih pada DB baru =====
   console.log('🗑️  Membersihkan data lama...');
   await prisma.assignment.deleteMany();
   await prisma.schedule.deleteMany();
