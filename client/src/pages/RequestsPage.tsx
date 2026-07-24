@@ -92,9 +92,14 @@ export default function RequestsPage() {
       setFormData({ date: '', dateEnd: '', type: 'off', shiftPref: '', reason: '' });
       loadRequests();
       alert('✅ Permintaan berhasil dibuat!');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating request:', error);
-      alert('Gagal membuat permintaan. Silakan coba lagi.');
+      const serverMsg = error.response?.data?.error;
+      if (serverMsg) {
+        alert(`⚠️ ${serverMsg}`);
+      } else {
+        alert('Gagal membuat permintaan. Silakan coba lagi.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -384,22 +389,20 @@ export default function RequestsPage() {
             <div style={{
               padding: '0.6rem 0.85rem',
               borderRadius: 'var(--radius-md)',
-              border: `1px solid ${remaining > 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(244, 63, 94, 0.25)'}`,
-              background: remaining > 0 ? 'rgba(16, 185, 129, 0.06)' : 'rgba(244, 63, 94, 0.06)',
+              border: `1px solid ${remaining > 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(251, 191, 36, 0.25)'}`,
+              background: remaining > 0 ? 'rgba(16, 185, 129, 0.06)' : 'rgba(251, 191, 36, 0.06)',
               marginBottom: '0.75rem',
               fontSize: '0.8rem',
               color: 'var(--text-primary)',
             }}>
-              📋 Sisa kuota permintaan periode ini: <strong style={{ color: remaining > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>{remaining}</strong> dari {MAX_PER_PERIOD}
-              <span style={{ color: 'var(--text-muted)', marginLeft: '0.5rem', fontSize: '0.7rem' }}>
-                ({periodStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} — {periodEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })})
+              📋 Kuota request per periode (26-25) maksimal <strong>{MAX_PER_PERIOD} kali</strong>.
+              <span style={{ color: 'var(--text-muted)', marginLeft: '0.5rem', fontSize: '0.75rem' }}>
+                (Sisa kuota periode ini {periodStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} — {periodEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}: <strong style={{ color: remaining > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>{remaining}</strong>)
               </span>
             </div>
             <button
               className="btn btn-primary"
               onClick={() => setShowForm(true)}
-              disabled={remaining <= 0}
-              style={remaining <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
             >
               ➕ Buat Permintaan Baru
             </button>

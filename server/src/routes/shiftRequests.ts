@@ -11,24 +11,42 @@ const MAX_REQUESTS_PER_PERIOD = 2;
 const MAX_NURSES_OFF_PER_DAY = 3;
 const MAX_MIDWIVES_OFF_PER_DAY = 1;
 
+const MONTH_NAMES = [
+  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+];
+
 /**
  * Hitung rentang periode 26-25 yang memuat tanggal tertentu.
  * Periode dimulai tgl 26 dan berakhir tgl 25 bulan berikutnya.
  */
-function getPeriodRange(date: Date): { start: Date; end: Date } {
-  const y = date.getFullYear();
-  const m = date.getMonth(); // 0-indexed
-  if (date.getDate() >= 26) {
-    // periode mulai tgl 26 bulan ini
-    const start = new Date(y, m, 26);
-    const end = new Date(m === 11 ? y + 1 : y, m === 11 ? 0 : m + 1, 25);
-    return { start, end };
+function getPeriodRange(date: Date): { start: Date; end: Date; label: string } {
+  const y = date.getUTCFullYear();
+  const m = date.getUTCMonth(); // 0-indexed
+  const d = date.getUTCDate();
+
+  let startYear = y;
+  let startMonth = m;
+  let endYear = y;
+  let endMonth = m;
+
+  if (d >= 26) {
+    startYear = y;
+    startMonth = m;
+    endYear = m === 11 ? y + 1 : y;
+    endMonth = m === 11 ? 0 : m + 1;
   } else {
-    // periode mulai tgl 26 bulan lalu
-    const start = new Date(m === 0 ? y - 1 : y, m === 0 ? 11 : m - 1, 26);
-    const end = new Date(y, m, 25);
-    return { start, end };
+    startYear = m === 0 ? y - 1 : y;
+    startMonth = m === 0 ? 11 : m - 1;
+    endYear = y;
+    endMonth = m;
   }
+
+  const start = new Date(Date.UTC(startYear, startMonth, 26, 0, 0, 0, 0));
+  const end = new Date(Date.UTC(endYear, endMonth, 25, 23, 59, 59, 999));
+  const label = `26 ${MONTH_NAMES[startMonth].slice(0, 3)} - 25 ${MONTH_NAMES[endMonth].slice(0, 3)} ${endYear}`;
+
+  return { start, end, label };
 }
 
 // GET /api/shift-requests - Semua permintaan (admin melihat semua, worker hanya miliknya)
@@ -79,20 +97,19 @@ router.post('/', async (req: AuthRequest, res: Response) => {
       return;
     }
 
-    // === Pre-validation: maksimal 2 entri request per pekerja per periode ===
-    // "Entri" = 1 kali submit form (rentang libur multi-hari tetap dihitung 1 entri).
-    const { start: periodStart, end: periodEnd } = getPeriodRange(startDate);
+    // === Pre-validation: maksimal 2 entri request per pekerja per periode (26-25) ===
+    const { start: periodStart, end: periodEnd, label: periodLabel } = getPeriodRange(startDate);
     const existingInPeriod = await prisma.shiftRequest.findMany({
       where: {
         workerId,
         date: { gte: periodStart, lte: periodEnd },
-        status: { not: 'rejected' },
+        status: { notIn: ['rejected', 'cancelled'] },
       },
       select: { id: true, date: true },
     });
     if (existingInPeriod.length >= MAX_REQUESTS_PER_PERIOD) {
       res.status(400).json({
-        error: `Maksimal ${MAX_REQUESTS_PER_PERIOD} request per periode. Anda sudah memiliki ${existingInPeriod.length} request pada periode ${periodStart.toLocaleDateString('id-ID')} - ${periodEnd.toLocaleDateString('id-ID')}.`,
+        error: `Maksimal ${MAX_REQUESTS_PER_PERIOD} request untuk periode (${periodLabel}). Anda sudah memiliki ${existingInPeriod.length} request aktif pada periode ini. Jika ingin mengajukan request baru untuk periode ini, batalkan request sebelumnya terlebih dahulu, atau pilih tanggal untuk periode lainnya.`,
       });
       return;
     }
