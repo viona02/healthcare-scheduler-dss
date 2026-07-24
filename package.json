@@ -8,7 +8,7 @@
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "build": "npx prisma generate --schema=server/prisma/schema.prisma && (npx prisma db push --schema=server/prisma/schema.prisma --accept-data-loss && npx tsx server/prisma/seed.ts || echo 'Db push skipped') && cd client && npm install && npm run build"
+    "build": "npx prisma generate --schema=server/prisma/schema.prisma && npx prisma db push --schema=server/prisma/schema.prisma --accept-data-loss && npx tsx server/prisma/seed.ts && cd client && npm install && npm run build"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
