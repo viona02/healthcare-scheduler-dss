@@ -91,10 +91,7 @@ export default function RequestsPage() {
       setShowForm(false);
       setFormData({ date: '', dateEnd: '', type: 'off', shiftPref: '', reason: '' });
       loadRequests();
-      // Notifikasi berapa hari yang berhasil dibuat
-      if (result?.count && result.count > 1) {
-        alert(`✅ ${result.count} permintaan libur berhasil dibuat!`);
-      }
+      alert('✅ Permintaan berhasil dibuat!');
     } catch (error) {
       console.error('Error creating request:', error);
       alert('Gagal membuat permintaan. Silakan coba lagi.');
@@ -216,7 +213,18 @@ export default function RequestsPage() {
             )}
             <div className="request-card__field">
               <span className="request-card__field-label">📅 Tanggal</span>
-              <span className="request-card__field-value">{formatDate(req.date)}</span>
+              <span className="request-card__field-value">
+                {req.endDate && new Date(req.endDate).getTime() > new Date(req.date).getTime() ? (
+                  <>
+                    {formatDate(req.date)} – {formatDate(req.endDate)}{' '}
+                    <span style={{ fontSize: '0.8rem', color: 'var(--accent-amber)', fontWeight: 600, marginLeft: '0.25rem' }}>
+                      ({Math.round((new Date(req.endDate).getTime() - new Date(req.date).getTime()) / (1000 * 60 * 60 * 24)) + 1} Hari)
+                    </span>
+                  </>
+                ) : (
+                  formatDate(req.date)
+                )}
+              </span>
             </div>
             {req.type === 'preference' && req.shiftPref && (
               <div className="request-card__field">
@@ -326,14 +334,55 @@ export default function RequestsPage() {
         </div>
       </div>
 
-      {/* Worker: Button to create request */}
-      {isWorker && (
-        <div className="mb-3">
-          <button className="btn btn-primary" onClick={() => setShowForm(true)}>
-            ➕ Buat Permintaan Baru
-          </button>
-        </div>
-      )}
+      {/* Worker: Button to create request + remaining request info */}
+      {isWorker && (() => {
+        // Hitung request non-rejected pekerja ini di periode saat ini
+        const MAX_PER_PERIOD = 2;
+        const workerRequests = requests.filter(r =>
+          r.workerId === user?.workerId && r.status !== 'rejected'
+        );
+        // Ambil tanggal dari request pertama untuk tentukan periode
+        const now = new Date();
+        // Periode: tgl 26 bulan lalu s/d tgl 25 bulan ini (atau tgl 26 bulan ini s/d 25 depan)
+        const periodStart = now.getDate() >= 26
+          ? new Date(now.getFullYear(), now.getMonth(), 26)
+          : new Date(now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear(), now.getMonth() === 0 ? 11 : now.getMonth() - 1, 26);
+        const periodEnd = now.getDate() >= 26
+          ? new Date(now.getMonth() === 11 ? now.getFullYear() + 1 : now.getFullYear(), now.getMonth() === 11 ? 0 : now.getMonth() + 1, 25)
+          : new Date(now.getFullYear(), now.getMonth(), 25);
+        const inPeriod = workerRequests.filter(r => {
+          const d = new Date(r.date);
+          return d >= periodStart && d <= periodEnd;
+        });
+        const remaining = MAX_PER_PERIOD - inPeriod.length;
+
+        return (
+          <div className="mb-3">
+            <div style={{
+              padding: '0.6rem 0.85rem',
+              borderRadius: 'var(--radius-md)',
+              border: `1px solid ${remaining > 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(244, 63, 94, 0.25)'}`,
+              background: remaining > 0 ? 'rgba(16, 185, 129, 0.06)' : 'rgba(244, 63, 94, 0.06)',
+              marginBottom: '0.75rem',
+              fontSize: '0.8rem',
+              color: 'var(--text-primary)',
+            }}>
+              📋 Sisa kuota permintaan periode ini: <strong style={{ color: remaining > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)' }}>{remaining}</strong> dari {MAX_PER_PERIOD}
+              <span style={{ color: 'var(--text-muted)', marginLeft: '0.5rem', fontSize: '0.7rem' }}>
+                ({periodStart.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} — {periodEnd.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })})
+              </span>
+            </div>
+            <button
+              className="btn btn-primary"
+              onClick={() => setShowForm(true)}
+              disabled={remaining <= 0}
+              style={remaining <= 0 ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
+            >
+              ➕ Buat Permintaan Baru
+            </button>
+          </div>
+        );
+      })()}
 
       {/* Create Request Modal */}
       {showForm && (

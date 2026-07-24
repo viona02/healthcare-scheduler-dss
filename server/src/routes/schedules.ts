@@ -11,6 +11,7 @@ import {
   DEFAULT_GA_CONFIG,
   AHP_WEIGHTS,
 } from '../algorithms/geneticAlgorithm';
+import { getHolidaysInRange } from '../services/holidayService';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -49,6 +50,9 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
       name: w.name,
       workerType: w.workerType as 'perawat' | 'bidan',
       skillLevel: w.skillLevel as 'junior' | 'senior',
+      fixedShift: w.fixedShift,
+      weekendHolidayOff: w.weekendHolidayOff,
+      sundayHolidayOff: w.sundayHolidayOff,
     }));
 
     const shifts: ShiftData[] = dbShifts.map(s => ({
@@ -70,14 +74,18 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
     // Ambil shift requests untuk periode ini
     const dbRequests = await prisma.shiftRequest.findMany({
       where: {
-        date: { gte: periodStart, lte: periodEnd },
         status: 'approved',
+        OR: [
+          { date: { gte: periodStart, lte: periodEnd } },
+          { endDate: { gte: periodStart, lte: periodEnd } },
+        ],
       },
     });
 
     const requests: ShiftRequestData[] = dbRequests.map(r => ({
       workerId: r.workerId,
       date: r.date.toISOString(),
+      endDate: r.endDate ? r.endDate.toISOString() : undefined,
       type: r.type as 'off' | 'preference',
       shiftPref: r.shiftPref || undefined,
     }));
@@ -85,13 +93,16 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
     // Merge GA config
     const config: GAConfig = { ...DEFAULT_GA_CONFIG, ...gaConfig };
 
+    // Fetch tanggal merah (libur nasional) untuk periode ini
+    const holidays = await getHolidaysInRange(periodStart, periodEnd);
+
     // Jalankan GA
     console.log(`[GA] Starting schedule generation for period ${month}/${year} (${periodDates.length} days: ${periodStart.toLocaleDateString()} - ${periodEnd.toLocaleDateString()})`);
     console.log(`[GA] Workers: ${workers.length}, Shifts: ${shifts.length}`);
     console.log(`[GA] AHP Weights:`, AHP_WEIGHTS);
     console.log(`[GA] Config:`, config);
 
-    const result = runGeneticAlgorithm(workers, shifts, periodDates, requests, config);
+    const result = runGeneticAlgorithm(workers, shifts, periodDates, requests, holidays, config);
 
     console.log(`[GA] Completed. Best fitness: ${result.fitness.toFixed(2)}`);
 
@@ -365,6 +376,23 @@ router.get('/:id/violations', async (req: AuthRequest, res: Response) => {
     const periodDates = buildPeriodDates(schedule.month, schedule.year);
     const totalDays = periodDates.length;
 
+    // Fetch tanggal merah untuk pemeriksaan aturan khusus (weekendHolidayOff)
+    const periodStart = periodDates[0];
+    const periodEnd = periodDates[periodDates.length - 1];
+    const holidays = await getHolidaysInRange(periodStart, periodEnd);
+
+    const toISODate = (date: Date): string => {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    };
+
+    // Helper: apakah hari (dayOfMonth 1-based) adalah libur (weekend/tgl merah)?
+    const isLiburDay = (dayOfMonth: number): boolean => {
+      const date = periodDates[dayOfMonth - 1];
+      const dow = date.getDay();
+      const isWeekend = dow === 0 || dow === 6;
+      return isWeekend || holidays.has(toISODate(date));
+    };
+
     interface Violation {
       type: 'hard' | 'soft';
       rule: string;
@@ -389,6 +417,9 @@ router.get('/:id/violations', async (req: AuthRequest, res: Response) => {
 
     // === HARD CONSTRAINT 1: Min 2 perawat + 1 bidan per shift ===
     for (let d = 1; d <= totalDays; d++) {
+      const actualDate = periodDates[d - 1];
+      const isSundayOrHoliday = actualDate.getDay() === 0 || holidays.has(toISODate(actualDate));
+
       for (const shift of shifts) {
         const dayAssignments = schedule.assignments.filter(
           a => a.dayOfMonth === d && a.shift?.name === shift.name
@@ -405,11 +436,15 @@ router.get('/:id/violations', async (req: AuthRequest, res: Response) => {
             shiftName: shift.name,
           });
         }
-        if (midwives < shift.minMidwives) {
+
+        // Khusus shift Pagi di hari Minggu & tanggal merah: 0 bidan TIDAK MASALAH
+        const reqMidwives = (shift.name === 'Pagi' && isSundayOrHoliday) ? 0 : shift.minMidwives;
+
+        if (midwives < reqMidwives) {
           violations.push({
             type: 'hard',
             rule: 'Minimal Bidan',
-            description: `Tgl ${d} shift ${shift.name}: hanya ${midwives} bidan (min ${shift.minMidwives})`,
+            description: `Tgl ${d} shift ${shift.name}: hanya ${midwives} bidan (min ${reqMidwives})`,
             day: d,
             shiftName: shift.name,
           });
@@ -437,22 +472,41 @@ router.get('/:id/violations', async (req: AuthRequest, res: Response) => {
       }
     }
 
-    // === HARD CONSTRAINT 3: 2 malam berturut → 2 hari libur ===
+    // === HARD CONSTRAINT 3 (STRICT): Malam WAJIB pasangan tepat 2, lalu libur 2 hari ===
     for (const w of workers) {
-      for (let d = 1; d <= totalDays - 1; d++) {
-        if (matrix[w.id][d] === 'Malam' && matrix[w.id][d + 1] === 'Malam') {
-          // After 2 consecutive nights, next 2 days should be off
-          for (let off = d + 2; off <= Math.min(d + 3, totalDays); off++) {
+      let d = 1;
+      while (d <= totalDays) {
+        if (matrix[w.id][d] === 'Malam') {
+          // Hitung panjang run malam berturut
+          let runLen = 0;
+          while (d + runLen <= totalDays && matrix[w.id][d + runLen] === 'Malam') runLen++;
+
+          if (runLen !== 2) {
+            // 1 malam tunggal atau >2 malam = pelanggaran
+            violations.push({
+              type: 'hard',
+              rule: 'Pasangan Shift Malam',
+              description: `${w.name}: ${runLen === 1 ? 'shift malam tunggal' : `${runLen} malam berturut`} tgl ${d}-${d + runLen - 1}. Malam wajib tepat pasangan 2 hari.`,
+              day: d,
+              workerName: w.name,
+            });
+          }
+
+          // Setelah run malam, 2 hari berikutnya wajib libur
+          for (let off = d + runLen; off <= Math.min(d + runLen + 1, totalDays); off++) {
             if (matrix[w.id][off]) {
               violations.push({
                 type: 'hard',
                 rule: 'Libur Setelah 2 Malam',
-                description: `${w.name}: malam berturut tgl ${d}-${d + 1}, tapi tgl ${off} masih bekerja (shift ${matrix[w.id][off]})`,
+                description: `${w.name}: habis malam tgl ${d}-${d + runLen - 1}, tapi tgl ${off} masih bekerja (shift ${matrix[w.id][off]}). Wajib libur 2 hari.`,
                 day: off,
                 workerName: w.name,
               });
             }
           }
+          d += runLen;
+        } else {
+          d++;
         }
       }
     }
@@ -482,6 +536,83 @@ router.get('/:id/violations', async (req: AuthRequest, res: Response) => {
           description: `${w.name}: total ${totalHours.toFixed(1)} jam (max 180 jam)`,
           workerName: w.name,
         });
+      }
+    }
+
+    // === HARD CONSTRAINT 5: Maksimal 6 hari kerja berturut ===
+    for (const w of workers) {
+      let consecutive = 0;
+      for (let d = 1; d <= totalDays; d++) {
+        if (matrix[w.id][d]) {
+          consecutive++;
+          if (consecutive > 6) {
+            violations.push({
+              type: 'hard',
+              rule: 'Maksimal 6 Hari Kerja',
+              description: `${w.name}: bekerja ${consecutive} hari berturut (tgl ${d - consecutive + 1}-${d}). Setelah 6 hari wajib libur.`,
+              day: d,
+              workerName: w.name,
+            });
+          }
+        } else {
+          consecutive = 0;
+        }
+      }
+    }
+
+    // === HARD CONSTRAINT 7: Habis shift malam, tidak boleh shift pagi ===
+    for (const w of workers) {
+      for (let d = 1; d <= totalDays - 1; d++) {
+        if (matrix[w.id][d] === 'Malam' && matrix[w.id][d + 1] === 'Pagi') {
+          violations.push({
+            type: 'hard',
+            rule: 'Larangan Malam→Pagi',
+            description: `${w.name}: shift malam tgl ${d} lalu pagi tgl ${d + 1}. Habis malam tidak boleh pagi.`,
+            day: d + 1,
+            workerName: w.name,
+          });
+        }
+      }
+    }
+
+    // === HARD CONSTRAINT 8: Aturan khusus worker (fixedShift, weekendHolidayOff, sundayHolidayOff) ===
+    for (const w of workers) {
+      for (let d = 1; d <= totalDays; d++) {
+        const assignedShift = matrix[w.id][d];
+        const actualDate = periodDates[d - 1];
+        const isSundayOrHoliday = actualDate.getDay() === 0 || holidays.has(toISODate(actualDate));
+
+        // Minggu & Holiday off: tidak boleh bekerja di hari Minggu / tanggal merah
+        if (w.sundayHolidayOff && isSundayOrHoliday && assignedShift) {
+          violations.push({
+            type: 'hard',
+            rule: 'Wajib Libur Minggu/Tgl Merah',
+            description: `${w.name}: bekerja shift ${assignedShift} tgl ${d} (hari Minggu / tgl merah). Wajib libur setiap Minggu & tanggal merah.`,
+            day: d,
+            workerName: w.name,
+          });
+        }
+
+        // Weekend/Holiday off: tidak boleh bekerja di hari libur weekend & tanggal merah
+        if (w.weekendHolidayOff && isLiburDay(d) && assignedShift) {
+          violations.push({
+            type: 'hard',
+            rule: 'Wajib Libur Weekend/Tgl Merah',
+            description: `${w.name}: bekerja shift ${assignedShift} tgl ${d} (hari libur). Wajib libur setiap weekend & tanggal merah.`,
+            day: d,
+            workerName: w.name,
+          });
+        }
+        // Fixed shift: jika bekerja harus di shift tetapnya
+        if (w.fixedShift && assignedShift && assignedShift !== w.fixedShift) {
+          violations.push({
+            type: 'hard',
+            rule: 'Shift Tetap',
+            description: `${w.name}: di-shift ${assignedShift} tgl ${d}, padahal wajib selalu shift ${w.fixedShift}.`,
+            day: d,
+            workerName: w.name,
+          });
+        }
       }
     }
 

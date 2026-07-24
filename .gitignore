@@ -1,33 +1,6 @@
-# Dependencies
 node_modules/
-
-# Build output
 dist/
-client/dist/
-
-# Environment variables (contain secrets!)
 .env
-server/.env
-client/.env
-
-# Lock files (regenerated on install)
-package-lock.json
-
-# Database files (SQLite - dev only)
-*.db
 *.db-journal
+*.zip
 
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-npm-debug.log*
-
-# Prisma
-server/prisma/migrations/

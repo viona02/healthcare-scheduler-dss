@@ -42,13 +42,20 @@ router.post('/', async (req: AuthRequest, res: Response) => {
       res.status(403).json({ error: 'Akses hanya untuk admin' });
       return;
     }
-    const { name, workerType, skillLevel } = req.body;
+    const { name, workerType, skillLevel, fixedShift, weekendHolidayOff, sundayHolidayOff } = req.body;
     if (!name || !workerType || !skillLevel) {
       res.status(400).json({ error: 'Nama, tipe, dan level skill wajib diisi' });
       return;
     }
     const worker = await prisma.worker.create({
-      data: { name, workerType, skillLevel },
+      data: {
+        name,
+        workerType,
+        skillLevel,
+        fixedShift: fixedShift || null,
+        weekendHolidayOff: !!weekendHolidayOff,
+        sundayHolidayOff: !!sundayHolidayOff,
+      },
     });
     res.status(201).json(worker);
   } catch (error) {
@@ -64,10 +71,18 @@ router.put('/:id', async (req: AuthRequest, res: Response) => {
       res.status(403).json({ error: 'Akses hanya untuk admin' });
       return;
     }
-    const { name, workerType, skillLevel, isActive } = req.body;
+    const { name, workerType, skillLevel, isActive, fixedShift, weekendHolidayOff, sundayHolidayOff } = req.body;
     const worker = await prisma.worker.update({
       where: { id: parseInt(req.params.id as string) },
-      data: { name, workerType, skillLevel, isActive },
+      data: {
+        ...(name && { name }),
+        ...(workerType && { workerType }),
+        ...(skillLevel && { skillLevel }),
+        ...(isActive !== undefined && { isActive }),
+        fixedShift: fixedShift !== undefined ? (fixedShift || null) : undefined,
+        weekendHolidayOff: weekendHolidayOff !== undefined ? !!weekendHolidayOff : undefined,
+        sundayHolidayOff: sundayHolidayOff !== undefined ? !!sundayHolidayOff : undefined,
+      },
     });
     res.json(worker);
   } catch (error) {

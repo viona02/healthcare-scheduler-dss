@@ -11,10 +11,16 @@ export default function WorkersPage() {
     name: string;
     workerType: 'perawat' | 'bidan';
     skillLevel: 'junior' | 'senior';
+    fixedShift: string;
+    weekendHolidayOff: boolean;
+    sundayHolidayOff: boolean;
   }>({
     name: '',
     workerType: 'perawat',
     skillLevel: 'junior',
+    fixedShift: '',
+    weekendHolidayOff: false,
+    sundayHolidayOff: false,
   });
 
   useEffect(() => {
@@ -42,7 +48,7 @@ export default function WorkersPage() {
       }
       setShowForm(false);
       setEditId(null);
-      setFormData({ name: '', workerType: 'perawat', skillLevel: 'junior' });
+      setFormData({ name: '', workerType: 'perawat', skillLevel: 'junior', fixedShift: '', weekendHolidayOff: false, sundayHolidayOff: false });
       loadWorkers();
     } catch (error) {
       console.error('Error saving worker:', error);
@@ -55,6 +61,9 @@ export default function WorkersPage() {
       name: worker.name,
       workerType: worker.workerType,
       skillLevel: worker.skillLevel,
+      fixedShift: worker.fixedShift || '',
+      weekendHolidayOff: !!worker.weekendHolidayOff,
+      sundayHolidayOff: !!worker.sundayHolidayOff,
     });
     setEditId(worker.id);
     setShowForm(true);
@@ -74,7 +83,7 @@ export default function WorkersPage() {
   const cancelForm = () => {
     setShowForm(false);
     setEditId(null);
-    setFormData({ name: '', workerType: 'perawat', skillLevel: 'junior' });
+    setFormData({ name: '', workerType: 'perawat', skillLevel: 'junior', fixedShift: '', weekendHolidayOff: false, sundayHolidayOff: false });
   };
 
   if (loading) {
@@ -157,6 +166,46 @@ export default function WorkersPage() {
                   </select>
                 </div>
               </div>
+              {/* Aturan Khusus */}
+                  <div className="form-group" style={{ marginTop: '0.25rem' }}>
+                    <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={formData.weekendHolidayOff}
+                        onChange={(e) => setFormData({ ...formData, weekendHolidayOff: e.target.checked, sundayHolidayOff: e.target.checked ? false : formData.sundayHolidayOff })}
+                        style={{ width: '1rem', height: '1rem' }}
+                      />
+                      <span>🏖️ Wajib libur setiap <strong>weekend &amp; tanggal merah</strong></span>
+                    </label>
+                  </div>
+                  <div className="form-group" style={{ marginTop: '0.25rem' }}>
+                    <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={formData.sundayHolidayOff}
+                        onChange={(e) => setFormData({ ...formData, sundayHolidayOff: e.target.checked, weekendHolidayOff: e.target.checked ? false : formData.weekendHolidayOff })}
+                        style={{ width: '1rem', height: '1rem' }}
+                      />
+                      <span>🏖️ Wajib libur setiap <strong>Minggu &amp; tanggal merah saja</strong> (Sabtu masuk)</span>
+                    </label>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="worker-fixed-shift">Shift Tetap (opsional)</label>
+                    <select
+                      id="worker-fixed-shift"
+                      className="form-select"
+                      value={formData.fixedShift}
+                      onChange={(e) => setFormData({ ...formData, fixedShift: e.target.value })}
+                    >
+                      <option value="">— Tidak ada —</option>
+                      <option value="Pagi">☀️ Pagi</option>
+                      <option value="Siang">🌤️ Siang</option>
+                      <option value="Malam">🌙 Malam</option>
+                    </select>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block', marginTop: '0.2rem' }}>
+                      Jika diatur, pekerja hanya akan ditempatkan di shift ini saat generate jadwal.
+                    </span>
+                  </div>
               <div className="form-actions">
                 <button type="button" className="btn btn-secondary" onClick={cancelForm}>
                   Batal
@@ -166,7 +215,7 @@ export default function WorkersPage() {
                 </button>
               </div>
             </form>
-          </div>
+              </div>
         </div>
       )}
 
@@ -181,6 +230,7 @@ export default function WorkersPage() {
                 <th>Tipe</th>
                 <th>Level</th>
                 <th>Status</th>
+                <th>Aturan</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -203,6 +253,23 @@ export default function WorkersPage() {
                     <span className={`badge ${worker.isActive ? 'badge-approved' : 'badge-rejected'}`}>
                       {worker.isActive ? 'Aktif' : 'Nonaktif'}
                     </span>
+                  </td>
+                  <td>
+                    <div className="flex flex-col gap-1" style={{ minWidth: '60px' }}>
+                      {worker.weekendHolidayOff && (
+                        <span className="badge" style={{ fontSize: '0.6rem', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-indigo)' }}>
+                          🏖️ Libur Wknd/Merah
+                        </span>
+                      )}
+                      {worker.fixedShift && (
+                        <span className="badge" style={{ fontSize: '0.6rem', background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)' }}>
+                          📌 Tetap {worker.fixedShift}
+                        </span>
+                      )}
+                      {!worker.weekendHolidayOff && !worker.fixedShift && (
+                        <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>—</span>
+                      )}
+                    </div>
                   </td>
                   <td>
                     <div className="flex gap-1">

@@ -36,9 +36,11 @@ async function main() {
   console.log('✅ Shift berhasil dibuat (Pagi/Siang/Malam)');
 
   // ===== Buat Data Tenaga Kerja =====
+  // Rika: fixedShift='Pagi' + weekendHolidayOff=true (libur weekend & tgl merah)
+  // Livia: fixedShift='Pagi' + sundayHolidayOff=true (libur minggu & tgl merah saja, sabtu tetap pagi)
   const workersData = [
     // 9 Perawat (8 Senior, 1 Junior)
-    { name: 'Ns. Rika Aprimadhani, S. Kep', workerType: 'perawat', skillLevel: 'senior' },
+    { name: 'Ns. Rika Aprimadhani, S. Kep', workerType: 'perawat', skillLevel: 'senior', fixedShift: 'Pagi', weekendHolidayOff: true, sundayHolidayOff: false },
     { name: 'Nofri Yorizar, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
     { name: 'Febsyamadri, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
     { name: 'Ns. Rio Hadi Putra, S.Kep', workerType: 'perawat', skillLevel: 'senior' },
@@ -48,15 +50,24 @@ async function main() {
     { name: 'Tika Octavia, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
     { name: 'Ns. Marta Winda Sari, S.Kep', workerType: 'perawat', skillLevel: 'junior' },
     // 4 Bidan (3 Senior, 1 Junior)
-    { name: 'Livia Ramli, A.Md.Kab, S.KM.', workerType: 'bidan', skillLevel: 'senior' },
-    { name: 'Meri Saputri Yani, A.Md.Kab', workerType: 'bidan', skillLevel: 'senior' },
-    { name: 'Rubbiah, A.Md.Kab', workerType: 'bidan', skillLevel: 'senior' },
-    { name: 'Nayia Syafitry, A.Md.Kab', workerType: 'bidan', skillLevel: 'junior' },
+    { name: 'Livia Ramli, A.Md.Keb, S.KM.', workerType: 'bidan', skillLevel: 'senior', fixedShift: 'Pagi', sundayHolidayOff: true, weekendHolidayOff: false },
+    { name: 'Meri Saputri Yani, A.Md.Keb', workerType: 'bidan', skillLevel: 'senior' },
+    { name: 'Rubbiah, A.Md.Keb', workerType: 'bidan', skillLevel: 'senior' },
+    { name: 'Nayia Syafitry, A.Md.Keb', workerType: 'bidan', skillLevel: 'junior' },
   ];
 
   const createdWorkers = [];
   for (const worker of workersData) {
-    const created = await prisma.worker.create({ data: worker });
+    const created = await prisma.worker.create({
+      data: {
+        name: worker.name,
+        workerType: worker.workerType,
+        skillLevel: worker.skillLevel,
+        fixedShift: 'fixedShift' in worker ? worker.fixedShift : null,
+        weekendHolidayOff: 'weekendHolidayOff' in worker ? worker.weekendHolidayOff : false,
+        sundayHolidayOff: 'sundayHolidayOff' in worker ? worker.sundayHolidayOff : false,
+      },
+    });
     createdWorkers.push(created);
   }
   console.log(`✅ ${createdWorkers.length} tenaga kerja berhasil dibuat (9 perawat + 4 bidan)`);

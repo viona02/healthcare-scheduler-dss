@@ -11,12 +11,10 @@ import { authMiddleware } from './middleware/auth';
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3001;
 
 // Middleware
-app.use(cors({
-  origin: true, // Allow all origins (Vercel handles same-domain)
-  credentials: true,
-}));
+app.use(cors());
 app.use(express.json());
 
 // Routes publik (tanpa auth)
@@ -30,17 +28,14 @@ app.use('/api/shift-requests', authMiddleware, shiftRequestRoutes);
 
 // Health check
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', message: 'DSS Healthcare Scheduler API berjalan', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', message: 'DSS Healthcare Scheduler API berjalan' });
 });
 
-// Jalankan server hanya di development (bukan serverless)
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    console.log(`\n🏥 DSS Healthcare Scheduler API`);
-    console.log(`   Server berjalan di http://localhost:${PORT}`);
-    console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
-  });
-}
+// Start server
+app.listen(PORT, () => {
+  console.log(`\n🏥 DSS Healthcare Scheduler API`);
+  console.log(`   Server berjalan di http://localhost:${PORT}`);
+  console.log(`   Health check: http://localhost:${PORT}/api/health\n`);
+});
 
 export default app;

@@ -16,6 +16,9 @@ export interface Worker {
   workerType: 'perawat' | 'bidan';
   skillLevel: 'junior' | 'senior';
   isActive: boolean;
+  fixedShift?: string | null; // shift yang dipaksa, mis. "Pagi". null = tidak ada aturan
+  weekendHolidayOff?: boolean; // wajib libur setiap weekend & tanggal merah
+  sundayHolidayOff?: boolean; // wajib libur setiap Minggu & tanggal merah
   createdAt: string;
   updatedAt: string;
 }
@@ -58,6 +61,7 @@ export interface ShiftRequest {
   id: number;
   workerId: number;
   date: string;
+  endDate?: string | null;
   type: 'off' | 'preference';
   shiftPref?: string | null;
   reason?: string | null;

@@ -1,17 +1,18 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "DSS Healthcare Scheduler - Backend API",
-  "main": "dist/index.js",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "npx prisma generate && tsc",
+    "build": "tsc",
     "start": "node dist/index.js",
     "seed": "tsx prisma/seed.ts",
+    "benchmark": "tsx src/benchmarkRunner.ts",
+    "benchmark:ahp": "tsx src/benchmarkAhpRunner.ts",
     "db:push": "npx prisma db push",
     "db:generate": "npx prisma generate",
-    "db:studio": "npx prisma studio",
-    "postinstall": "npx prisma generate"
+    "db:studio": "npx prisma studio"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
