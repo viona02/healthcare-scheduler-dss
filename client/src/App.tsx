@@ -5,7 +5,6 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import WorkersPage from './pages/WorkersPage';
 import ShiftsPage from './pages/ShiftsPage';
-import AHPPage from './pages/AHPPage';
 import GeneratePage from './pages/GeneratePage';
 import SchedulePage from './pages/SchedulePage';
 import RequestsPage from './pages/RequestsPage';
@@ -78,14 +77,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/ahp"
-        element={
-          <ProtectedRoute adminOnly>
-            <AppLayout><AHPPage /></AppLayout>
-          </ProtectedRoute>
-        }
-      />
+
       <Route
         path="/generate"
         element={

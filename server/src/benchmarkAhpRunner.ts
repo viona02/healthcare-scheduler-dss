@@ -1,7 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import prisma from './prisma';
 import {
   runGeneticAlgorithm,
   buildPeriodDates,
+  buildRequestLookup,
   WorkerData,
   ShiftData,
   ShiftRequestData,
@@ -10,8 +14,6 @@ import {
   AHP_WEIGHTS,
 } from './algorithms/geneticAlgorithm';
 import { getHolidaysInRange } from './services/holidayService';
-
-const prisma = new PrismaClient();
 
 // Konfigurasi GA Standar untuk Pengujian (Seimbang & Cepat)
 const GA_TEST_CONFIG: GAConfig = {
@@ -49,7 +51,8 @@ function analyzeScheduleDetails(
   shifts: ShiftData[],
   periodDates: Date[],
   holidays: Set<string>,
-  requests: ShiftRequestData[]
+  requests: ShiftRequestData[],
+  requestLookup?: Map<number, { offWorkerIds: Set<number>; preferences: Map<string, number[]> }>
 ): ComponentScores {
   const totalDays = periodDates.length;
   let hardViolations = 0;
@@ -108,7 +111,10 @@ function analyzeScheduleDetails(
           while (d + runLen < totalDays && chromosome[d + runLen][nightShiftIndex].includes(worker.id)) {
             runLen++;
           }
-          if (runLen !== 2) hardViolations += (runLen === 1 ? 1 : runLen - 2);
+          if (runLen !== 2) {
+            const excess = runLen === 1 ? 1 : runLen - 2;
+            hardViolations += 5 * excess;
+          }
           if (runLen >= 2) {
             for (let off = 1; off <= 2; off++) {
               const restDay = d + runLen - 1 + off;
@@ -168,11 +174,35 @@ function analyzeScheduleDetails(
       const isSun = dow === 0;
       const isWeekend = dow === 0 || dow === 6;
 
-      if (worker.sundayHolidayOff && (isSun || isRed) && sIdx !== -1) hardViolations += 1;
-      if (worker.weekendHolidayOff && (isWeekend || isRed) && sIdx !== -1) hardViolations += 1;
-      if (worker.fixedShift && sIdx !== -1) {
+      const isOff = (worker.sundayHolidayOff && (isSun || isRed)) ||
+                    (worker.weekendHolidayOff && (isWeekend || isRed));
+
+      if (isOff) {
+        if (sIdx !== -1) hardViolations += 1;
+      } else if (worker.fixedShift) {
         const targetIdx = shifts.findIndex(s => s.name === worker.fixedShift);
         if (sIdx !== targetIdx) hardViolations += 1;
+      }
+    }
+  }
+
+  // HC9: Approved Requests (Off & Preference)
+  if (requestLookup) {
+    for (let day = 0; day < totalDays; day++) {
+      const dayReqs = requestLookup.get(day);
+      if (!dayReqs) continue;
+
+      for (const wId of dayReqs.offWorkerIds) {
+        const sIdx = getWorkerShiftIndex(day, wId);
+        if (sIdx !== -1) hardViolations += 1;
+      }
+
+      for (const [shiftName, wIds] of dayReqs.preferences.entries()) {
+        const prefShiftIdx = shifts.findIndex(s => s.name === shiftName);
+        for (const wId of wIds) {
+          const sIdx = getWorkerShiftIndex(day, wId);
+          if (sIdx !== prefShiftIdx) hardViolations += 1;
+        }
       }
     }
   }
@@ -296,17 +326,9 @@ interface AhpRunResult {
 }
 
 async function main() {
+  const month = 7;
   const year = 2026;
-  const startDate = new Date(year, 5, 26); // 26 Juni 2026
-  const endDate = new Date(year, 6, 26);   // 26 Juli 2026
-
-  const periodDates: Date[] = [];
-  const curr = new Date(startDate);
-  while (curr <= endDate) {
-    periodDates.push(new Date(curr));
-    curr.setDate(curr.getDate() + 1);
-  }
-
+  const periodDates = buildPeriodDates(month, year);
   const periodStart = periodDates[0];
   const periodEnd = periodDates[periodDates.length - 1];
 
@@ -357,9 +379,10 @@ async function main() {
   }));
 
   const holidays = await getHolidaysInRange(periodStart, periodEnd);
+  const requestLookup = buildRequestLookup(requests, periodDates, shifts);
 
   console.log(`📌 Informasi Dataset Testing:`);
-  console.log(`   - Periode: 26 Juni - 26 Juli 2026 (${periodDates.length} hari)`);
+  console.log(`   - Periode: 26 Juni - 25 Juli 2026 (${periodDates.length} hari)`);
   console.log(`   - Tenaga Kerja Aktif: ${workers.length}`);
   console.log(`   - Shift Jaga: ${shifts.length}`);
   console.log(`   - Permintaan Shift Disetujui: ${requests.length}`);
@@ -426,7 +449,8 @@ async function main() {
         shifts,
         periodDates,
         holidays,
-        requests
+        requests,
+        requestLookup
       );
 
       const runData: AhpRunResult = {

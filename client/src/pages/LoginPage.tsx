@@ -70,12 +70,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
-          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-            <p className="text-sm text-muted">
-              Demo: admin / admin123
-            </p>
-          </div>
         </div>
       </div>
     </div>

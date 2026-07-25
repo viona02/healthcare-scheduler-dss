@@ -58,7 +58,7 @@ export default function GeneratePage() {
     <div className="animate-fadeIn">
       <div className="page-header">
         <h2>Generate Jadwal</h2>
-        <p>Gunakan Genetic Algorithm dengan bobot AHP untuk membuat jadwal optimal</p>
+        <p>Sistem akan membuat jadwal kerja otomatis yang optimal untuk periode terpilih</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
@@ -144,111 +144,6 @@ export default function GeneratePage() {
               Tidak ada request yang disetujui untuk periode {getPeriodLabel(month, year)}
             </div>
           )}
-        </div>
-
-        {/* GA Parameters */}
-        <div className="card">
-          <div className="card-title" style={{ marginBottom: '1rem' }}>🧬 Parameter Genetic Algorithm</div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">Population Size</label>
-              <input
-                type="number"
-                className="form-input"
-                value={config.populationSize}
-                onChange={(e) => setConfig({ ...config, populationSize: parseInt(e.target.value) })}
-                min={20}
-                max={500}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Max Generations</label>
-              <input
-                type="number"
-                className="form-input"
-                value={config.maxGenerations}
-                onChange={(e) => setConfig({ ...config, maxGenerations: parseInt(e.target.value) })}
-                min={50}
-                max={2000}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">Crossover Rate</label>
-              <input
-                type="number"
-                step="0.05"
-                className="form-input"
-                value={config.crossoverRate}
-                onChange={(e) => setConfig({ ...config, crossoverRate: parseFloat(e.target.value) })}
-                min={0.1}
-                max={1}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Mutation Rate</label>
-              <input
-                type="number"
-                step="0.01"
-                className="form-input"
-                value={config.mutationRate}
-                onChange={(e) => setConfig({ ...config, mutationRate: parseFloat(e.target.value) })}
-                min={0.01}
-                max={0.5}
-              />
-            </div>
-          </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label className="form-label">Elitism Rate</label>
-              <input
-                type="number"
-                step="0.01"
-                className="form-input"
-                value={config.elitismRate}
-                onChange={(e) => setConfig({ ...config, elitismRate: parseFloat(e.target.value) })}
-                min={0.01}
-                max={0.2}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Tournament Size</label>
-              <input
-                type="number"
-                className="form-input"
-                value={config.tournamentSize}
-                onChange={(e) => setConfig({ ...config, tournamentSize: parseInt(e.target.value) })}
-                min={2}
-                max={10}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Presets */}
-      <div className="card mt-2">
-        <div className="card-title" style={{ marginBottom: '1rem' }}>⚡ Preset Konfigurasi</div>
-        <div className="flex gap-1">
-          <button
-            className="btn btn-secondary"
-            onClick={() => setConfig({ populationSize: 50, maxGenerations: 200, crossoverRate: 0.8, mutationRate: 0.15, elitismRate: 0.05, tournamentSize: 3 })}
-          >
-            🏃 Cepat (kualitas rendah)
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => setConfig({ ...DEFAULT_GA_CONFIG })}
-          >
-            ⚖️ Seimbang (default)
-          </button>
-          <button
-            className="btn btn-secondary"
-            onClick={() => setConfig({ populationSize: 200, maxGenerations: 1000, crossoverRate: 0.85, mutationRate: 0.08, elitismRate: 0.05, tournamentSize: 7 })}
-          >
-            🔬 Thorough (kualitas tinggi)
-          </button>
         </div>
       </div>
 

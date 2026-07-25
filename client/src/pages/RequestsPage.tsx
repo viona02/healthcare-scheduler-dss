@@ -296,7 +296,7 @@ export default function RequestsPage() {
           </span>
           {req.status?.toLowerCase() === 'pending' && (
             <div className="request-card__actions">
-              {isAdmin && (
+              {isAdmin ? (
                 <>
                   <button
                     className="btn btn-success btn-sm"
@@ -311,14 +311,15 @@ export default function RequestsPage() {
                     ❌ Tolak
                   </button>
                 </>
+              ) : (
+                <button
+                  className="btn btn-outline btn-sm"
+                  style={{ color: '#f43f5e', borderColor: 'rgba(244, 63, 94, 0.4)', background: 'rgba(244, 63, 94, 0.08)' }}
+                  onClick={() => handleCancelRequest(req.id)}
+                >
+                  🗑️ Batalkan Permintaan
+                </button>
               )}
-              <button
-                className="btn btn-outline btn-sm"
-                style={{ color: '#f43f5e', borderColor: 'rgba(244, 63, 94, 0.4)', background: 'rgba(244, 63, 94, 0.08)' }}
-                onClick={() => handleCancelRequest(req.id)}
-              >
-                🗑️ Batalkan Permintaan
-              </button>
             </div>
           )}
         </div>

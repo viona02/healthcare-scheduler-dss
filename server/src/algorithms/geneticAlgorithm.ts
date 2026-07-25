@@ -160,7 +160,7 @@ function isWorkerWorking(chromosome: Chromosome, day: number, workerId: number):
 // ----- Inisialisasi Populasi -----
 
 // Bangun lookup: dayIndex -> { offWorkerIds, preferences: {shiftName -> workerId[]} }
-function buildRequestLookup(
+export function buildRequestLookup(
   requests: ShiftRequestData[],
   periodDates: Date[],
   shifts: ShiftData[]

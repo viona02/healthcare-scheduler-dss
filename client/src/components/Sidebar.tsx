@@ -68,13 +68,6 @@ export default function Sidebar() {
             <div className="sidebar-section">
               <div className="sidebar-section-title">DSS Engine</div>
               <NavLink
-                to="/ahp"
-                className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-              >
-                <span className="icon">⚖️</span>
-                Bobot AHP
-              </NavLink>
-              <NavLink
                 to="/generate"
                 className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
               >
