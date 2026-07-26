@@ -63,7 +63,7 @@ app.get('/api/db-status', async (_req, res) => {
 
 app.get('/api/fix-nayla', async (_req, res) => {
   try {
-    const updatedUsers = await prisma.user.updateMany({
+    const uCount = await prisma.user.updateMany({
       where: {
         OR: [
           { username: 'nayia' },
@@ -76,22 +76,18 @@ app.get('/api/fix-nayla', async (_req, res) => {
       }
     });
 
-    const updatedWorkers = await prisma.worker.updateMany({
-      where: {
-        id: 93
-      },
-      data: {
-        name: 'Nayla Syafitry, A.Md.Keb'
-      }
+    const wCount = await prisma.worker.updateMany({
+      where: { id: 93 },
+      data: { name: 'Nayla Syafitry, A.Md.Keb' }
     });
 
-    const allUsers = await prisma.user.findMany({ select: { id: true, username: true, fullName: true, workerId: true } });
+    const user95 = await prisma.user.findUnique({ where: { id: 95 } });
 
     res.json({
       status: 'success',
-      updatedUsersCount: updatedUsers.count,
-      updatedWorkersCount: updatedWorkers.count,
-      allUsers
+      updatedUsers: uCount.count,
+      updatedWorkers: wCount.count,
+      user95
     });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
