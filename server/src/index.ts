@@ -58,6 +58,44 @@ app.get('/api/db-status', async (_req, res) => {
       status: 'error',
       message: error.message,
     });
+app.get('/api/fix-nayla', async (_req, res) => {
+  try {
+    const updatedUsers = await prisma.user.updateMany({
+      where: {
+        OR: [
+          { username: { equals: 'nayia', mode: 'insensitive' } },
+          { fullName: { contains: 'Nayia', mode: 'insensitive' } },
+          { id: 95 }
+        ]
+      },
+      data: {
+        username: 'nayla',
+        fullName: 'Nayla Syafitry, A.Md.Keb'
+      }
+    });
+
+    const updatedWorkers = await prisma.worker.updateMany({
+      where: {
+        OR: [
+          { name: { contains: 'Nayia', mode: 'insensitive' } },
+          { id: 93 }
+        ]
+      },
+      data: {
+        name: 'Nayla Syafitry, A.Md.Keb'
+      }
+    });
+
+    const allUsers = await prisma.user.findMany({ select: { id: true, username: true, fullName: true } });
+
+    res.json({
+      status: 'success',
+      updatedUsersCount: updatedUsers.count,
+      updatedWorkersCount: updatedWorkers.count,
+      allUsers
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 });
 

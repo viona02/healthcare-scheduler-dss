@@ -16,7 +16,19 @@ router.post('/login', async (req: AuthRequest, res: Response) => {
       return;
     }
 
-    const user = await prisma.user.findUnique({ where: { username } });
+    const cleanUsername = String(username).trim().toLowerCase();
+    let user = await prisma.user.findFirst({
+      where: {
+        username: { equals: cleanUsername, mode: 'insensitive' }
+      }
+    });
+    if (!user) {
+      user = await prisma.user.findFirst({
+        where: {
+          username: cleanUsername
+        }
+      });
+    }
     if (!user) {
       res.status(401).json({ error: 'Username atau password salah' });
       return;
