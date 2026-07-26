@@ -58,6 +58,9 @@ app.get('/api/db-status', async (_req, res) => {
       status: 'error',
       message: error.message,
     });
+  }
+});
+
 app.get('/api/fix-nayla', async (_req, res) => {
   try {
     const updatedUsers = await prisma.user.updateMany({
