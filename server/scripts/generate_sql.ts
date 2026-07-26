@@ -140,7 +140,7 @@ VALUES
 (10, 'Livia Ramli, A.Md.Keb, S.KM.', 'bidan', 'senior', 'Pagi', false, true),
 (11, 'Meri Saputri Yani, A.Md.Keb', 'bidan', 'senior', NULL, false, false),
 (12, 'Rubbiah, A.Md.Keb', 'bidan', 'senior', NULL, false, false),
-(13, 'Nayia Syafitry, A.Md.Keb', 'bidan', 'junior', NULL, false, false)
+(13, 'Nayla Syafitry, A.Md.Keb', 'bidan', 'junior', NULL, false, false)
 ON CONFLICT ("id") DO NOTHING;
 
 -- Isi Akun User Admin & Nakes
@@ -159,7 +159,7 @@ VALUES
 ('livia', '${workerPass}', 'Livia Ramli, A.Md.Keb, S.KM.', 'worker', 10),
 ('meri', '${workerPass}', 'Meri Saputri Yani, A.Md.Keb', 'worker', 11),
 ('rubbiah', '${workerPass}', 'Rubbiah, A.Md.Keb', 'worker', 12),
-('nayia', '${workerPass}', 'Nayia Syafitry, A.Md.Keb', 'worker', 13)
+('nayla', '${workerPass}', 'Nayla Syafitry, A.Md.Keb', 'worker', 13)
 ON CONFLICT ("username") DO NOTHING;
 `;
 

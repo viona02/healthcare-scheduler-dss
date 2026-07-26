@@ -133,7 +133,7 @@ INSERT INTO "Worker" ("id", "name", "workerType", "skillLevel", "fixedShift", "w
 (90, 'Livia Ramli, A.Md.Keb, S.KM.', 'bidan', 'senior', 'Pagi', false, true),
 (91, 'Meri Saputri Yani, A.Md.Keb', 'bidan', 'senior', NULL, false, false),
 (92, 'Rubbiah, A.Md.Keb', 'bidan', 'senior', NULL, false, false),
-(93, 'Nayia Syafitry, A.Md.Keb', 'bidan', 'junior', NULL, false, false)
+(93, 'Nayla Syafitry, A.Md.Keb', 'bidan', 'junior', NULL, false, false)
 ON CONFLICT ("id") DO NOTHING;
 
 -- 4. Insert Users
@@ -148,10 +148,10 @@ INSERT INTO "User" ("id", "username", "password", "fullName", "role", "workerId"
 (89, 'yusuf', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Yusuf Suhandi, A.Md.Kep', 'worker', 87),
 (90, 'tika', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Tika Octavia, A.Md.Kep', 'worker', 88),
 (91, 'marta', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Ns. Marta Winda Sari, S.Kep', 'worker', 89),
-(92, 'livia', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Livia Ramli, A.Md.Kab, S.KM.', 'worker', 90),
-(93, 'meri', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Meri Saputri Yani, A.Md.Kab', 'worker', 91),
-(94, 'rubbiah', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Rubbiah, A.Md.Kab', 'worker', 92),
-(95, 'nayia', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Nayia Syafitry, A.Md.Kab', 'worker', 93)
+(92, 'livia', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Livia Ramli, A.Md.Keb, S.KM.', 'worker', 90),
+(93, 'meri', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Meri Saputri Yani, A.Md.Keb', 'worker', 91),
+(94, 'rubbiah', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Rubbiah, A.Md.Keb', 'worker', 92),
+(95, 'nayla', '$2b$10$MBd4hBQhvbWC3K6mR6Bode8TeD1bVasaDlW/lfGp0gVu/HP0hy8Si', 'Nayla Syafitry, A.Md.Keb', 'worker', 93)
 ON CONFLICT ("id") DO NOTHING;
 
 -- 5. Insert Schedules (8 total)

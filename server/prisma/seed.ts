@@ -60,7 +60,7 @@ async function main() {
     { name: 'Livia Ramli, A.Md.Keb, S.KM.', workerType: 'bidan', skillLevel: 'senior', fixedShift: 'Pagi', sundayHolidayOff: true, weekendHolidayOff: false },
     { name: 'Meri Saputri Yani, A.Md.Keb', workerType: 'bidan', skillLevel: 'senior' },
     { name: 'Rubbiah, A.Md.Keb', workerType: 'bidan', skillLevel: 'senior' },
-    { name: 'Nayia Syafitry, A.Md.Keb', workerType: 'bidan', skillLevel: 'junior' },
+    { name: 'Nayla Syafitry, A.Md.Keb', workerType: 'bidan', skillLevel: 'junior' },
   ];
 
   const createdWorkers = [];
@@ -105,10 +105,10 @@ async function main() {
     { username: 'yusuf', fullName: 'Yusuf Suhandi, A.Md.Kep', workerId: createdWorkers[6].id },
     { username: 'tika', fullName: 'Tika Octavia, A.Md.Kep', workerId: createdWorkers[7].id },
     { username: 'marta', fullName: 'Ns. Marta Winda Sari, S.Kep', workerId: createdWorkers[8].id },
-    { username: 'livia', fullName: 'Livia Ramli, A.Md.Kab, S.KM.', workerId: createdWorkers[9].id },
-    { username: 'meri', fullName: 'Meri Saputri Yani, A.Md.Kab', workerId: createdWorkers[10].id },
-    { username: 'rubbiah', fullName: 'Rubbiah, A.Md.Kab', workerId: createdWorkers[11].id },
-    { username: 'nayia', fullName: 'Nayia Syafitry, A.Md.Kab', workerId: createdWorkers[12].id },
+    { username: 'livia', fullName: 'Livia Ramli, A.Md.Keb, S.KM.', workerId: createdWorkers[9].id },
+    { username: 'meri', fullName: 'Meri Saputri Yani, A.Md.Keb', workerId: createdWorkers[10].id },
+    { username: 'rubbiah', fullName: 'Rubbiah, A.Md.Keb', workerId: createdWorkers[11].id },
+    { username: 'nayla', fullName: 'Nayla Syafitry, A.Md.Keb', workerId: createdWorkers[12].id },
   ];
 
   const workerPassword = await bcrypt.hash('worker123', 10);
@@ -135,7 +135,7 @@ async function main() {
   console.log('║  TENAGA KERJA (semua password: worker123):   ║');
   console.log('║  rika, nofri, febsyamadri, rio, agus,        ║');
   console.log('║  hafis, yusuf, tika, marta,                  ║');
-  console.log('║  livia, meri, rubbiah, nayia                 ║');
+  console.log('║  livia, meri, rubbiah, nayla                 ║');
   console.log('╚══════════════════════════════════════════════╝');
 }
 

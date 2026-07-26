@@ -132,7 +132,7 @@ VALUES
 (10, 'Livia Ramli, A.Md.Keb, S.KM.', 'bidan', 'senior', 'Pagi', false, true),
 (11, 'Meri Saputri Yani, A.Md.Keb', 'bidan', 'senior', NULL, false, false),
 (12, 'Rubbiah, A.Md.Keb', 'bidan', 'senior', NULL, false, false),
-(13, 'Nayia Syafitry, A.Md.Keb', 'bidan', 'junior', NULL, false, false)
+(13, 'Nayla Syafitry, A.Md.Keb', 'bidan', 'junior', NULL, false, false)
 ON CONFLICT ("id") DO NOTHING;
 
 -- Isi Akun User Admin & Nakes
@@ -151,5 +151,5 @@ VALUES
 ('livia', '$2b$10$V4hqM19PIy0.T720oV1oUenuNhOm0KFtW.WAoKBpiGG7O5tO3qQqi', 'Livia Ramli, A.Md.Keb, S.KM.', 'worker', 10),
 ('meri', '$2b$10$V4hqM19PIy0.T720oV1oUenuNhOm0KFtW.WAoKBpiGG7O5tO3qQqi', 'Meri Saputri Yani, A.Md.Keb', 'worker', 11),
 ('rubbiah', '$2b$10$V4hqM19PIy0.T720oV1oUenuNhOm0KFtW.WAoKBpiGG7O5tO3qQqi', 'Rubbiah, A.Md.Keb', 'worker', 12),
-('nayia', '$2b$10$V4hqM19PIy0.T720oV1oUenuNhOm0KFtW.WAoKBpiGG7O5tO3qQqi', 'Nayia Syafitry, A.Md.Keb', 'worker', 13)
+('nayla', '$2b$10$V4hqM19PIy0.T720oV1oUenuNhOm0KFtW.WAoKBpiGG7O5tO3qQqi', 'Nayla Syafitry, A.Md.Keb', 'worker', 13)
 ON CONFLICT ("username") DO NOTHING;
