@@ -61,39 +61,6 @@ app.get('/api/db-status', async (_req, res) => {
   }
 });
 
-app.get('/api/fix-nayla', async (_req, res) => {
-  try {
-    const uCount = await prisma.user.updateMany({
-      where: {
-        OR: [
-          { username: 'nayia' },
-          { id: 95 }
-        ]
-      },
-      data: {
-        username: 'nayla',
-        fullName: 'Nayla Syafitry, A.Md.Keb'
-      }
-    });
-
-    const wCount = await prisma.worker.updateMany({
-      where: { id: 93 },
-      data: { name: 'Nayla Syafitry, A.Md.Keb' }
-    });
-
-    const user95 = await prisma.user.findUnique({ where: { id: 95 } });
-
-    res.json({
-      status: 'success',
-      updatedUsers: uCount.count,
-      updatedWorkers: wCount.count,
-      user95
-    });
-  } catch (error: any) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // Start server (hanya saat berjalan lokal)
 if (process.env.VERCEL !== '1') {
   app.listen(PORT, () => {
