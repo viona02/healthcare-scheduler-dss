@@ -66,8 +66,7 @@ app.get('/api/fix-nayla', async (_req, res) => {
     const updatedUsers = await prisma.user.updateMany({
       where: {
         OR: [
-          { username: { equals: 'nayia', mode: 'insensitive' } },
-          { fullName: { contains: 'Nayia', mode: 'insensitive' } },
+          { username: 'nayia' },
           { id: 95 }
         ]
       },
@@ -79,17 +78,14 @@ app.get('/api/fix-nayla', async (_req, res) => {
 
     const updatedWorkers = await prisma.worker.updateMany({
       where: {
-        OR: [
-          { name: { contains: 'Nayia', mode: 'insensitive' } },
-          { id: 93 }
-        ]
+        id: 93
       },
       data: {
         name: 'Nayla Syafitry, A.Md.Keb'
       }
     });
 
-    const allUsers = await prisma.user.findMany({ select: { id: true, username: true, fullName: true } });
+    const allUsers = await prisma.user.findMany({ select: { id: true, username: true, fullName: true, workerId: true } });
 
     res.json({
       status: 'success',
