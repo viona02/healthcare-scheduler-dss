@@ -19,6 +19,24 @@ function getSqliteClient(): PrismaClient {
       sqlitePath = cwdPath;
     }
   }
+
+  // On Vercel / serverless environment, /var/task is read-only.
+  // Copy dev.db to /tmp/dev.db so write operations (delete, select, generate) succeed!
+  if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production') {
+    const tmpPath = path.join('/tmp', 'dev.db');
+    try {
+      if (!fs.existsSync(tmpPath) && fs.existsSync(sqlitePath)) {
+        fs.copyFileSync(sqlitePath, tmpPath);
+        console.log('[Prisma] Copied dev.db to /tmp/dev.db for writable serverless execution');
+      }
+      if (fs.existsSync(tmpPath)) {
+        sqlitePath = tmpPath;
+      }
+    } catch (e) {
+      console.warn('[Prisma] Failed to copy dev.db to /tmp:', e);
+    }
+  }
+
   const sqliteUrl = `file:${sqlitePath}`;
   process.env.SQLITE_DATABASE_URL = sqliteUrl;
   const { PrismaClient: SqlitePrismaClient } = require('../generated-sqlite-client');
