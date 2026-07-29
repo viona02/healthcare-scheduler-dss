@@ -96,7 +96,9 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   fullName: 'fullName',
   role: 'role',
-  workerId: 'workerId'
+  workerId: 'workerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.WorkerScalarFieldEnum = {
@@ -107,7 +109,9 @@ exports.Prisma.WorkerScalarFieldEnum = {
   isActive: 'isActive',
   fixedShift: 'fixedShift',
   weekendHolidayOff: 'weekendHolidayOff',
-  sundayHolidayOff: 'sundayHolidayOff'
+  sundayHolidayOff: 'sundayHolidayOff',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShiftScalarFieldEnum = {
@@ -118,7 +122,9 @@ exports.Prisma.ShiftScalarFieldEnum = {
   durationHrs: 'durationHrs',
   minNurses: 'minNurses',
   minMidwives: 'minMidwives',
-  minSeniors: 'minSeniors'
+  minSeniors: 'minSeniors',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ScheduleScalarFieldEnum = {
@@ -128,7 +134,9 @@ exports.Prisma.ScheduleScalarFieldEnum = {
   status: 'status',
   isSelected: 'isSelected',
   fitnessScore: 'fitnessScore',
-  generationCount: 'generationCount'
+  generationCount: 'generationCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AssignmentScalarFieldEnum = {
@@ -136,7 +144,9 @@ exports.Prisma.AssignmentScalarFieldEnum = {
   scheduleId: 'scheduleId',
   workerId: 'workerId',
   dayOfMonth: 'dayOfMonth',
-  shiftId: 'shiftId'
+  shiftId: 'shiftId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShiftRequestScalarFieldEnum = {
@@ -199,7 +209,8 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../.env"
+    "rootEnvPath": null,
+    "schemaEnvPath": "../.env"
   },
   "relativePath": "../prisma",
   "clientVersion": "6.19.3",
@@ -217,13 +228,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated-sqlite-client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"SQLITE_DATABASE_URL\")\n}\n\nmodel User {\n  id       Int    @id @default(autoincrement())\n  username String @unique\n  password String\n  fullName String\n  role     String\n  workerId Int?\n}\n\nmodel Worker {\n  id                Int     @id @default(autoincrement())\n  name              String\n  workerType        String\n  skillLevel        String\n  isActive          Boolean\n  fixedShift        String?\n  weekendHolidayOff Boolean\n  sundayHolidayOff  Boolean\n}\n\nmodel Shift {\n  id          Int    @id @default(autoincrement())\n  name        String\n  startTime   String\n  endTime     String\n  durationHrs Float\n  minNurses   Int\n  minMidwives Int\n  minSeniors  Int\n}\n\nmodel Schedule {\n  id              Int     @id @default(autoincrement())\n  month           Int\n  year            Int\n  status          String?\n  isSelected      Boolean @default(false)\n  fitnessScore    Float\n  generationCount Int\n}\n\nmodel Assignment {\n  id         Int @id @default(autoincrement())\n  scheduleId Int\n  workerId   Int\n  dayOfMonth Int\n  shiftId    Int\n}\n\nmodel ShiftRequest {\n  id              Int       @id @default(autoincrement())\n  workerId        Int\n  date            DateTime\n  endDate         DateTime?\n  type            String\n  shiftPref       String?\n  reason          String?\n  status          String\n  rejectionReason String?\n}\n",
-  "inlineSchemaHash": "f07ece6e732f2dbe9da81016eff9bcd247e0e425606700317cb572b8b1edb7aa",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated-sqlite-client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"SQLITE_DATABASE_URL\")\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  username  String   @unique\n  password  String\n  fullName  String\n  role      String   @default(\"worker\")\n  workerId  Int?     @unique\n  createdAt DateTime @default(now())\n  updatedAt DateTime @default(now())\n}\n\nmodel Worker {\n  id                Int      @id @default(autoincrement())\n  name              String\n  workerType        String\n  skillLevel        String\n  isActive          Boolean  @default(true)\n  fixedShift        String?\n  weekendHolidayOff Boolean  @default(false)\n  sundayHolidayOff  Boolean  @default(false)\n  createdAt         DateTime @default(now())\n  updatedAt         DateTime @default(now())\n}\n\nmodel Shift {\n  id          Int      @id @default(autoincrement())\n  name        String\n  startTime   String\n  endTime     String\n  durationHrs Float\n  minNurses   Int\n  minMidwives Int\n  minSeniors  Int\n  createdAt   DateTime @default(now())\n  updatedAt   DateTime @default(now())\n}\n\nmodel Schedule {\n  id              Int      @id @default(autoincrement())\n  month           Int\n  year            Int\n  status          String?  @default(\"draft\")\n  isSelected      Boolean  @default(false)\n  fitnessScore    Float\n  generationCount Int\n  createdAt       DateTime @default(now())\n  updatedAt       DateTime @default(now())\n}\n\nmodel Assignment {\n  id         Int      @id @default(autoincrement())\n  scheduleId Int\n  workerId   Int\n  dayOfMonth Int\n  shiftId    Int\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @default(now())\n}\n\nmodel ShiftRequest {\n  id              Int       @id @default(autoincrement())\n  workerId        Int\n  date            DateTime\n  endDate         DateTime?\n  type            String\n  shiftPref       String?\n  reason          String?\n  status          String    @default(\"pending\")\n  rejectionReason String?\n}\n",
+  "inlineSchemaHash": "b7f9583a8c2905a7ba1b9982306f6bb6c7a0c0342c3e3aa186fe2888f5c617a9",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workerId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Worker\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workerType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"skillLevel\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"fixedShift\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weekendHolidayOff\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"sundayHolidayOff\",\"kind\":\"scalar\",\"type\":\"Boolean\"}],\"dbName\":null},\"Shift\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"durationHrs\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"minNurses\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"minMidwives\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"minSeniors\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Schedule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"month\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isSelected\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"fitnessScore\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"generationCount\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"Assignment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"scheduleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"workerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"dayOfMonth\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"shiftId\",\"kind\":\"scalar\",\"type\":\"Int\"}],\"dbName\":null},\"ShiftRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"workerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shiftPref\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rejectionReason\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"fullName\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Worker\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"workerType\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"skillLevel\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isActive\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"fixedShift\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"weekendHolidayOff\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"sundayHolidayOff\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Shift\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"startTime\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"endTime\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"durationHrs\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"minNurses\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"minMidwives\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"minSeniors\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Schedule\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"month\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"year\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isSelected\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"fitnessScore\",\"kind\":\"scalar\",\"type\":\"Float\"},{\"name\":\"generationCount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Assignment\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"scheduleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"workerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"dayOfMonth\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"shiftId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"ShiftRequest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"workerId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"date\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"endDate\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"type\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"shiftPref\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"reason\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"status\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"rejectionReason\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

@@ -13,8 +13,10 @@ model User {
   username  String   @unique
   password  String
   fullName  String
-  role      String
-  workerId  Int?
+  role      String   @default("worker")
+  workerId  Int?     @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Worker {
@@ -22,14 +24,16 @@ model Worker {
   name              String
   workerType        String
   skillLevel        String
-  isActive          Boolean
+  isActive          Boolean  @default(true)
   fixedShift        String?
-  weekendHolidayOff Boolean
-  sundayHolidayOff  Boolean
+  weekendHolidayOff Boolean  @default(false)
+  sundayHolidayOff  Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
 }
 
 model Shift {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   startTime   String
   endTime     String
@@ -37,34 +41,40 @@ model Shift {
   minNurses   Int
   minMidwives Int
   minSeniors  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
 
 model Schedule {
-  id              Int     @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   month           Int
   year            Int
-  status          String?
-  isSelected      Boolean @default(false)
+  status          String?  @default("draft")
+  isSelected      Boolean  @default(false)
   fitnessScore    Float
   generationCount Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
 }
 
 model Assignment {
-  id         Int @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   scheduleId Int
   workerId   Int
   dayOfMonth Int
   shiftId    Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
 }
 
 model ShiftRequest {
-  id              Int     @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   workerId        Int
   date            DateTime
   endDate         DateTime?
   type            String
   shiftPref       String?
   reason          String?
-  status          String
+  status          String    @default("pending")
   rejectionReason String?
 }

@@ -124,7 +124,9 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   fullName: 'fullName',
   role: 'role',
-  workerId: 'workerId'
+  workerId: 'workerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.WorkerScalarFieldEnum = {
@@ -135,7 +137,9 @@ exports.Prisma.WorkerScalarFieldEnum = {
   isActive: 'isActive',
   fixedShift: 'fixedShift',
   weekendHolidayOff: 'weekendHolidayOff',
-  sundayHolidayOff: 'sundayHolidayOff'
+  sundayHolidayOff: 'sundayHolidayOff',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShiftScalarFieldEnum = {
@@ -146,7 +150,9 @@ exports.Prisma.ShiftScalarFieldEnum = {
   durationHrs: 'durationHrs',
   minNurses: 'minNurses',
   minMidwives: 'minMidwives',
-  minSeniors: 'minSeniors'
+  minSeniors: 'minSeniors',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ScheduleScalarFieldEnum = {
@@ -156,7 +162,9 @@ exports.Prisma.ScheduleScalarFieldEnum = {
   status: 'status',
   isSelected: 'isSelected',
   fitnessScore: 'fitnessScore',
-  generationCount: 'generationCount'
+  generationCount: 'generationCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AssignmentScalarFieldEnum = {
@@ -164,7 +172,9 @@ exports.Prisma.AssignmentScalarFieldEnum = {
   scheduleId: 'scheduleId',
   workerId: 'workerId',
   dayOfMonth: 'dayOfMonth',
-  shiftId: 'shiftId'
+  shiftId: 'shiftId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ShiftRequestScalarFieldEnum = {

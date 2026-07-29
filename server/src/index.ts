@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import authRoutes from './routes/auth';
 import workerRoutes from './routes/workers';
 import shiftRoutes from './routes/shifts';
@@ -58,6 +59,123 @@ app.get('/api/db-status', async (_req, res) => {
       status: 'error',
       message: error.message,
     });
+  }
+});
+
+// Endpoint re-seed database (bisa dipanggil di Vercel / Cloud DB)
+app.get('/api/reseed', async (_req, res) => {
+  try {
+    await prisma.assignment.deleteMany();
+    await prisma.schedule.deleteMany();
+    await prisma.shiftRequest.deleteMany();
+    await prisma.user.deleteMany({ where: { role: 'worker' } });
+    await prisma.worker.deleteMany();
+
+    const shiftsData = [
+      { id: 1, name: 'Pagi', startTime: '07:00', endTime: '14:00', durationHrs: 7, minNurses: 2, minMidwives: 1, minSeniors: 1 },
+      { id: 2, name: 'Siang', startTime: '14:00', endTime: '21:30', durationHrs: 7.5, minNurses: 2, minMidwives: 1, minSeniors: 1 },
+      { id: 3, name: 'Malam', startTime: '21:30', endTime: '07:00', durationHrs: 9.5, minNurses: 2, minMidwives: 1, minSeniors: 1 },
+    ];
+
+    for (const shift of shiftsData) {
+      await prisma.shift.upsert({
+        where: { id: shift.id },
+        update: shift,
+        create: shift,
+      });
+    }
+
+    const workersData = [
+      { name: 'Ns. Rika Aprimadhani, S. Kep', workerType: 'perawat', skillLevel: 'senior', fixedShift: 'Pagi', weekendHolidayOff: true, sundayHolidayOff: false },
+      { name: 'Nofri Yorizar, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Febsyamadri, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Ns. Rio Hadi Putra, S.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Agus Chandra, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Muhammad Hafis, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Yusuf Suhandi, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Tika Octavia, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
+      { name: 'Ns. Marta Winda Sari, S.Kep', workerType: 'perawat', skillLevel: 'junior' },
+      { name: 'Livia Ramli, A.Md.Keb, S.KM.', workerType: 'bidan', skillLevel: 'senior', fixedShift: 'Pagi', sundayHolidayOff: true, weekendHolidayOff: false },
+      { name: 'Meri Saputri Yani, A.Md.Keb', workerType: 'bidan', skillLevel: 'senior' },
+      { name: 'Rubbiah, A.Md.Keb', workerType: 'bidan', skillLevel: 'senior' },
+      { name: 'Nayla Syafitry, A.Md.Keb', workerType: 'bidan', skillLevel: 'junior' },
+    ];
+
+    const createdWorkers = [];
+    for (const worker of workersData) {
+      const created = await prisma.worker.create({
+        data: {
+          name: worker.name,
+          workerType: worker.workerType,
+          skillLevel: worker.skillLevel,
+          fixedShift: worker.fixedShift || null,
+          weekendHolidayOff: worker.weekendHolidayOff || false,
+          sundayHolidayOff: worker.sundayHolidayOff || false,
+        },
+      });
+      createdWorkers.push(created);
+    }
+
+    const adminPassword = await bcrypt.hash('admin123', 10);
+    await prisma.user.upsert({
+      where: { username: 'admin' },
+      update: {},
+      create: {
+        username: 'admin',
+        password: adminPassword,
+        fullName: 'Administrator',
+        role: 'admin',
+      },
+    });
+
+    const workerUsernames = [
+      { username: 'rika', fullName: 'Ns. Rika Aprimadhani, S. Kep', workerId: createdWorkers[0].id },
+      { username: 'nofri', fullName: 'Nofri Yorizar, A.Md.Kep', workerId: createdWorkers[1].id },
+      { username: 'febsyamadri', fullName: 'Febsyamadri, A.Md.Kep', workerId: createdWorkers[2].id },
+      { username: 'rio', fullName: 'Ns. Rio Hadi Putra, S.Kep', workerId: createdWorkers[3].id },
+      { username: 'agus', fullName: 'Agus Chandra, A.Md.Kep', workerId: createdWorkers[4].id },
+      { username: 'hafis', fullName: 'Muhammad Hafis, A.Md.Kep', workerId: createdWorkers[5].id },
+      { username: 'yusuf', fullName: 'Yusuf Suhandi, A.Md.Kep', workerId: createdWorkers[6].id },
+      { username: 'tika', fullName: 'Tika Octavia, A.Md.Kep', workerId: createdWorkers[7].id },
+      { username: 'marta', fullName: 'Ns. Marta Winda Sari, S.Kep', workerId: createdWorkers[8].id },
+      { username: 'livia', fullName: 'Livia Ramli, A.Md.Keb, S.KM.', workerId: createdWorkers[9].id },
+      { username: 'meri', fullName: 'Meri Saputri Yani, A.Md.Keb', workerId: createdWorkers[10].id },
+      { username: 'rubbiah', fullName: 'Rubbiah, A.Md.Keb', workerId: createdWorkers[11].id },
+      { username: 'nayla', fullName: 'Nayla Syafitry, A.Md.Keb', workerId: createdWorkers[12].id },
+    ];
+
+    const workerPassword = await bcrypt.hash('worker123', 10);
+    for (const wu of workerUsernames) {
+      await prisma.user.create({
+        data: {
+          username: wu.username,
+          password: workerPassword,
+          fullName: wu.fullName,
+          role: 'worker',
+          workerId: wu.workerId,
+        },
+      });
+    }
+
+    const initialRequests = [
+      { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z'), endDate: new Date('2026-07-07T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[4].id, date: new Date('2026-07-15T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[6].id, date: new Date('2026-06-30T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[6].id, date: new Date('2026-07-08T00:00:00.000Z'), endDate: new Date('2026-07-13T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[7].id, date: new Date('2026-06-26T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[8].id, date: new Date('2026-07-18T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[10].id, date: new Date('2026-07-20T00:00:00.000Z'), endDate: new Date('2026-07-25T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[12].id, date: new Date('2026-07-16T00:00:00.000Z'), type: 'off', status: 'approved' },
+    ];
+
+    for (const req of initialRequests) {
+      await prisma.shiftRequest.create({ data: req });
+    }
+
+    res.json({ success: true, message: 'Database successfully re-seeded!' });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

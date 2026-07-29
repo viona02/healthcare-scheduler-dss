@@ -3,20 +3,11 @@
 // 9 Perawat + 4 Bidan + Worker User Accounts
 // ============================================
 
-import { PrismaClient } from '@prisma/client';
+import prisma from '../src/prisma';
 import bcrypt from 'bcryptjs';
-
-const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Seeding database...\n');
-
-  // Cek apakah database sudah memiliki data (misal admin)
-  const existingAdmin = await prisma.user.findUnique({ where: { username: 'admin' } });
-  if (existingAdmin) {
-    console.log('✅ Database Supabase sudah terisi data, melewati auto-seed.');
-    return;
-  }
 
   // ===== Hapus data lama untuk re-seed bersih pada DB baru =====
   console.log('🗑️  Membersihkan data lama...');
@@ -70,6 +61,7 @@ async function main() {
         name: worker.name,
         workerType: worker.workerType,
         skillLevel: worker.skillLevel,
+        isActive: true,
         fixedShift: 'fixedShift' in worker ? worker.fixedShift : null,
         weekendHolidayOff: 'weekendHolidayOff' in worker ? worker.weekendHolidayOff : false,
         sundayHolidayOff: 'sundayHolidayOff' in worker ? worker.sundayHolidayOff : false,
@@ -124,6 +116,26 @@ async function main() {
     });
   }
   console.log('✅ User untuk semua tenaga kerja dibuat');
+
+  // ===== Buat Initial Shift Requests =====
+  const initialRequests = [
+    { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z'), endDate: new Date('2026-07-07T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[4].id, date: new Date('2026-07-15T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[6].id, date: new Date('2026-06-30T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[6].id, date: new Date('2026-07-08T00:00:00.000Z'), endDate: new Date('2026-07-13T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[7].id, date: new Date('2026-06-26T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[8].id, date: new Date('2026-07-18T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[10].id, date: new Date('2026-07-20T00:00:00.000Z'), endDate: new Date('2026-07-25T00:00:00.000Z'), type: 'off', status: 'approved' },
+    { workerId: createdWorkers[12].id, date: new Date('2026-07-16T00:00:00.000Z'), type: 'off', status: 'approved' },
+  ];
+
+  for (const req of initialRequests) {
+    await prisma.shiftRequest.create({
+      data: req,
+    });
+  }
+  console.log(`✅ ${initialRequests.length} shift request awal berhasil dibuat`);
 
   console.log('\n🎉 Seeding selesai!\n');
   console.log('╔══════════════════════════════════════════════╗');
