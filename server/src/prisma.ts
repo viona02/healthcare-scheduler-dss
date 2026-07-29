@@ -54,7 +54,7 @@ function getSqliteClient(): PrismaClient {
 function createPrismaClient(): PrismaClient {
   const dbUrl = process.env.DATABASE_URL || '';
 
-  if (!dbUrl || dbUrl.startsWith('file:') || dbUrl.includes('.db')) {
+  if (!dbUrl || dbUrl.startsWith('file:') || dbUrl.includes('.db') || process.env.VERCEL === '1') {
     return getSqliteClient();
   }
 

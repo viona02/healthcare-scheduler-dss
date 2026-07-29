@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npx prisma generate --schema=server/prisma/schema.prisma && npx prisma generate --schema=server/prisma/sqlite.prisma && cd client && npm install && npm run build",
+  "buildCommand": "cd server && npm install && npm run build && npx prisma generate --schema=prisma/sqlite.prisma && cd ../client && npm install && npm run build",
   "outputDirectory": "client/dist",
   "functions": {
     "api/index.ts": {
