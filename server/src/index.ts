@@ -19,18 +19,20 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Auto-seed function & re-seed logic
 let isSeeding = false;
 
-async function performSeed() {
-  // 1. Membersihkan data lama sesuai urutan Relasi Foreign Key
+async function performSeedWithLogs(): Promise<string[]> {
+  const logs: string[] = [];
+
+  logs.push('Deleting old data...');
   await prisma.assignment.deleteMany();
   await prisma.schedule.deleteMany();
   await prisma.shiftRequest.deleteMany();
   await prisma.user.deleteMany();
   await prisma.worker.deleteMany();
+  logs.push('Old data deleted successfully.');
 
-  // 2. Insert Shifts Default
+  logs.push('Upserting shifts...');
   const shiftsData = [
     { id: 1, name: 'Pagi', startTime: '07:00', endTime: '14:00', durationHrs: 7, minNurses: 2, minMidwives: 1, minSeniors: 1 },
     { id: 2, name: 'Siang', startTime: '14:00', endTime: '21:30', durationHrs: 7.5, minNurses: 2, minMidwives: 1, minSeniors: 1 },
@@ -44,8 +46,9 @@ async function performSeed() {
       create: shift,
     });
   }
+  logs.push('Shifts upserted successfully.');
 
-  // 3. Insert Workers Default
+  logs.push('Creating workers...');
   const workersData = [
     { name: 'Ns. Rika Aprimadhani, S. Kep', workerType: 'perawat', skillLevel: 'senior', fixedShift: 'Pagi', weekendHolidayOff: true, sundayHolidayOff: false },
     { name: 'Nofri Yorizar, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
@@ -62,7 +65,7 @@ async function performSeed() {
     { name: 'Nayla Syafitry, A.Md.Keb', workerType: 'bidan', skillLevel: 'junior' },
   ];
 
-  const createdWorkers = [];
+  const createdWorkers: any[] = [];
   for (const worker of workersData) {
     const created = await prisma.worker.create({
       data: {
@@ -77,8 +80,9 @@ async function performSeed() {
     });
     createdWorkers.push(created);
   }
+  logs.push(`Created ${createdWorkers.length} workers.`);
 
-  // 4. Insert User Admin
+  logs.push('Creating admin user...');
   const adminPassword = await bcrypt.hash('admin123', 10);
   await prisma.user.create({
     data: {
@@ -88,8 +92,9 @@ async function performSeed() {
       role: 'admin',
     },
   });
+  logs.push('Admin user created.');
 
-  // 5. Insert User Worker Accounts
+  logs.push('Creating worker user accounts...');
   const workerUsernames = [
     { username: 'rika', fullName: 'Ns. Rika Aprimadhani, S. Kep', workerId: createdWorkers[0].id },
     { username: 'nofri', fullName: 'Nofri Yorizar, A.Md.Kep', workerId: createdWorkers[1].id },
@@ -118,8 +123,9 @@ async function performSeed() {
       },
     });
   }
+  logs.push(`Created ${workerUsernames.length} worker user accounts.`);
 
-  // 6. Insert Shift Requests Default
+  logs.push('Creating shift requests...');
   const initialRequests = [
     { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z'), endDate: new Date('2026-07-07T00:00:00.000Z'), type: 'off', status: 'approved' },
     { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z'), type: 'off', status: 'approved' },
@@ -135,6 +141,9 @@ async function performSeed() {
   for (const req of initialRequests) {
     await prisma.shiftRequest.create({ data: req });
   }
+  logs.push(`Created ${initialRequests.length} shift requests.`);
+
+  return logs;
 }
 
 async function ensureDbSeeded() {
@@ -145,7 +154,7 @@ async function ensureDbSeeded() {
 
     isSeeding = true;
     console.log('🌱 Cloud DB workers table is empty. Running automatic seed...');
-    await performSeed();
+    await performSeedWithLogs();
     console.log('✅ Auto-seed completed successfully.');
   } catch (error) {
     console.error('Auto-seed failed:', error);
@@ -205,10 +214,16 @@ app.get('/api/db-status', async (_req, res) => {
 // Endpoint re-seed manual (/api/reseed)
 app.get('/api/reseed', async (_req, res) => {
   try {
-    await performSeed();
-    res.json({ success: true, message: 'Database cloud berhasil di-seed ulang!' });
+    const logs = await performSeedWithLogs();
+    res.json({ success: true, logs, message: 'Database cloud berhasil di-seed ulang!' });
   } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message, stack: error.stack });
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code,
+      meta: error.meta,
+      stack: error.stack,
+    });
   }
 });
 
