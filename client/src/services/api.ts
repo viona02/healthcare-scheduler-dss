@@ -182,12 +182,4 @@ export const shiftRequestsAPI = {
   },
 };
 
-// ===== Benchmark Results =====
-export const benchmarkAPI = {
-  getResults: async () => {
-    const res = await api.get('/benchmark/results');
-    return res.data;
-  },
-};
-
 export default api;
