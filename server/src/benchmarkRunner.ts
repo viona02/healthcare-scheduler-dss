@@ -385,7 +385,6 @@ async function main() {
 
   const testConfigs = [
     { name: 'KONFIGURASI RENDAH (Cepat)', config: CONFIG_LOW },
-    { name: 'KONFIGURASI SEDANG (Seimbang / Default)', config: CONFIG_MEDIUM },
     { name: 'KONFIGURASI TINGGI (Thorough / Kualitas Tinggi)', config: CONFIG_HIGH },
   ];
 
