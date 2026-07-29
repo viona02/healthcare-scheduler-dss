@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npx prisma generate --schema=server/prisma/schema.prisma && cd client && npm install && npm run build",
+  "buildCommand": "npx prisma db push --schema=server/prisma/schema.prisma --accept-data-loss && npx prisma generate --schema=server/prisma/schema.prisma && cd client && npm install && npm run build",
   "outputDirectory": "client/dist",
   "functions": {
     "api/index.ts": {
