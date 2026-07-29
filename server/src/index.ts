@@ -38,6 +38,7 @@ async function performSeedWithLogs(): Promise<string[]> {
     await prisma.$executeRawUnsafe(`ALTER TABLE "Worker" ADD COLUMN IF NOT EXISTS "fixedShift" TEXT;`);
     await prisma.$executeRawUnsafe(`ALTER TABLE "Worker" ADD COLUMN IF NOT EXISTS "weekendHolidayOff" BOOLEAN DEFAULT false;`);
     await prisma.$executeRawUnsafe(`ALTER TABLE "Worker" ADD COLUMN IF NOT EXISTS "sundayHolidayOff" BOOLEAN DEFAULT false;`);
+    await prisma.$executeRawUnsafe(`ALTER TABLE "Schedule" ADD COLUMN IF NOT EXISTS "executionTimeMs" DOUBLE PRECISION;`);
     logs.push('Schema columns verified.');
   } catch (err: any) {
     logs.push(`Schema migration note: ${err.message}`);
@@ -191,11 +192,14 @@ async function performSeedWithLogs(): Promise<string[]> {
     ];
 
     const holidays = await getHolidaysInRange(periodStart, periodEnd).catch(() => new Set<string>());
+    const startTime = performance.now();
     const result = runGeneticAlgorithm(gaWorkers, gaShifts, periodDates, gaRequests, holidays, {
       ...DEFAULT_GA_CONFIG,
       populationSize: 30,
       maxGenerations: 50,
     });
+    const endTime = performance.now();
+    const compTimeMs = endTime - startTime;
 
     const activeSchedule = await prisma.schedule.create({
       data: {
@@ -205,6 +209,7 @@ async function performSeedWithLogs(): Promise<string[]> {
         isSelected: true,
         fitnessScore: result.fitness,
         generationCount: result.generations,
+        executionTimeMs: compTimeMs,
       },
     });
 

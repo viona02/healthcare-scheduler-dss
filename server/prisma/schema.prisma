@@ -72,6 +72,7 @@ model Schedule {
   isSelected      Boolean      @default(false)   // Jadwal aktif pilihan admin
   fitnessScore    Float
   generationCount Int
+  executionTimeMs Float?       // Waktu komputasi persis (ms)
   assignments     Assignment[]
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt

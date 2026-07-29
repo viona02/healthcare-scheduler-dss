@@ -129,6 +129,7 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
         year,
         fitnessScore: result.fitness,
         generationCount: result.generations,
+        executionTimeMs: compTimeMs,
       },
     });
 
