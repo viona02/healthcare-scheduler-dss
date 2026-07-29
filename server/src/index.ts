@@ -9,6 +9,15 @@ import scheduleRoutes from './routes/schedules';
 import shiftRequestRoutes from './routes/shiftRequests';
 import { authMiddleware } from './middleware/auth';
 import prisma from './prisma';
+import {
+  runGeneticAlgorithm,
+  buildPeriodDates,
+  WorkerData,
+  ShiftData,
+  ShiftRequestData,
+  DEFAULT_GA_CONFIG,
+} from './algorithms/geneticAlgorithm';
+import { getHolidaysInRange } from './services/holidayService';
 
 dotenv.config();
 
@@ -148,6 +157,85 @@ async function performSeedWithLogs(): Promise<string[]> {
       data: initialRequests,
     });
     logs.push(`Created ${initialRequests.length} shift requests.`);
+  }
+
+  logs.push('Generating initial active schedule for July 2026...');
+  try {
+    const month = 7;
+    const year = 2026;
+    const periodDates = buildPeriodDates(month, year);
+    const periodStart = periodDates[0];
+    const periodEnd = periodDates[periodDates.length - 1];
+
+    const gaWorkers: WorkerData[] = createdWorkers.map((w) => ({
+      id: w.id,
+      name: w.name,
+      workerType: w.workerType as 'perawat' | 'bidan',
+      skillLevel: w.skillLevel as 'junior' | 'senior',
+      fixedShift: w.fixedShift || undefined,
+      weekendHolidayOff: w.weekendHolidayOff,
+      sundayHolidayOff: w.sundayHolidayOff,
+    }));
+
+    const gaShifts: ShiftData[] = shiftsData;
+    const gaRequests: ShiftRequestData[] = [
+      { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z').toISOString(), endDate: new Date('2026-07-07T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[4].id, date: new Date('2026-07-15T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[6].id, date: new Date('2026-06-30T00:00:00.000Z').toISOString(), endDate: new Date('2026-07-01T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[6].id, date: new Date('2026-07-08T00:00:00.000Z').toISOString(), endDate: new Date('2026-07-13T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[7].id, date: new Date('2026-06-26T00:00:00.000Z').toISOString(), endDate: new Date('2026-07-01T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[8].id, date: new Date('2026-07-18T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[10].id, date: new Date('2026-07-20T00:00:00.000Z').toISOString(), endDate: new Date('2026-07-25T00:00:00.000Z').toISOString(), type: 'off' },
+      { workerId: createdWorkers[12].id, date: new Date('2026-07-16T00:00:00.000Z').toISOString(), type: 'off' },
+    ];
+
+    const holidays = await getHolidaysInRange(periodStart, periodEnd);
+    const result = runGeneticAlgorithm(gaWorkers, gaShifts, periodDates, gaRequests, holidays, {
+      ...DEFAULT_GA_CONFIG,
+      populationSize: 50,
+      maxGenerations: 100,
+    });
+
+    const activeSchedule = await prisma.schedule.create({
+      data: {
+        month,
+        year,
+        status: 'published',
+        isSelected: true,
+        fitnessScore: result.fitness,
+        generationCount: result.generations,
+      },
+    });
+
+    const assignmentData: Array<{
+      scheduleId: number;
+      workerId: number;
+      shiftId: number;
+      dayOfMonth: number;
+    }> = [];
+
+    for (let day = 0; day < periodDates.length; day++) {
+      for (let s = 0; s < shiftsData.length; s++) {
+        const workerIds = result.bestSchedule[day]?.[s] || [];
+        for (const workerId of workerIds) {
+          assignmentData.push({
+            scheduleId: activeSchedule.id,
+            workerId,
+            shiftId: shiftsData[s].id,
+            dayOfMonth: day + 1,
+          });
+        }
+      }
+    }
+
+    await prisma.assignment.createMany({
+      data: assignmentData,
+    });
+
+    logs.push(`Generated initial active schedule ID ${activeSchedule.id} with ${assignmentData.length} assignments.`);
+  } catch (err: any) {
+    logs.push(`Schedule generation note: ${err.message}`);
   }
 
   return logs;
