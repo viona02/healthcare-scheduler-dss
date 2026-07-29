@@ -12,24 +12,26 @@ if (!process.env.JWT_SECRET) {
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 function getSqliteClient(): PrismaClient {
-  let sqlitePath = path.resolve(__dirname, '..', 'prisma', 'dev.db');
-  if (!fs.existsSync(sqlitePath)) {
+  let sourcePath = path.resolve(__dirname, '..', 'prisma', 'dev.db');
+  if (!fs.existsSync(sourcePath)) {
     const cwdPath = path.resolve(process.cwd(), 'server', 'prisma', 'dev.db');
     if (fs.existsSync(cwdPath)) {
-      sqlitePath = cwdPath;
+      sourcePath = cwdPath;
     }
   }
 
+  let sqlitePath = sourcePath;
+
   // On Vercel / serverless environment, /var/task is read-only.
-  // Copy dev.db to /tmp/dev.db so write operations (delete, select, generate) succeed!
-  if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production') {
+  // ALWAYS copy/sync dev.db to /tmp/dev.db so all write operations (delete, select, generate) succeed!
+  if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production' || process.env.AWS_LAMBDA_FUNCTION_NAME) {
     const tmpPath = path.join('/tmp', 'dev.db');
     try {
-      if (!fs.existsSync(tmpPath) && fs.existsSync(sqlitePath)) {
-        fs.copyFileSync(sqlitePath, tmpPath);
-        console.log('[Prisma] Copied dev.db to /tmp/dev.db for writable serverless execution');
-      }
-      if (fs.existsSync(tmpPath)) {
+      if (fs.existsSync(sourcePath)) {
+        fs.copyFileSync(sourcePath, tmpPath);
+        sqlitePath = tmpPath;
+        console.log('[Prisma] Copied dev.db to /tmp/dev.db for full read/write support on Vercel');
+      } else if (fs.existsSync(tmpPath)) {
         sqlitePath = tmpPath;
       }
     } catch (e) {
