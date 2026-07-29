@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import type { PrismaClient } from '@prisma/client';
+import { PrismaClient as SqlitePrismaClient } from '../generated-sqlite-client';
 
 dotenv.config();
 
@@ -45,7 +46,6 @@ function getSqliteClient(): PrismaClient {
 
   const sqliteUrl = `file:${sqlitePath}`;
   process.env.SQLITE_DATABASE_URL = sqliteUrl;
-  const { PrismaClient: SqlitePrismaClient } = require('../generated-sqlite-client');
   return new SqlitePrismaClient({
     datasources: {
       db: {
