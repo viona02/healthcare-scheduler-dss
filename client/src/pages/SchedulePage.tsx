@@ -118,21 +118,24 @@ export default function SchedulePage() {
         setAssignments([]);
         setViolations(null);
       }
-    } catch (error) {
+      alert('Jadwal berhasil dihapus!');
+    } catch (error: any) {
       console.error('Error deleting schedule:', error);
+      alert('Gagal menghapus jadwal: ' + (error?.response?.data?.error || error?.message || 'Terjadi kesalahan'));
     }
   };
 
   const handleSelectSchedule = async (id: number) => {
     try {
-      await schedulesAPI.selectSchedule(id);
+      const res = await schedulesAPI.selectSchedule(id);
       setSchedules(prev => prev.map(s => ({ ...s, isSelected: s.id === id })));
       if (selectedSchedule) {
         setSelectedSchedule({ ...selectedSchedule, isSelected: selectedSchedule.id === id });
       }
-    } catch (error) {
+      alert(res?.message || 'Jadwal berhasil dipilih sebagai jadwal aktif!');
+    } catch (error: any) {
       console.error('Error selecting schedule:', error);
-      alert('Gagal memilih jadwal');
+      alert('Gagal memilih jadwal: ' + (error?.response?.data?.error || error?.message || 'Terjadi kesalahan'));
     }
   };
 
