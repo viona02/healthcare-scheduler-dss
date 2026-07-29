@@ -190,11 +190,11 @@ async function performSeedWithLogs(): Promise<string[]> {
       { workerId: createdWorkers[12].id, date: new Date('2026-07-16T00:00:00.000Z').toISOString(), type: 'off' },
     ];
 
-    const holidays = await getHolidaysInRange(periodStart, periodEnd);
+    const holidays = await getHolidaysInRange(periodStart, periodEnd).catch(() => new Set<string>());
     const result = runGeneticAlgorithm(gaWorkers, gaShifts, periodDates, gaRequests, holidays, {
       ...DEFAULT_GA_CONFIG,
-      populationSize: 50,
-      maxGenerations: 100,
+      populationSize: 30,
+      maxGenerations: 50,
     });
 
     const activeSchedule = await prisma.schedule.create({
@@ -235,7 +235,7 @@ async function performSeedWithLogs(): Promise<string[]> {
 
     logs.push(`Generated initial active schedule ID ${activeSchedule.id} with ${assignmentData.length} assignments.`);
   } catch (err: any) {
-    logs.push(`Schedule generation note: ${err.message}`);
+    logs.push(`Schedule generation note: ${err.message || String(err)}`);
   }
 
   return logs;
