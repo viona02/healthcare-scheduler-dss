@@ -24,15 +24,25 @@ let isSeeding = false;
 async function performSeedWithLogs(): Promise<string[]> {
   const logs: string[] = [];
 
+  logs.push('Ensuring database schema column compatibility...');
+  try {
+    await prisma.$executeRawUnsafe(`ALTER TABLE "Worker" ADD COLUMN IF NOT EXISTS "fixedShift" TEXT;`);
+    await prisma.$executeRawUnsafe(`ALTER TABLE "Worker" ADD COLUMN IF NOT EXISTS "weekendHolidayOff" BOOLEAN DEFAULT false;`);
+    await prisma.$executeRawUnsafe(`ALTER TABLE "Worker" ADD COLUMN IF NOT EXISTS "sundayHolidayOff" BOOLEAN DEFAULT false;`);
+    logs.push('Schema columns verified.');
+  } catch (err: any) {
+    logs.push(`Schema migration note: ${err.message}`);
+  }
+
   logs.push('Deleting old data...');
   await prisma.assignment.deleteMany();
   await prisma.schedule.deleteMany();
   await prisma.shiftRequest.deleteMany();
   await prisma.user.deleteMany();
   await prisma.worker.deleteMany();
-  logs.push('Old data deleted successfully.');
+  logs.push('Old data deleted.');
 
-  logs.push('Upserting shifts...');
+  logs.push('Creating shifts...');
   const shiftsData = [
     { id: 1, name: 'Pagi', startTime: '07:00', endTime: '14:00', durationHrs: 7, minNurses: 2, minMidwives: 1, minSeniors: 1 },
     { id: 2, name: 'Siang', startTime: '14:00', endTime: '21:30', durationHrs: 7.5, minNurses: 2, minMidwives: 1, minSeniors: 1 },
@@ -46,7 +56,7 @@ async function performSeedWithLogs(): Promise<string[]> {
       create: shift,
     });
   }
-  logs.push('Shifts upserted successfully.');
+  logs.push('Shifts created.');
 
   logs.push('Creating workers...');
   const workersData = [
@@ -65,21 +75,19 @@ async function performSeedWithLogs(): Promise<string[]> {
     { name: 'Nayla Syafitry, A.Md.Keb', workerType: 'bidan', skillLevel: 'junior' },
   ];
 
-  const createdWorkers: any[] = [];
-  for (const worker of workersData) {
-    const created = await prisma.worker.create({
-      data: {
-        name: worker.name,
-        workerType: worker.workerType,
-        skillLevel: worker.skillLevel,
-        isActive: true,
-        fixedShift: worker.fixedShift || null,
-        weekendHolidayOff: worker.weekendHolidayOff || false,
-        sundayHolidayOff: worker.sundayHolidayOff || false,
-      },
-    });
-    createdWorkers.push(created);
-  }
+  await prisma.worker.createMany({
+    data: workersData.map((w) => ({
+      name: w.name,
+      workerType: w.workerType,
+      skillLevel: w.skillLevel,
+      isActive: true,
+      fixedShift: w.fixedShift || null,
+      weekendHolidayOff: w.weekendHolidayOff || false,
+      sundayHolidayOff: w.sundayHolidayOff || false,
+    })),
+  });
+
+  const createdWorkers = await prisma.worker.findMany({ orderBy: { id: 'asc' } });
   logs.push(`Created ${createdWorkers.length} workers.`);
 
   logs.push('Creating admin user...');
@@ -92,56 +100,55 @@ async function performSeedWithLogs(): Promise<string[]> {
       role: 'admin',
     },
   });
-  logs.push('Admin user created.');
 
   logs.push('Creating worker user accounts...');
-  const workerUsernames = [
-    { username: 'rika', fullName: 'Ns. Rika Aprimadhani, S. Kep', workerId: createdWorkers[0].id },
-    { username: 'nofri', fullName: 'Nofri Yorizar, A.Md.Kep', workerId: createdWorkers[1].id },
-    { username: 'febsyamadri', fullName: 'Febsyamadri, A.Md.Kep', workerId: createdWorkers[2].id },
-    { username: 'rio', fullName: 'Ns. Rio Hadi Putra, S.Kep', workerId: createdWorkers[3].id },
-    { username: 'agus', fullName: 'Agus Chandra, A.Md.Kep', workerId: createdWorkers[4].id },
-    { username: 'hafis', fullName: 'Muhammad Hafis, A.Md.Kep', workerId: createdWorkers[5].id },
-    { username: 'yusuf', fullName: 'Yusuf Suhandi, A.Md.Kep', workerId: createdWorkers[6].id },
-    { username: 'tika', fullName: 'Tika Octavia, A.Md.Kep', workerId: createdWorkers[7].id },
-    { username: 'marta', fullName: 'Ns. Marta Winda Sari, S.Kep', workerId: createdWorkers[8].id },
-    { username: 'livia', fullName: 'Livia Ramli, A.Md.Keb, S.KM.', workerId: createdWorkers[9].id },
-    { username: 'meri', fullName: 'Meri Saputri Yani, A.Md.Keb', workerId: createdWorkers[10].id },
-    { username: 'rubbiah', fullName: 'Rubbiah, A.Md.Keb', workerId: createdWorkers[11].id },
-    { username: 'nayla', fullName: 'Nayla Syafitry, A.Md.Keb', workerId: createdWorkers[12].id },
+  const usernamesList = [
+    { username: 'rika', fullName: createdWorkers[0]?.name || 'Ns. Rika Aprimadhani, S. Kep', workerId: createdWorkers[0]?.id },
+    { username: 'nofri', fullName: createdWorkers[1]?.name || 'Nofri Yorizar, A.Md.Kep', workerId: createdWorkers[1]?.id },
+    { username: 'febsyamadri', fullName: createdWorkers[2]?.name || 'Febsyamadri, A.Md.Kep', workerId: createdWorkers[2]?.id },
+    { username: 'rio', fullName: createdWorkers[3]?.name || 'Ns. Rio Hadi Putra, S.Kep', workerId: createdWorkers[3]?.id },
+    { username: 'agus', fullName: createdWorkers[4]?.name || 'Agus Chandra, A.Md.Kep', workerId: createdWorkers[4]?.id },
+    { username: 'hafis', fullName: createdWorkers[5]?.name || 'Muhammad Hafis, A.Md.Kep', workerId: createdWorkers[5]?.id },
+    { username: 'yusuf', fullName: createdWorkers[6]?.name || 'Yusuf Suhandi, A.Md.Kep', workerId: createdWorkers[6]?.id },
+    { username: 'tika', fullName: createdWorkers[7]?.name || 'Tika Octavia, A.Md.Kep', workerId: createdWorkers[7]?.id },
+    { username: 'marta', fullName: createdWorkers[8]?.name || 'Ns. Marta Winda Sari, S.Kep', workerId: createdWorkers[8]?.id },
+    { username: 'livia', fullName: createdWorkers[9]?.name || 'Livia Ramli, A.Md.Keb, S.KM.', workerId: createdWorkers[9]?.id },
+    { username: 'meri', fullName: createdWorkers[10]?.name || 'Meri Saputri Yani, A.Md.Keb', workerId: createdWorkers[10]?.id },
+    { username: 'rubbiah', fullName: createdWorkers[11]?.name || 'Rubbiah, A.Md.Keb', workerId: createdWorkers[11]?.id },
+    { username: 'nayla', fullName: createdWorkers[12]?.name || 'Nayla Syafitry, A.Md.Keb', workerId: createdWorkers[12]?.id },
   ];
 
   const workerPassword = await bcrypt.hash('worker123', 10);
-  for (const wu of workerUsernames) {
-    await prisma.user.create({
-      data: {
-        username: wu.username,
-        password: workerPassword,
-        fullName: wu.fullName,
-        role: 'worker',
-        workerId: wu.workerId,
-      },
-    });
-  }
-  logs.push(`Created ${workerUsernames.length} worker user accounts.`);
+  await prisma.user.createMany({
+    data: usernamesList.map((u) => ({
+      username: u.username,
+      password: workerPassword,
+      fullName: u.fullName,
+      role: 'worker',
+      workerId: u.workerId,
+    })),
+  });
+  logs.push(`Created ${usernamesList.length} worker user accounts.`);
 
   logs.push('Creating shift requests...');
-  const initialRequests = [
-    { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z'), endDate: new Date('2026-07-07T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[4].id, date: new Date('2026-07-15T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[6].id, date: new Date('2026-06-30T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[6].id, date: new Date('2026-07-08T00:00:00.000Z'), endDate: new Date('2026-07-13T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[7].id, date: new Date('2026-06-26T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[8].id, date: new Date('2026-07-18T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[10].id, date: new Date('2026-07-20T00:00:00.000Z'), endDate: new Date('2026-07-25T00:00:00.000Z'), type: 'off', status: 'approved' },
-    { workerId: createdWorkers[12].id, date: new Date('2026-07-16T00:00:00.000Z'), type: 'off', status: 'approved' },
-  ];
+  if (createdWorkers.length >= 13) {
+    const initialRequests = [
+      { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z'), endDate: new Date('2026-07-07T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[4].id, date: new Date('2026-07-15T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[6].id, date: new Date('2026-06-30T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[6].id, date: new Date('2026-07-08T00:00:00.000Z'), endDate: new Date('2026-07-13T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[7].id, date: new Date('2026-06-26T00:00:00.000Z'), endDate: new Date('2026-07-01T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[8].id, date: new Date('2026-07-18T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[10].id, date: new Date('2026-07-20T00:00:00.000Z'), endDate: new Date('2026-07-25T00:00:00.000Z'), type: 'off', status: 'approved' },
+      { workerId: createdWorkers[12].id, date: new Date('2026-07-16T00:00:00.000Z'), type: 'off', status: 'approved' },
+    ];
 
-  for (const req of initialRequests) {
-    await prisma.shiftRequest.create({ data: req });
+    await prisma.shiftRequest.createMany({
+      data: initialRequests,
+    });
+    logs.push(`Created ${initialRequests.length} shift requests.`);
   }
-  logs.push(`Created ${initialRequests.length} shift requests.`);
 
   return logs;
 }
