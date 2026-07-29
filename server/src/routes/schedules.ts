@@ -19,6 +19,7 @@ import prisma from '../prisma';
 
 // POST /api/schedules/generate - Generate jadwal baru (admin only)
 router.post('/generate', async (req: AuthRequest, res: Response) => {
+  const reqStartTime = performance.now();
   try {
     if (req.userRole !== 'admin') {
       res.status(403).json({ error: 'Akses hanya untuk admin' });
@@ -103,10 +104,8 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
     console.log(`[GA] AHP Weights:`, AHP_WEIGHTS);
     console.log(`[GA] Config:`, config);
 
-    const startTime = performance.now();
     const result = runGeneticAlgorithm(workers, shifts, periodDates, requests, holidays, config);
-    const endTime = performance.now();
-    const compTimeMs = endTime - startTime;
+    const compTimeMs = performance.now() - reqStartTime;
 
     const violations = analyzeViolations(result.bestSchedule, workers, shifts, periodDates, holidays, requests);
     const timeFormatted = compTimeMs < 1000 ? `${compTimeMs.toFixed(0)} ms` : `${(compTimeMs / 1000).toFixed(2)} s`;
