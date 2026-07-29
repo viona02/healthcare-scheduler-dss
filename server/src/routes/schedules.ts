@@ -12,6 +12,7 @@ import {
   AHP_WEIGHTS,
 } from '../algorithms/geneticAlgorithm';
 import { getHolidaysInRange } from '../services/holidayService';
+import { analyzeViolations } from '../utils/violationAnalyzer';
 
 const router = Router();
 import prisma from '../prisma';
@@ -102,9 +103,24 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
     console.log(`[GA] AHP Weights:`, AHP_WEIGHTS);
     console.log(`[GA] Config:`, config);
 
+    const startTime = performance.now();
     const result = runGeneticAlgorithm(workers, shifts, periodDates, requests, holidays, config);
+    const endTime = performance.now();
+    const compTimeMs = endTime - startTime;
 
-    console.log(`[GA] Completed. Best fitness: ${result.fitness.toFixed(2)}`);
+    const violations = analyzeViolations(result.bestSchedule, workers, shifts, periodDates, holidays, requests);
+    const timeFormatted = compTimeMs < 1000 ? `${compTimeMs.toFixed(0)} ms` : `${(compTimeMs / 1000).toFixed(2)} s`;
+
+    console.log('------------------------------------------------------------------------');
+    console.log(`🔥 TESTING: GENERATE JADWAL DSS ONLINE`);
+    console.log(`   Parameter: PopSize=${config.populationSize}, MaxGen=${config.maxGenerations}, Cr=${config.crossoverRate}, Mut=${config.mutationRate}, Elit=${config.elitismRate}, Tourn=${config.tournamentSize}`);
+    console.log('------------------------------------------------------------------------');
+    console.log('| Run # | Fitness Score | Hard Violations | Soft Violations | Waktu Komputasi |');
+    console.log('|-------|---------------|-----------------|-----------------|-----------------|');
+    console.log(
+      `|  01   |   ${result.fitness.toFixed(2).padStart(8, ' ')}    |       ${String(violations.hardViolations).padStart(2, ' ')}        |       ${String(violations.softViolations).padStart(2, ' ')}        |   ${timeFormatted.padStart(10, ' ')}    |`
+    );
+    console.log('------------------------------------------------------------------------');
 
     // Simpan jadwal ke database
     const schedule = await prisma.schedule.create({
