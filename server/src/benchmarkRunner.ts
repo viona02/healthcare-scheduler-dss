@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -472,6 +474,40 @@ async function main() {
     );
   }
   console.log('========================================================================\n');
+
+  try {
+    const dataDir = path.join(__dirname, 'data');
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+    const outputPath = path.join(dataDir, 'benchmarkResults.json');
+
+    const benchmarkPayload = {
+      updatedAt: new Date().toISOString(),
+      summaries: allSummary.map(item => {
+        const count = item.results.length || 1;
+        const avgFitness = item.results.reduce((s, r) => s + r.fitnessScore, 0) / count;
+        const avgHard = item.results.reduce((s, r) => s + r.hardViolations, 0) / count;
+        const avgSoft = item.results.reduce((s, r) => s + r.softViolations, 0) / count;
+        const avgTimeMs = item.results.reduce((s, r) => s + r.computationTimeMs, 0) / count;
+        return {
+          name: item.name,
+          results: item.results,
+          averages: {
+            avgFitness,
+            avgHard,
+            avgSoft,
+            avgTimeMs,
+          },
+        };
+      }),
+    };
+
+    fs.writeFileSync(outputPath, JSON.stringify(benchmarkPayload, null, 2));
+    console.log('✅ Results successfully saved to src/data/benchmarkResults.json!');
+  } catch (err) {
+    console.error('Error saving benchmark JSON:', err);
+  }
 
   await prisma.$disconnect();
 }

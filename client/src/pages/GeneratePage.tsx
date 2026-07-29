@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { schedulesAPI, shiftRequestsAPI } from '../services/api';
+import { schedulesAPI, shiftRequestsAPI, benchmarkAPI } from '../services/api';
 import type { GAConfig, GenerateResponse, ShiftRequest } from '../types';
 import { DEFAULT_GA_CONFIG, MONTHS, buildPeriodDates, getPeriodLabel } from '../types';
 
@@ -14,10 +14,21 @@ export default function GeneratePage() {
   const [result, setResult] = useState<GenerateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [approvedRequests, setApprovedRequests] = useState<ShiftRequest[]>([]);
+  const [benchmarkData, setBenchmarkData] = useState<any>(null);
 
   useEffect(() => {
     loadApprovedRequests();
+    loadBenchmarkData();
   }, [month, year]);
+
+  const loadBenchmarkData = async () => {
+    try {
+      const data = await benchmarkAPI.getResults();
+      setBenchmarkData(data);
+    } catch (err) {
+      console.error('Error loading benchmark data:', err);
+    }
+  };
 
   const loadApprovedRequests = async () => {
     try {
@@ -242,6 +253,78 @@ export default function GeneratePage() {
               📅 Lihat Jadwal
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Benchmark 10x Run Results Card (Konfigurasi Sedang) */}
+      {benchmarkData?.summaries && benchmarkData.summaries.length > 0 && (
+        <div className="card mt-3 animate-fadeIn">
+          <div className="card-title" style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <span>📊 Hasil Uji Benchmark 10x Run — Konfigurasi Sedang</span>
+            <span className="badge badge-approved" style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+              ⚡ GA Parameter Sedang (Pop: 100, Gen: 500)
+            </span>
+          </div>
+          <p className="text-sm text-muted" style={{ marginBottom: '1rem' }}>
+            Rekapitulasi 10 kali pengujian otomatis untuk mengukur konsistensi, jumlah pelanggaran, dan kecepatan komputasi algoritma.
+          </p>
+
+          {benchmarkData.summaries.filter((s: any) => s.name.includes('SEDANG') || s.name.includes('Default')).map((sedangSummary: any, idx: number) => {
+            const runs = sedangSummary.results || [];
+            const averages = sedangSummary.averages || {};
+            return (
+              <div key={idx}>
+                <div className="table-container">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th style={{ textAlign: 'center' }}>Pengujian (Run)</th>
+                        <th style={{ textAlign: 'right' }}>Fitness Score</th>
+                        <th style={{ textAlign: 'center' }}>Hard Violations</th>
+                        <th style={{ textAlign: 'center' }}>Soft Violations</th>
+                        <th style={{ textAlign: 'right' }}>Waktu Komputasi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {runs.map((r: any) => {
+                        const compSec = (r.computationTimeMs / 1000).toFixed(2);
+                        return (
+                          <tr key={r.run}>
+                            <td style={{ textAlign: 'center', fontWeight: 600 }}>Run #{r.run}</td>
+                            <td style={{ textAlign: 'right', fontFamily: 'monospace', fontWeight: 600 }}>{r.fitnessScore.toFixed(2)}</td>
+                            <td style={{ textAlign: 'center' }}>
+                              <span className={`badge ${r.hardViolations === 0 ? 'badge-approved' : 'badge-rejected'}`}>
+                                {r.hardViolations === 0 ? '0 (Terpenuhi)' : `${r.hardViolations} Pelanggaran`}
+                              </span>
+                            </td>
+                            <td style={{ textAlign: 'center' }}>{r.softViolations}</td>
+                            <td style={{ textAlign: 'right', color: 'var(--text-muted)' }}>{compSec} detik</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <tfoot>
+                      <tr style={{ background: 'rgba(99, 102, 241, 0.12)', fontWeight: 700 }}>
+                        <td style={{ textAlign: 'center' }}>RATA-RATA (10 RUN)</td>
+                        <td style={{ textAlign: 'right', fontFamily: 'monospace', color: '#6366f1' }}>
+                          {averages.avgFitness ? averages.avgFitness.toFixed(2) : '-'}
+                        </td>
+                        <td style={{ textAlign: 'center', color: '#10b981' }}>
+                          {averages.avgHard !== undefined ? averages.avgHard.toFixed(1) : '0.0'}
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          {averages.avgSoft !== undefined ? averages.avgSoft.toFixed(1) : '-'}
+                        </td>
+                        <td style={{ textAlign: 'right', color: 'var(--text-main)' }}>
+                          {averages.avgTimeMs ? (averages.avgTimeMs / 1000).toFixed(2) : '-'} detik
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
