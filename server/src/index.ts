@@ -19,15 +19,18 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Auto-seed middleware: jika database kosong (misal DB Cloud Supabase baru), otomatis isi data awal
+// Auto-seed function & re-seed logic
 let isSeeding = false;
+
 async function performSeed() {
+  // 1. Membersihkan data lama sesuai urutan Relasi Foreign Key
   await prisma.assignment.deleteMany();
   await prisma.schedule.deleteMany();
   await prisma.shiftRequest.deleteMany();
-  await prisma.user.deleteMany({ where: { role: 'worker' } });
+  await prisma.user.deleteMany();
   await prisma.worker.deleteMany();
 
+  // 2. Insert Shifts Default
   const shiftsData = [
     { id: 1, name: 'Pagi', startTime: '07:00', endTime: '14:00', durationHrs: 7, minNurses: 2, minMidwives: 1, minSeniors: 1 },
     { id: 2, name: 'Siang', startTime: '14:00', endTime: '21:30', durationHrs: 7.5, minNurses: 2, minMidwives: 1, minSeniors: 1 },
@@ -42,6 +45,7 @@ async function performSeed() {
     });
   }
 
+  // 3. Insert Workers Default
   const workersData = [
     { name: 'Ns. Rika Aprimadhani, S. Kep', workerType: 'perawat', skillLevel: 'senior', fixedShift: 'Pagi', weekendHolidayOff: true, sundayHolidayOff: false },
     { name: 'Nofri Yorizar, A.Md.Kep', workerType: 'perawat', skillLevel: 'senior' },
@@ -65,6 +69,7 @@ async function performSeed() {
         name: worker.name,
         workerType: worker.workerType,
         skillLevel: worker.skillLevel,
+        isActive: true,
         fixedShift: worker.fixedShift || null,
         weekendHolidayOff: worker.weekendHolidayOff || false,
         sundayHolidayOff: worker.sundayHolidayOff || false,
@@ -73,11 +78,10 @@ async function performSeed() {
     createdWorkers.push(created);
   }
 
+  // 4. Insert User Admin
   const adminPassword = await bcrypt.hash('admin123', 10);
-  await prisma.user.upsert({
-    where: { username: 'admin' },
-    update: {},
-    create: {
+  await prisma.user.create({
+    data: {
       username: 'admin',
       password: adminPassword,
       fullName: 'Administrator',
@@ -85,6 +89,7 @@ async function performSeed() {
     },
   });
 
+  // 5. Insert User Worker Accounts
   const workerUsernames = [
     { username: 'rika', fullName: 'Ns. Rika Aprimadhani, S. Kep', workerId: createdWorkers[0].id },
     { username: 'nofri', fullName: 'Nofri Yorizar, A.Md.Kep', workerId: createdWorkers[1].id },
@@ -114,6 +119,7 @@ async function performSeed() {
     });
   }
 
+  // 6. Insert Shift Requests Default
   const initialRequests = [
     { workerId: createdWorkers[5].id, date: new Date('2026-07-02T00:00:00.000Z'), endDate: new Date('2026-07-07T00:00:00.000Z'), type: 'off', status: 'approved' },
     { workerId: createdWorkers[5].id, date: new Date('2026-07-14T00:00:00.000Z'), type: 'off', status: 'approved' },
@@ -196,13 +202,13 @@ app.get('/api/db-status', async (_req, res) => {
   }
 });
 
-// Endpoint re-seed manual (bisa dipanggil di browser: /api/reseed)
+// Endpoint re-seed manual (/api/reseed)
 app.get('/api/reseed', async (_req, res) => {
   try {
     await performSeed();
     res.json({ success: true, message: 'Database cloud berhasil di-seed ulang!' });
   } catch (error: any) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error.message, stack: error.stack });
   }
 });
 
