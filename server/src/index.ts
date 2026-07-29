@@ -33,6 +33,10 @@ app.use('/api/schedules', authMiddleware, scheduleRoutes);
 app.use('/api/shift-requests', authMiddleware, shiftRequestRoutes);
 
 // Health & DB status check
+app.get('/api/version', (_req, res) => {
+  res.json({ version: '1.0.5-fix-select-delete-generate', timestamp: new Date().toISOString() });
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', message: 'DSS Healthcare Scheduler API berjalan' });
 });

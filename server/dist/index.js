@@ -32,6 +32,9 @@ app.use('/api/shifts', auth_2.authMiddleware, shifts_1.default);
 app.use('/api/schedules', auth_2.authMiddleware, schedules_1.default);
 app.use('/api/shift-requests', auth_2.authMiddleware, shiftRequests_1.default);
 // Health & DB status check
+app.get('/api/version', (_req, res) => {
+    res.json({ version: '1.0.5-fix-select-delete-generate', timestamp: new Date().toISOString() });
+});
 app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok', message: 'DSS Healthcare Scheduler API berjalan' });
 });
