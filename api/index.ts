@@ -17,6 +17,6 @@ if (!process.env.DATABASE_URL) {
   console.log('[Vercel Serverless] Using configured DATABASE_URL connection with PgBouncer optimization.');
 }
 
-import app from '../server/src/index';
+import app from '../server/dist/index';
 
 export default app;

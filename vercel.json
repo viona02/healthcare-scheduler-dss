@@ -6,6 +6,7 @@
     "api/index.ts": {
       "includeFiles": [
         "server/prisma/**",
+        "server/dist/**",
         "server/generated-sqlite-client/**"
       ],
       "maxDuration": 60
