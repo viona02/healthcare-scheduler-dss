@@ -1311,6 +1311,107 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type WorkerCountOutputType
+   */
+
+  export type WorkerCountOutputType = {
+    assignments: number
+    shiftRequests: number
+  }
+
+  export type WorkerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | WorkerCountOutputTypeCountAssignmentsArgs
+    shiftRequests?: boolean | WorkerCountOutputTypeCountShiftRequestsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * WorkerCountOutputType without action
+   */
+  export type WorkerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkerCountOutputType
+     */
+    select?: WorkerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * WorkerCountOutputType without action
+   */
+  export type WorkerCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssignmentWhereInput
+  }
+
+  /**
+   * WorkerCountOutputType without action
+   */
+  export type WorkerCountOutputTypeCountShiftRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ShiftRequestWhereInput
+  }
+
+
+  /**
+   * Count Type ShiftCountOutputType
+   */
+
+  export type ShiftCountOutputType = {
+    assignments: number
+  }
+
+  export type ShiftCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | ShiftCountOutputTypeCountAssignmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ShiftCountOutputType without action
+   */
+  export type ShiftCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShiftCountOutputType
+     */
+    select?: ShiftCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ShiftCountOutputType without action
+   */
+  export type ShiftCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssignmentWhereInput
+  }
+
+
+  /**
+   * Count Type ScheduleCountOutputType
+   */
+
+  export type ScheduleCountOutputType = {
+    assignments: number
+  }
+
+  export type ScheduleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | ScheduleCountOutputTypeCountAssignmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ScheduleCountOutputType without action
+   */
+  export type ScheduleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduleCountOutputType
+     */
+    select?: ScheduleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ScheduleCountOutputType without action
+   */
+  export type ScheduleCountOutputTypeCountAssignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AssignmentWhereInput
+  }
+
 
   /**
    * Models
@@ -1345,6 +1446,8 @@ export namespace Prisma {
     fullName: string | null
     role: string | null
     workerId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1354,6 +1457,8 @@ export namespace Prisma {
     fullName: string | null
     role: string | null
     workerId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1363,6 +1468,8 @@ export namespace Prisma {
     fullName: number
     role: number
     workerId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -1384,6 +1491,8 @@ export namespace Prisma {
     fullName?: true
     role?: true
     workerId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1393,6 +1502,8 @@ export namespace Prisma {
     fullName?: true
     role?: true
     workerId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1402,6 +1513,8 @@ export namespace Prisma {
     fullName?: true
     role?: true
     workerId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -1498,6 +1611,8 @@ export namespace Prisma {
     fullName: string
     role: string
     workerId: number | null
+    createdAt: Date
+    updatedAt: Date
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1526,6 +1641,9 @@ export namespace Prisma {
     fullName?: boolean
     role?: boolean
     workerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | User$workerArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1535,6 +1653,9 @@ export namespace Prisma {
     fullName?: boolean
     role?: boolean
     workerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | User$workerArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1544,6 +1665,9 @@ export namespace Prisma {
     fullName?: boolean
     role?: boolean
     workerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | User$workerArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1553,13 +1677,26 @@ export namespace Prisma {
     fullName?: boolean
     role?: boolean
     workerId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "fullName" | "role" | "workerId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "password" | "fullName" | "role" | "workerId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | User$workerArgs<ExtArgs>
+  }
+  export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | User$workerArgs<ExtArgs>
+  }
+  export type UserIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | User$workerArgs<ExtArgs>
+  }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
-    objects: {}
+    objects: {
+      worker: Prisma.$WorkerPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       username: string
@@ -1567,6 +1704,8 @@ export namespace Prisma {
       fullName: string
       role: string
       workerId: number | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -1961,6 +2100,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    worker<T extends User$workerArgs<ExtArgs> = {}>(args?: Subset<T, User$workerArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1996,6 +2136,8 @@ export namespace Prisma {
     readonly fullName: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'String'>
     readonly workerId: FieldRef<"User", 'Int'>
+    readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -2012,6 +2154,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -2031,6 +2177,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where: UserWhereUniqueInput
@@ -2048,6 +2198,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * Filter, which User to fetch.
      */
@@ -2097,6 +2251,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which User to fetch.
      */
     where?: UserWhereInput
@@ -2145,6 +2303,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter, which Users to fetch.
      */
     where?: UserWhereInput
@@ -2188,6 +2350,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * The data needed to create a User.
      */
     data: XOR<UserCreateInput, UserUncheckedCreateInput>
@@ -2219,6 +2385,10 @@ export namespace Prisma {
      * The data used to create many Users.
      */
     data: UserCreateManyInput | UserCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2233,6 +2403,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The data needed to update a User.
      */
@@ -2285,6 +2459,10 @@ export namespace Prisma {
      * Limit how many Users to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -2299,6 +2477,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
     /**
      * The filter to search for the User to update in case it exists.
      */
@@ -2326,6 +2508,10 @@ export namespace Prisma {
      */
     omit?: UserOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
      * Filter which User to delete.
      */
     where: UserWhereUniqueInput
@@ -2346,6 +2532,25 @@ export namespace Prisma {
   }
 
   /**
+   * User.worker
+   */
+  export type User$workerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Worker
+     */
+    select?: WorkerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Worker
+     */
+    omit?: WorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
+    where?: WorkerWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2357,6 +2562,10 @@ export namespace Prisma {
      * Omit specific fields from the User
      */
     omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
   }
 
 
@@ -2389,6 +2598,8 @@ export namespace Prisma {
     fixedShift: string | null
     weekendHolidayOff: boolean | null
     sundayHolidayOff: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type WorkerMaxAggregateOutputType = {
@@ -2400,6 +2611,8 @@ export namespace Prisma {
     fixedShift: string | null
     weekendHolidayOff: boolean | null
     sundayHolidayOff: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type WorkerCountAggregateOutputType = {
@@ -2411,6 +2624,8 @@ export namespace Prisma {
     fixedShift: number
     weekendHolidayOff: number
     sundayHolidayOff: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -2432,6 +2647,8 @@ export namespace Prisma {
     fixedShift?: true
     weekendHolidayOff?: true
     sundayHolidayOff?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type WorkerMaxAggregateInputType = {
@@ -2443,6 +2660,8 @@ export namespace Prisma {
     fixedShift?: true
     weekendHolidayOff?: true
     sundayHolidayOff?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type WorkerCountAggregateInputType = {
@@ -2454,6 +2673,8 @@ export namespace Prisma {
     fixedShift?: true
     weekendHolidayOff?: true
     sundayHolidayOff?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -2552,6 +2773,8 @@ export namespace Prisma {
     fixedShift: string | null
     weekendHolidayOff: boolean
     sundayHolidayOff: boolean
+    createdAt: Date
+    updatedAt: Date
     _count: WorkerCountAggregateOutputType | null
     _avg: WorkerAvgAggregateOutputType | null
     _sum: WorkerSumAggregateOutputType | null
@@ -2582,6 +2805,12 @@ export namespace Prisma {
     fixedShift?: boolean
     weekendHolidayOff?: boolean
     sundayHolidayOff?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | Worker$userArgs<ExtArgs>
+    assignments?: boolean | Worker$assignmentsArgs<ExtArgs>
+    shiftRequests?: boolean | Worker$shiftRequestsArgs<ExtArgs>
+    _count?: boolean | WorkerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["worker"]>
 
   export type WorkerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2593,6 +2822,8 @@ export namespace Prisma {
     fixedShift?: boolean
     weekendHolidayOff?: boolean
     sundayHolidayOff?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["worker"]>
 
   export type WorkerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2604,6 +2835,8 @@ export namespace Prisma {
     fixedShift?: boolean
     weekendHolidayOff?: boolean
     sundayHolidayOff?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["worker"]>
 
   export type WorkerSelectScalar = {
@@ -2615,13 +2848,27 @@ export namespace Prisma {
     fixedShift?: boolean
     weekendHolidayOff?: boolean
     sundayHolidayOff?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type WorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "workerType" | "skillLevel" | "isActive" | "fixedShift" | "weekendHolidayOff" | "sundayHolidayOff", ExtArgs["result"]["worker"]>
+  export type WorkerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "workerType" | "skillLevel" | "isActive" | "fixedShift" | "weekendHolidayOff" | "sundayHolidayOff" | "createdAt" | "updatedAt", ExtArgs["result"]["worker"]>
+  export type WorkerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | Worker$userArgs<ExtArgs>
+    assignments?: boolean | Worker$assignmentsArgs<ExtArgs>
+    shiftRequests?: boolean | Worker$shiftRequestsArgs<ExtArgs>
+    _count?: boolean | WorkerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type WorkerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type WorkerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $WorkerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Worker"
-    objects: {}
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs> | null
+      assignments: Prisma.$AssignmentPayload<ExtArgs>[]
+      shiftRequests: Prisma.$ShiftRequestPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
@@ -2631,6 +2878,8 @@ export namespace Prisma {
       fixedShift: string | null
       weekendHolidayOff: boolean
       sundayHolidayOff: boolean
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["worker"]>
     composites: {}
   }
@@ -3025,6 +3274,9 @@ export namespace Prisma {
    */
   export interface Prisma__WorkerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends Worker$userArgs<ExtArgs> = {}>(args?: Subset<T, Worker$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    assignments<T extends Worker$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Worker$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    shiftRequests<T extends Worker$shiftRequestsArgs<ExtArgs> = {}>(args?: Subset<T, Worker$shiftRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ShiftRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3062,6 +3314,8 @@ export namespace Prisma {
     readonly fixedShift: FieldRef<"Worker", 'String'>
     readonly weekendHolidayOff: FieldRef<"Worker", 'Boolean'>
     readonly sundayHolidayOff: FieldRef<"Worker", 'Boolean'>
+    readonly createdAt: FieldRef<"Worker", 'DateTime'>
+    readonly updatedAt: FieldRef<"Worker", 'DateTime'>
   }
     
 
@@ -3078,6 +3332,10 @@ export namespace Prisma {
      * Omit specific fields from the Worker
      */
     omit?: WorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
     /**
      * Filter, which Worker to fetch.
      */
@@ -3097,6 +3355,10 @@ export namespace Prisma {
      */
     omit?: WorkerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
+    /**
      * Filter, which Worker to fetch.
      */
     where: WorkerWhereUniqueInput
@@ -3114,6 +3376,10 @@ export namespace Prisma {
      * Omit specific fields from the Worker
      */
     omit?: WorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
     /**
      * Filter, which Worker to fetch.
      */
@@ -3163,6 +3429,10 @@ export namespace Prisma {
      */
     omit?: WorkerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
+    /**
      * Filter, which Worker to fetch.
      */
     where?: WorkerWhereInput
@@ -3211,6 +3481,10 @@ export namespace Prisma {
      */
     omit?: WorkerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
+    /**
      * Filter, which Workers to fetch.
      */
     where?: WorkerWhereInput
@@ -3253,6 +3527,10 @@ export namespace Prisma {
      * Omit specific fields from the Worker
      */
     omit?: WorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
     /**
      * The data needed to create a Worker.
      */
@@ -3299,6 +3577,10 @@ export namespace Prisma {
      * Omit specific fields from the Worker
      */
     omit?: WorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
     /**
      * The data needed to update a Worker.
      */
@@ -3366,6 +3648,10 @@ export namespace Prisma {
      */
     omit?: WorkerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
+    /**
      * The filter to search for the Worker to update in case it exists.
      */
     where: WorkerWhereUniqueInput
@@ -3392,6 +3678,10 @@ export namespace Prisma {
      */
     omit?: WorkerOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
+    /**
      * Filter which Worker to delete.
      */
     where: WorkerWhereUniqueInput
@@ -3412,6 +3702,73 @@ export namespace Prisma {
   }
 
   /**
+   * Worker.user
+   */
+  export type Worker$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Worker.assignments
+   */
+  export type Worker$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Assignment
+     */
+    select?: AssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Assignment
+     */
+    omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    where?: AssignmentWhereInput
+    orderBy?: AssignmentOrderByWithRelationInput | AssignmentOrderByWithRelationInput[]
+    cursor?: AssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssignmentScalarFieldEnum | AssignmentScalarFieldEnum[]
+  }
+
+  /**
+   * Worker.shiftRequests
+   */
+  export type Worker$shiftRequestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ShiftRequest
+     */
+    select?: ShiftRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ShiftRequest
+     */
+    omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
+    where?: ShiftRequestWhereInput
+    orderBy?: ShiftRequestOrderByWithRelationInput | ShiftRequestOrderByWithRelationInput[]
+    cursor?: ShiftRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ShiftRequestScalarFieldEnum | ShiftRequestScalarFieldEnum[]
+  }
+
+  /**
    * Worker without action
    */
   export type WorkerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3423,6 +3780,10 @@ export namespace Prisma {
      * Omit specific fields from the Worker
      */
     omit?: WorkerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkerInclude<ExtArgs> | null
   }
 
 
@@ -3463,6 +3824,8 @@ export namespace Prisma {
     minNurses: number | null
     minMidwives: number | null
     minSeniors: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShiftMaxAggregateOutputType = {
@@ -3474,6 +3837,8 @@ export namespace Prisma {
     minNurses: number | null
     minMidwives: number | null
     minSeniors: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShiftCountAggregateOutputType = {
@@ -3485,6 +3850,8 @@ export namespace Prisma {
     minNurses: number
     minMidwives: number
     minSeniors: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -3514,6 +3881,8 @@ export namespace Prisma {
     minNurses?: true
     minMidwives?: true
     minSeniors?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShiftMaxAggregateInputType = {
@@ -3525,6 +3894,8 @@ export namespace Prisma {
     minNurses?: true
     minMidwives?: true
     minSeniors?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShiftCountAggregateInputType = {
@@ -3536,6 +3907,8 @@ export namespace Prisma {
     minNurses?: true
     minMidwives?: true
     minSeniors?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -3634,6 +4007,8 @@ export namespace Prisma {
     minNurses: number
     minMidwives: number
     minSeniors: number
+    createdAt: Date
+    updatedAt: Date
     _count: ShiftCountAggregateOutputType | null
     _avg: ShiftAvgAggregateOutputType | null
     _sum: ShiftSumAggregateOutputType | null
@@ -3664,6 +4039,10 @@ export namespace Prisma {
     minNurses?: boolean
     minMidwives?: boolean
     minSeniors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignments?: boolean | Shift$assignmentsArgs<ExtArgs>
+    _count?: boolean | ShiftCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shift"]>
 
   export type ShiftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3675,6 +4054,8 @@ export namespace Prisma {
     minNurses?: boolean
     minMidwives?: boolean
     minSeniors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["shift"]>
 
   export type ShiftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3686,6 +4067,8 @@ export namespace Prisma {
     minNurses?: boolean
     minMidwives?: boolean
     minSeniors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["shift"]>
 
   export type ShiftSelectScalar = {
@@ -3697,13 +4080,23 @@ export namespace Prisma {
     minNurses?: boolean
     minMidwives?: boolean
     minSeniors?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ShiftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startTime" | "endTime" | "durationHrs" | "minNurses" | "minMidwives" | "minSeniors", ExtArgs["result"]["shift"]>
+  export type ShiftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startTime" | "endTime" | "durationHrs" | "minNurses" | "minMidwives" | "minSeniors" | "createdAt" | "updatedAt", ExtArgs["result"]["shift"]>
+  export type ShiftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | Shift$assignmentsArgs<ExtArgs>
+    _count?: boolean | ShiftCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ShiftIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ShiftIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $ShiftPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Shift"
-    objects: {}
+    objects: {
+      assignments: Prisma.$AssignmentPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
@@ -3713,6 +4106,8 @@ export namespace Prisma {
       minNurses: number
       minMidwives: number
       minSeniors: number
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["shift"]>
     composites: {}
   }
@@ -4107,6 +4502,7 @@ export namespace Prisma {
    */
   export interface Prisma__ShiftClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    assignments<T extends Shift$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Shift$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4144,6 +4540,8 @@ export namespace Prisma {
     readonly minNurses: FieldRef<"Shift", 'Int'>
     readonly minMidwives: FieldRef<"Shift", 'Int'>
     readonly minSeniors: FieldRef<"Shift", 'Int'>
+    readonly createdAt: FieldRef<"Shift", 'DateTime'>
+    readonly updatedAt: FieldRef<"Shift", 'DateTime'>
   }
     
 
@@ -4160,6 +4558,10 @@ export namespace Prisma {
      * Omit specific fields from the Shift
      */
     omit?: ShiftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
     /**
      * Filter, which Shift to fetch.
      */
@@ -4179,6 +4581,10 @@ export namespace Prisma {
      */
     omit?: ShiftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
+    /**
      * Filter, which Shift to fetch.
      */
     where: ShiftWhereUniqueInput
@@ -4196,6 +4602,10 @@ export namespace Prisma {
      * Omit specific fields from the Shift
      */
     omit?: ShiftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
     /**
      * Filter, which Shift to fetch.
      */
@@ -4245,6 +4655,10 @@ export namespace Prisma {
      */
     omit?: ShiftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
+    /**
      * Filter, which Shift to fetch.
      */
     where?: ShiftWhereInput
@@ -4293,6 +4707,10 @@ export namespace Prisma {
      */
     omit?: ShiftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
+    /**
      * Filter, which Shifts to fetch.
      */
     where?: ShiftWhereInput
@@ -4335,6 +4753,10 @@ export namespace Prisma {
      * Omit specific fields from the Shift
      */
     omit?: ShiftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
     /**
      * The data needed to create a Shift.
      */
@@ -4381,6 +4803,10 @@ export namespace Prisma {
      * Omit specific fields from the Shift
      */
     omit?: ShiftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
     /**
      * The data needed to update a Shift.
      */
@@ -4448,6 +4874,10 @@ export namespace Prisma {
      */
     omit?: ShiftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
+    /**
      * The filter to search for the Shift to update in case it exists.
      */
     where: ShiftWhereUniqueInput
@@ -4474,6 +4904,10 @@ export namespace Prisma {
      */
     omit?: ShiftOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
+    /**
      * Filter which Shift to delete.
      */
     where: ShiftWhereUniqueInput
@@ -4494,6 +4928,30 @@ export namespace Prisma {
   }
 
   /**
+   * Shift.assignments
+   */
+  export type Shift$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Assignment
+     */
+    select?: AssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Assignment
+     */
+    omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    where?: AssignmentWhereInput
+    orderBy?: AssignmentOrderByWithRelationInput | AssignmentOrderByWithRelationInput[]
+    cursor?: AssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssignmentScalarFieldEnum | AssignmentScalarFieldEnum[]
+  }
+
+  /**
    * Shift without action
    */
   export type ShiftDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4505,6 +4963,10 @@ export namespace Prisma {
      * Omit specific fields from the Shift
      */
     omit?: ShiftOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftInclude<ExtArgs> | null
   }
 
 
@@ -4544,6 +5006,8 @@ export namespace Prisma {
     isSelected: boolean | null
     fitnessScore: number | null
     generationCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ScheduleMaxAggregateOutputType = {
@@ -4554,6 +5018,8 @@ export namespace Prisma {
     isSelected: boolean | null
     fitnessScore: number | null
     generationCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ScheduleCountAggregateOutputType = {
@@ -4564,6 +5030,8 @@ export namespace Prisma {
     isSelected: number
     fitnessScore: number
     generationCount: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -4592,6 +5060,8 @@ export namespace Prisma {
     isSelected?: true
     fitnessScore?: true
     generationCount?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ScheduleMaxAggregateInputType = {
@@ -4602,6 +5072,8 @@ export namespace Prisma {
     isSelected?: true
     fitnessScore?: true
     generationCount?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ScheduleCountAggregateInputType = {
@@ -4612,6 +5084,8 @@ export namespace Prisma {
     isSelected?: true
     fitnessScore?: true
     generationCount?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -4709,6 +5183,8 @@ export namespace Prisma {
     isSelected: boolean
     fitnessScore: number
     generationCount: number
+    createdAt: Date
+    updatedAt: Date
     _count: ScheduleCountAggregateOutputType | null
     _avg: ScheduleAvgAggregateOutputType | null
     _sum: ScheduleSumAggregateOutputType | null
@@ -4738,6 +5214,10 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    assignments?: boolean | Schedule$assignmentsArgs<ExtArgs>
+    _count?: boolean | ScheduleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["schedule"]>
 
   export type ScheduleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4748,6 +5228,8 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["schedule"]>
 
   export type ScheduleSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4758,6 +5240,8 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["schedule"]>
 
   export type ScheduleSelectScalar = {
@@ -4768,13 +5252,23 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "month" | "year" | "status" | "isSelected" | "fitnessScore" | "generationCount", ExtArgs["result"]["schedule"]>
+  export type ScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "month" | "year" | "status" | "isSelected" | "fitnessScore" | "generationCount" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
+  export type ScheduleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    assignments?: boolean | Schedule$assignmentsArgs<ExtArgs>
+    _count?: boolean | ScheduleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ScheduleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ScheduleIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $SchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Schedule"
-    objects: {}
+    objects: {
+      assignments: Prisma.$AssignmentPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       month: number
@@ -4783,6 +5277,8 @@ export namespace Prisma {
       isSelected: boolean
       fitnessScore: number
       generationCount: number
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["schedule"]>
     composites: {}
   }
@@ -5177,6 +5673,7 @@ export namespace Prisma {
    */
   export interface Prisma__ScheduleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    assignments<T extends Schedule$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Schedule$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5213,6 +5710,8 @@ export namespace Prisma {
     readonly isSelected: FieldRef<"Schedule", 'Boolean'>
     readonly fitnessScore: FieldRef<"Schedule", 'Float'>
     readonly generationCount: FieldRef<"Schedule", 'Int'>
+    readonly createdAt: FieldRef<"Schedule", 'DateTime'>
+    readonly updatedAt: FieldRef<"Schedule", 'DateTime'>
   }
     
 
@@ -5229,6 +5728,10 @@ export namespace Prisma {
      * Omit specific fields from the Schedule
      */
     omit?: ScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
     /**
      * Filter, which Schedule to fetch.
      */
@@ -5248,6 +5751,10 @@ export namespace Prisma {
      */
     omit?: ScheduleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
+    /**
      * Filter, which Schedule to fetch.
      */
     where: ScheduleWhereUniqueInput
@@ -5265,6 +5772,10 @@ export namespace Prisma {
      * Omit specific fields from the Schedule
      */
     omit?: ScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
     /**
      * Filter, which Schedule to fetch.
      */
@@ -5314,6 +5825,10 @@ export namespace Prisma {
      */
     omit?: ScheduleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
+    /**
      * Filter, which Schedule to fetch.
      */
     where?: ScheduleWhereInput
@@ -5362,6 +5877,10 @@ export namespace Prisma {
      */
     omit?: ScheduleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
+    /**
      * Filter, which Schedules to fetch.
      */
     where?: ScheduleWhereInput
@@ -5404,6 +5923,10 @@ export namespace Prisma {
      * Omit specific fields from the Schedule
      */
     omit?: ScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
     /**
      * The data needed to create a Schedule.
      */
@@ -5450,6 +5973,10 @@ export namespace Prisma {
      * Omit specific fields from the Schedule
      */
     omit?: ScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
     /**
      * The data needed to update a Schedule.
      */
@@ -5517,6 +6044,10 @@ export namespace Prisma {
      */
     omit?: ScheduleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
+    /**
      * The filter to search for the Schedule to update in case it exists.
      */
     where: ScheduleWhereUniqueInput
@@ -5543,6 +6074,10 @@ export namespace Prisma {
      */
     omit?: ScheduleOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
+    /**
      * Filter which Schedule to delete.
      */
     where: ScheduleWhereUniqueInput
@@ -5563,6 +6098,30 @@ export namespace Prisma {
   }
 
   /**
+   * Schedule.assignments
+   */
+  export type Schedule$assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Assignment
+     */
+    select?: AssignmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Assignment
+     */
+    omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    where?: AssignmentWhereInput
+    orderBy?: AssignmentOrderByWithRelationInput | AssignmentOrderByWithRelationInput[]
+    cursor?: AssignmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AssignmentScalarFieldEnum | AssignmentScalarFieldEnum[]
+  }
+
+  /**
    * Schedule without action
    */
   export type ScheduleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5574,6 +6133,10 @@ export namespace Prisma {
      * Omit specific fields from the Schedule
      */
     omit?: ScheduleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduleInclude<ExtArgs> | null
   }
 
 
@@ -5611,6 +6174,8 @@ export namespace Prisma {
     workerId: number | null
     dayOfMonth: number | null
     shiftId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type AssignmentMaxAggregateOutputType = {
@@ -5619,6 +6184,8 @@ export namespace Prisma {
     workerId: number | null
     dayOfMonth: number | null
     shiftId: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type AssignmentCountAggregateOutputType = {
@@ -5627,6 +6194,8 @@ export namespace Prisma {
     workerId: number
     dayOfMonth: number
     shiftId: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -5653,6 +6222,8 @@ export namespace Prisma {
     workerId?: true
     dayOfMonth?: true
     shiftId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type AssignmentMaxAggregateInputType = {
@@ -5661,6 +6232,8 @@ export namespace Prisma {
     workerId?: true
     dayOfMonth?: true
     shiftId?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type AssignmentCountAggregateInputType = {
@@ -5669,6 +6242,8 @@ export namespace Prisma {
     workerId?: true
     dayOfMonth?: true
     shiftId?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -5764,6 +6339,8 @@ export namespace Prisma {
     workerId: number
     dayOfMonth: number
     shiftId: number
+    createdAt: Date
+    updatedAt: Date
     _count: AssignmentCountAggregateOutputType | null
     _avg: AssignmentAvgAggregateOutputType | null
     _sum: AssignmentSumAggregateOutputType | null
@@ -5791,6 +6368,11 @@ export namespace Prisma {
     workerId?: boolean
     dayOfMonth?: boolean
     shiftId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    schedule?: boolean | ScheduleDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    shift?: boolean | ShiftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["assignment"]>
 
   export type AssignmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5799,6 +6381,11 @@ export namespace Prisma {
     workerId?: boolean
     dayOfMonth?: boolean
     shiftId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    schedule?: boolean | ScheduleDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    shift?: boolean | ShiftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["assignment"]>
 
   export type AssignmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5807,6 +6394,11 @@ export namespace Prisma {
     workerId?: boolean
     dayOfMonth?: boolean
     shiftId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    schedule?: boolean | ScheduleDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    shift?: boolean | ShiftDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["assignment"]>
 
   export type AssignmentSelectScalar = {
@@ -5815,19 +6407,42 @@ export namespace Prisma {
     workerId?: boolean
     dayOfMonth?: boolean
     shiftId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type AssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "scheduleId" | "workerId" | "dayOfMonth" | "shiftId", ExtArgs["result"]["assignment"]>
+  export type AssignmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "scheduleId" | "workerId" | "dayOfMonth" | "shiftId" | "createdAt" | "updatedAt", ExtArgs["result"]["assignment"]>
+  export type AssignmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | ScheduleDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    shift?: boolean | ShiftDefaultArgs<ExtArgs>
+  }
+  export type AssignmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | ScheduleDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    shift?: boolean | ShiftDefaultArgs<ExtArgs>
+  }
+  export type AssignmentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    schedule?: boolean | ScheduleDefaultArgs<ExtArgs>
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+    shift?: boolean | ShiftDefaultArgs<ExtArgs>
+  }
 
   export type $AssignmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Assignment"
-    objects: {}
+    objects: {
+      schedule: Prisma.$SchedulePayload<ExtArgs>
+      worker: Prisma.$WorkerPayload<ExtArgs>
+      shift: Prisma.$ShiftPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       scheduleId: number
       workerId: number
       dayOfMonth: number
       shiftId: number
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["assignment"]>
     composites: {}
   }
@@ -6222,6 +6837,9 @@ export namespace Prisma {
    */
   export interface Prisma__AssignmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    schedule<T extends ScheduleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ScheduleDefaultArgs<ExtArgs>>): Prisma__ScheduleClient<$Result.GetResult<Prisma.$SchedulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    shift<T extends ShiftDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ShiftDefaultArgs<ExtArgs>>): Prisma__ShiftClient<$Result.GetResult<Prisma.$ShiftPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6256,6 +6874,8 @@ export namespace Prisma {
     readonly workerId: FieldRef<"Assignment", 'Int'>
     readonly dayOfMonth: FieldRef<"Assignment", 'Int'>
     readonly shiftId: FieldRef<"Assignment", 'Int'>
+    readonly createdAt: FieldRef<"Assignment", 'DateTime'>
+    readonly updatedAt: FieldRef<"Assignment", 'DateTime'>
   }
     
 
@@ -6272,6 +6892,10 @@ export namespace Prisma {
      * Omit specific fields from the Assignment
      */
     omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
     /**
      * Filter, which Assignment to fetch.
      */
@@ -6291,6 +6915,10 @@ export namespace Prisma {
      */
     omit?: AssignmentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    /**
      * Filter, which Assignment to fetch.
      */
     where: AssignmentWhereUniqueInput
@@ -6308,6 +6936,10 @@ export namespace Prisma {
      * Omit specific fields from the Assignment
      */
     omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
     /**
      * Filter, which Assignment to fetch.
      */
@@ -6357,6 +6989,10 @@ export namespace Prisma {
      */
     omit?: AssignmentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    /**
      * Filter, which Assignment to fetch.
      */
     where?: AssignmentWhereInput
@@ -6405,6 +7041,10 @@ export namespace Prisma {
      */
     omit?: AssignmentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    /**
      * Filter, which Assignments to fetch.
      */
     where?: AssignmentWhereInput
@@ -6448,6 +7088,10 @@ export namespace Prisma {
      */
     omit?: AssignmentOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
+    /**
      * The data needed to create a Assignment.
      */
     data: XOR<AssignmentCreateInput, AssignmentUncheckedCreateInput>
@@ -6479,6 +7123,10 @@ export namespace Prisma {
      * The data used to create many Assignments.
      */
     data: AssignmentCreateManyInput | AssignmentCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6493,6 +7141,10 @@ export namespace Prisma {
      * Omit specific fields from the Assignment
      */
     omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
     /**
      * The data needed to update a Assignment.
      */
@@ -6545,6 +7197,10 @@ export namespace Prisma {
      * Limit how many Assignments to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -6559,6 +7215,10 @@ export namespace Prisma {
      * Omit specific fields from the Assignment
      */
     omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
     /**
      * The filter to search for the Assignment to update in case it exists.
      */
@@ -6585,6 +7245,10 @@ export namespace Prisma {
      * Omit specific fields from the Assignment
      */
     omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
     /**
      * Filter which Assignment to delete.
      */
@@ -6617,6 +7281,10 @@ export namespace Prisma {
      * Omit specific fields from the Assignment
      */
     omit?: AssignmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AssignmentInclude<ExtArgs> | null
   }
 
 
@@ -6652,6 +7320,8 @@ export namespace Prisma {
     reason: string | null
     status: string | null
     rejectionReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShiftRequestMaxAggregateOutputType = {
@@ -6664,6 +7334,8 @@ export namespace Prisma {
     reason: string | null
     status: string | null
     rejectionReason: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type ShiftRequestCountAggregateOutputType = {
@@ -6676,6 +7348,8 @@ export namespace Prisma {
     reason: number
     status: number
     rejectionReason: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -6700,6 +7374,8 @@ export namespace Prisma {
     reason?: true
     status?: true
     rejectionReason?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShiftRequestMaxAggregateInputType = {
@@ -6712,6 +7388,8 @@ export namespace Prisma {
     reason?: true
     status?: true
     rejectionReason?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type ShiftRequestCountAggregateInputType = {
@@ -6724,6 +7402,8 @@ export namespace Prisma {
     reason?: true
     status?: true
     rejectionReason?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -6823,6 +7503,8 @@ export namespace Prisma {
     reason: string | null
     status: string
     rejectionReason: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: ShiftRequestCountAggregateOutputType | null
     _avg: ShiftRequestAvgAggregateOutputType | null
     _sum: ShiftRequestSumAggregateOutputType | null
@@ -6854,6 +7536,9 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shiftRequest"]>
 
   export type ShiftRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6866,6 +7551,9 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shiftRequest"]>
 
   export type ShiftRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6878,6 +7566,9 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["shiftRequest"]>
 
   export type ShiftRequestSelectScalar = {
@@ -6890,13 +7581,26 @@ export namespace Prisma {
     reason?: boolean
     status?: boolean
     rejectionReason?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type ShiftRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workerId" | "date" | "endDate" | "type" | "shiftPref" | "reason" | "status" | "rejectionReason", ExtArgs["result"]["shiftRequest"]>
+  export type ShiftRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "workerId" | "date" | "endDate" | "type" | "shiftPref" | "reason" | "status" | "rejectionReason" | "createdAt" | "updatedAt", ExtArgs["result"]["shiftRequest"]>
+  export type ShiftRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }
+  export type ShiftRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }
+  export type ShiftRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    worker?: boolean | WorkerDefaultArgs<ExtArgs>
+  }
 
   export type $ShiftRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ShiftRequest"
-    objects: {}
+    objects: {
+      worker: Prisma.$WorkerPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       workerId: number
@@ -6907,6 +7611,8 @@ export namespace Prisma {
       reason: string | null
       status: string
       rejectionReason: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["shiftRequest"]>
     composites: {}
   }
@@ -7301,6 +8007,7 @@ export namespace Prisma {
    */
   export interface Prisma__ShiftRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    worker<T extends WorkerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WorkerDefaultArgs<ExtArgs>>): Prisma__WorkerClient<$Result.GetResult<Prisma.$WorkerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7339,6 +8046,8 @@ export namespace Prisma {
     readonly reason: FieldRef<"ShiftRequest", 'String'>
     readonly status: FieldRef<"ShiftRequest", 'String'>
     readonly rejectionReason: FieldRef<"ShiftRequest", 'String'>
+    readonly createdAt: FieldRef<"ShiftRequest", 'DateTime'>
+    readonly updatedAt: FieldRef<"ShiftRequest", 'DateTime'>
   }
     
 
@@ -7355,6 +8064,10 @@ export namespace Prisma {
      * Omit specific fields from the ShiftRequest
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
     /**
      * Filter, which ShiftRequest to fetch.
      */
@@ -7374,6 +8087,10 @@ export namespace Prisma {
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
+    /**
      * Filter, which ShiftRequest to fetch.
      */
     where: ShiftRequestWhereUniqueInput
@@ -7391,6 +8108,10 @@ export namespace Prisma {
      * Omit specific fields from the ShiftRequest
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
     /**
      * Filter, which ShiftRequest to fetch.
      */
@@ -7440,6 +8161,10 @@ export namespace Prisma {
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
+    /**
      * Filter, which ShiftRequest to fetch.
      */
     where?: ShiftRequestWhereInput
@@ -7488,6 +8213,10 @@ export namespace Prisma {
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
+    /**
      * Filter, which ShiftRequests to fetch.
      */
     where?: ShiftRequestWhereInput
@@ -7531,6 +8260,10 @@ export namespace Prisma {
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
+    /**
      * The data needed to create a ShiftRequest.
      */
     data: XOR<ShiftRequestCreateInput, ShiftRequestUncheckedCreateInput>
@@ -7562,6 +8295,10 @@ export namespace Prisma {
      * The data used to create many ShiftRequests.
      */
     data: ShiftRequestCreateManyInput | ShiftRequestCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7576,6 +8313,10 @@ export namespace Prisma {
      * Omit specific fields from the ShiftRequest
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
     /**
      * The data needed to update a ShiftRequest.
      */
@@ -7628,6 +8369,10 @@ export namespace Prisma {
      * Limit how many ShiftRequests to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -7642,6 +8387,10 @@ export namespace Prisma {
      * Omit specific fields from the ShiftRequest
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
     /**
      * The filter to search for the ShiftRequest to update in case it exists.
      */
@@ -7668,6 +8417,10 @@ export namespace Prisma {
      * Omit specific fields from the ShiftRequest
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
     /**
      * Filter which ShiftRequest to delete.
      */
@@ -7700,6 +8453,10 @@ export namespace Prisma {
      * Omit specific fields from the ShiftRequest
      */
     omit?: ShiftRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ShiftRequestInclude<ExtArgs> | null
   }
 
 
@@ -7720,7 +8477,9 @@ export namespace Prisma {
     password: 'password',
     fullName: 'fullName',
     role: 'role',
-    workerId: 'workerId'
+    workerId: 'workerId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -7734,7 +8493,9 @@ export namespace Prisma {
     isActive: 'isActive',
     fixedShift: 'fixedShift',
     weekendHolidayOff: 'weekendHolidayOff',
-    sundayHolidayOff: 'sundayHolidayOff'
+    sundayHolidayOff: 'sundayHolidayOff',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type WorkerScalarFieldEnum = (typeof WorkerScalarFieldEnum)[keyof typeof WorkerScalarFieldEnum]
@@ -7748,7 +8509,9 @@ export namespace Prisma {
     durationHrs: 'durationHrs',
     minNurses: 'minNurses',
     minMidwives: 'minMidwives',
-    minSeniors: 'minSeniors'
+    minSeniors: 'minSeniors',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ShiftScalarFieldEnum = (typeof ShiftScalarFieldEnum)[keyof typeof ShiftScalarFieldEnum]
@@ -7761,7 +8524,9 @@ export namespace Prisma {
     status: 'status',
     isSelected: 'isSelected',
     fitnessScore: 'fitnessScore',
-    generationCount: 'generationCount'
+    generationCount: 'generationCount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ScheduleScalarFieldEnum = (typeof ScheduleScalarFieldEnum)[keyof typeof ScheduleScalarFieldEnum]
@@ -7772,7 +8537,9 @@ export namespace Prisma {
     scheduleId: 'scheduleId',
     workerId: 'workerId',
     dayOfMonth: 'dayOfMonth',
-    shiftId: 'shiftId'
+    shiftId: 'shiftId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type AssignmentScalarFieldEnum = (typeof AssignmentScalarFieldEnum)[keyof typeof AssignmentScalarFieldEnum]
@@ -7787,7 +8554,9 @@ export namespace Prisma {
     shiftPref: 'shiftPref',
     reason: 'reason',
     status: 'status',
-    rejectionReason: 'rejectionReason'
+    rejectionReason: 'rejectionReason',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type ShiftRequestScalarFieldEnum = (typeof ShiftRequestScalarFieldEnum)[keyof typeof ShiftRequestScalarFieldEnum]
@@ -7829,6 +8598,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'DateTime'
+   */
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -7839,13 +8615,6 @@ export namespace Prisma {
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'DateTime'
-   */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
   /**
    * Deep Input Types
@@ -7862,6 +8631,9 @@ export namespace Prisma {
     fullName?: StringFilter<"User"> | string
     role?: StringFilter<"User"> | string
     workerId?: IntNullableFilter<"User"> | number | null
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    worker?: XOR<WorkerNullableScalarRelationFilter, WorkerWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -7871,19 +8643,25 @@ export namespace Prisma {
     fullName?: SortOrder
     role?: SortOrder
     workerId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    worker?: WorkerOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     username?: string
+    workerId?: number
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     password?: StringFilter<"User"> | string
     fullName?: StringFilter<"User"> | string
     role?: StringFilter<"User"> | string
-    workerId?: IntNullableFilter<"User"> | number | null
-  }, "id" | "username">
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeFilter<"User"> | Date | string
+    worker?: XOR<WorkerNullableScalarRelationFilter, WorkerWhereInput> | null
+  }, "id" | "username" | "workerId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -7892,6 +8670,8 @@ export namespace Prisma {
     fullName?: SortOrder
     role?: SortOrder
     workerId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -7909,6 +8689,8 @@ export namespace Prisma {
     fullName?: StringWithAggregatesFilter<"User"> | string
     role?: StringWithAggregatesFilter<"User"> | string
     workerId?: IntNullableWithAggregatesFilter<"User"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type WorkerWhereInput = {
@@ -7923,6 +8705,11 @@ export namespace Prisma {
     fixedShift?: StringNullableFilter<"Worker"> | string | null
     weekendHolidayOff?: BoolFilter<"Worker"> | boolean
     sundayHolidayOff?: BoolFilter<"Worker"> | boolean
+    createdAt?: DateTimeFilter<"Worker"> | Date | string
+    updatedAt?: DateTimeFilter<"Worker"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignments?: AssignmentListRelationFilter
+    shiftRequests?: ShiftRequestListRelationFilter
   }
 
   export type WorkerOrderByWithRelationInput = {
@@ -7934,6 +8721,11 @@ export namespace Prisma {
     fixedShift?: SortOrderInput | SortOrder
     weekendHolidayOff?: SortOrder
     sundayHolidayOff?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    assignments?: AssignmentOrderByRelationAggregateInput
+    shiftRequests?: ShiftRequestOrderByRelationAggregateInput
   }
 
   export type WorkerWhereUniqueInput = Prisma.AtLeast<{
@@ -7948,6 +8740,11 @@ export namespace Prisma {
     fixedShift?: StringNullableFilter<"Worker"> | string | null
     weekendHolidayOff?: BoolFilter<"Worker"> | boolean
     sundayHolidayOff?: BoolFilter<"Worker"> | boolean
+    createdAt?: DateTimeFilter<"Worker"> | Date | string
+    updatedAt?: DateTimeFilter<"Worker"> | Date | string
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    assignments?: AssignmentListRelationFilter
+    shiftRequests?: ShiftRequestListRelationFilter
   }, "id">
 
   export type WorkerOrderByWithAggregationInput = {
@@ -7959,6 +8756,8 @@ export namespace Prisma {
     fixedShift?: SortOrderInput | SortOrder
     weekendHolidayOff?: SortOrder
     sundayHolidayOff?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: WorkerCountOrderByAggregateInput
     _avg?: WorkerAvgOrderByAggregateInput
     _max?: WorkerMaxOrderByAggregateInput
@@ -7978,6 +8777,8 @@ export namespace Prisma {
     fixedShift?: StringNullableWithAggregatesFilter<"Worker"> | string | null
     weekendHolidayOff?: BoolWithAggregatesFilter<"Worker"> | boolean
     sundayHolidayOff?: BoolWithAggregatesFilter<"Worker"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Worker"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Worker"> | Date | string
   }
 
   export type ShiftWhereInput = {
@@ -7992,6 +8793,9 @@ export namespace Prisma {
     minNurses?: IntFilter<"Shift"> | number
     minMidwives?: IntFilter<"Shift"> | number
     minSeniors?: IntFilter<"Shift"> | number
+    createdAt?: DateTimeFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeFilter<"Shift"> | Date | string
+    assignments?: AssignmentListRelationFilter
   }
 
   export type ShiftOrderByWithRelationInput = {
@@ -8003,6 +8807,9 @@ export namespace Prisma {
     minNurses?: SortOrder
     minMidwives?: SortOrder
     minSeniors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    assignments?: AssignmentOrderByRelationAggregateInput
   }
 
   export type ShiftWhereUniqueInput = Prisma.AtLeast<{
@@ -8017,6 +8824,9 @@ export namespace Prisma {
     minNurses?: IntFilter<"Shift"> | number
     minMidwives?: IntFilter<"Shift"> | number
     minSeniors?: IntFilter<"Shift"> | number
+    createdAt?: DateTimeFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeFilter<"Shift"> | Date | string
+    assignments?: AssignmentListRelationFilter
   }, "id">
 
   export type ShiftOrderByWithAggregationInput = {
@@ -8028,6 +8838,8 @@ export namespace Prisma {
     minNurses?: SortOrder
     minMidwives?: SortOrder
     minSeniors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ShiftCountOrderByAggregateInput
     _avg?: ShiftAvgOrderByAggregateInput
     _max?: ShiftMaxOrderByAggregateInput
@@ -8047,6 +8859,8 @@ export namespace Prisma {
     minNurses?: IntWithAggregatesFilter<"Shift"> | number
     minMidwives?: IntWithAggregatesFilter<"Shift"> | number
     minSeniors?: IntWithAggregatesFilter<"Shift"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Shift"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Shift"> | Date | string
   }
 
   export type ScheduleWhereInput = {
@@ -8060,6 +8874,9 @@ export namespace Prisma {
     isSelected?: BoolFilter<"Schedule"> | boolean
     fitnessScore?: FloatFilter<"Schedule"> | number
     generationCount?: IntFilter<"Schedule"> | number
+    createdAt?: DateTimeFilter<"Schedule"> | Date | string
+    updatedAt?: DateTimeFilter<"Schedule"> | Date | string
+    assignments?: AssignmentListRelationFilter
   }
 
   export type ScheduleOrderByWithRelationInput = {
@@ -8070,6 +8887,9 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    assignments?: AssignmentOrderByRelationAggregateInput
   }
 
   export type ScheduleWhereUniqueInput = Prisma.AtLeast<{
@@ -8083,6 +8903,9 @@ export namespace Prisma {
     isSelected?: BoolFilter<"Schedule"> | boolean
     fitnessScore?: FloatFilter<"Schedule"> | number
     generationCount?: IntFilter<"Schedule"> | number
+    createdAt?: DateTimeFilter<"Schedule"> | Date | string
+    updatedAt?: DateTimeFilter<"Schedule"> | Date | string
+    assignments?: AssignmentListRelationFilter
   }, "id">
 
   export type ScheduleOrderByWithAggregationInput = {
@@ -8093,6 +8916,8 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ScheduleCountOrderByAggregateInput
     _avg?: ScheduleAvgOrderByAggregateInput
     _max?: ScheduleMaxOrderByAggregateInput
@@ -8111,6 +8936,8 @@ export namespace Prisma {
     isSelected?: BoolWithAggregatesFilter<"Schedule"> | boolean
     fitnessScore?: FloatWithAggregatesFilter<"Schedule"> | number
     generationCount?: IntWithAggregatesFilter<"Schedule"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Schedule"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Schedule"> | Date | string
   }
 
   export type AssignmentWhereInput = {
@@ -8122,6 +8949,11 @@ export namespace Prisma {
     workerId?: IntFilter<"Assignment"> | number
     dayOfMonth?: IntFilter<"Assignment"> | number
     shiftId?: IntFilter<"Assignment"> | number
+    createdAt?: DateTimeFilter<"Assignment"> | Date | string
+    updatedAt?: DateTimeFilter<"Assignment"> | Date | string
+    schedule?: XOR<ScheduleScalarRelationFilter, ScheduleWhereInput>
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
+    shift?: XOR<ShiftScalarRelationFilter, ShiftWhereInput>
   }
 
   export type AssignmentOrderByWithRelationInput = {
@@ -8130,10 +8962,16 @@ export namespace Prisma {
     workerId?: SortOrder
     dayOfMonth?: SortOrder
     shiftId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    schedule?: ScheduleOrderByWithRelationInput
+    worker?: WorkerOrderByWithRelationInput
+    shift?: ShiftOrderByWithRelationInput
   }
 
   export type AssignmentWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    scheduleId_workerId_dayOfMonth?: AssignmentScheduleIdWorkerIdDayOfMonthCompoundUniqueInput
     AND?: AssignmentWhereInput | AssignmentWhereInput[]
     OR?: AssignmentWhereInput[]
     NOT?: AssignmentWhereInput | AssignmentWhereInput[]
@@ -8141,7 +8979,12 @@ export namespace Prisma {
     workerId?: IntFilter<"Assignment"> | number
     dayOfMonth?: IntFilter<"Assignment"> | number
     shiftId?: IntFilter<"Assignment"> | number
-  }, "id">
+    createdAt?: DateTimeFilter<"Assignment"> | Date | string
+    updatedAt?: DateTimeFilter<"Assignment"> | Date | string
+    schedule?: XOR<ScheduleScalarRelationFilter, ScheduleWhereInput>
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
+    shift?: XOR<ShiftScalarRelationFilter, ShiftWhereInput>
+  }, "id" | "scheduleId_workerId_dayOfMonth">
 
   export type AssignmentOrderByWithAggregationInput = {
     id?: SortOrder
@@ -8149,6 +8992,8 @@ export namespace Prisma {
     workerId?: SortOrder
     dayOfMonth?: SortOrder
     shiftId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: AssignmentCountOrderByAggregateInput
     _avg?: AssignmentAvgOrderByAggregateInput
     _max?: AssignmentMaxOrderByAggregateInput
@@ -8165,6 +9010,8 @@ export namespace Prisma {
     workerId?: IntWithAggregatesFilter<"Assignment"> | number
     dayOfMonth?: IntWithAggregatesFilter<"Assignment"> | number
     shiftId?: IntWithAggregatesFilter<"Assignment"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"Assignment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Assignment"> | Date | string
   }
 
   export type ShiftRequestWhereInput = {
@@ -8180,6 +9027,9 @@ export namespace Prisma {
     reason?: StringNullableFilter<"ShiftRequest"> | string | null
     status?: StringFilter<"ShiftRequest"> | string
     rejectionReason?: StringNullableFilter<"ShiftRequest"> | string | null
+    createdAt?: DateTimeFilter<"ShiftRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ShiftRequest"> | Date | string
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
   }
 
   export type ShiftRequestOrderByWithRelationInput = {
@@ -8192,6 +9042,9 @@ export namespace Prisma {
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    worker?: WorkerOrderByWithRelationInput
   }
 
   export type ShiftRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -8207,6 +9060,9 @@ export namespace Prisma {
     reason?: StringNullableFilter<"ShiftRequest"> | string | null
     status?: StringFilter<"ShiftRequest"> | string
     rejectionReason?: StringNullableFilter<"ShiftRequest"> | string | null
+    createdAt?: DateTimeFilter<"ShiftRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ShiftRequest"> | Date | string
+    worker?: XOR<WorkerScalarRelationFilter, WorkerWhereInput>
   }, "id">
 
   export type ShiftRequestOrderByWithAggregationInput = {
@@ -8219,6 +9075,8 @@ export namespace Prisma {
     reason?: SortOrderInput | SortOrder
     status?: SortOrder
     rejectionReason?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: ShiftRequestCountOrderByAggregateInput
     _avg?: ShiftRequestAvgOrderByAggregateInput
     _max?: ShiftRequestMaxOrderByAggregateInput
@@ -8239,14 +9097,18 @@ export namespace Prisma {
     reason?: StringNullableWithAggregatesFilter<"ShiftRequest"> | string | null
     status?: StringWithAggregatesFilter<"ShiftRequest"> | string
     rejectionReason?: StringNullableWithAggregatesFilter<"ShiftRequest"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ShiftRequest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ShiftRequest"> | Date | string
   }
 
   export type UserCreateInput = {
     username: string
     password: string
     fullName: string
-    role: string
-    workerId?: number | null
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker?: WorkerCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -8254,8 +9116,10 @@ export namespace Prisma {
     username: string
     password: string
     fullName: string
-    role: string
+    role?: string
     workerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type UserUpdateInput = {
@@ -8263,7 +9127,9 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
-    workerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -8273,6 +9139,8 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     workerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserCreateManyInput = {
@@ -8280,8 +9148,10 @@ export namespace Prisma {
     username: string
     password: string
     fullName: string
-    role: string
+    role?: string
     workerId?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -8289,7 +9159,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     fullName?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
-    workerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -8299,16 +9170,23 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     workerId?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WorkerCreateInput = {
     name: string
     workerType: string
     skillLevel: string
-    isActive: boolean
+    isActive?: boolean
     fixedShift?: string | null
-    weekendHolidayOff: boolean
-    sundayHolidayOff: boolean
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutWorkerInput
+    assignments?: AssignmentCreateNestedManyWithoutWorkerInput
+    shiftRequests?: ShiftRequestCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUncheckedCreateInput = {
@@ -8316,10 +9194,15 @@ export namespace Prisma {
     name: string
     workerType: string
     skillLevel: string
-    isActive: boolean
+    isActive?: boolean
     fixedShift?: string | null
-    weekendHolidayOff: boolean
-    sundayHolidayOff: boolean
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserUncheckedCreateNestedOneWithoutWorkerInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutWorkerInput
+    shiftRequests?: ShiftRequestUncheckedCreateNestedManyWithoutWorkerInput
   }
 
   export type WorkerUpdateInput = {
@@ -8330,6 +9213,11 @@ export namespace Prisma {
     fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
     weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
     sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutWorkerNestedInput
+    assignments?: AssignmentUpdateManyWithoutWorkerNestedInput
+    shiftRequests?: ShiftRequestUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerUncheckedUpdateInput = {
@@ -8341,6 +9229,11 @@ export namespace Prisma {
     fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
     weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
     sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUncheckedUpdateOneWithoutWorkerNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutWorkerNestedInput
+    shiftRequests?: ShiftRequestUncheckedUpdateManyWithoutWorkerNestedInput
   }
 
   export type WorkerCreateManyInput = {
@@ -8348,10 +9241,12 @@ export namespace Prisma {
     name: string
     workerType: string
     skillLevel: string
-    isActive: boolean
+    isActive?: boolean
     fixedShift?: string | null
-    weekendHolidayOff: boolean
-    sundayHolidayOff: boolean
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type WorkerUpdateManyMutationInput = {
@@ -8362,6 +9257,8 @@ export namespace Prisma {
     fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
     weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
     sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type WorkerUncheckedUpdateManyInput = {
@@ -8373,6 +9270,8 @@ export namespace Prisma {
     fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
     weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
     sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShiftCreateInput = {
@@ -8383,6 +9282,9 @@ export namespace Prisma {
     minNurses: number
     minMidwives: number
     minSeniors: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssignmentCreateNestedManyWithoutShiftInput
   }
 
   export type ShiftUncheckedCreateInput = {
@@ -8394,6 +9296,9 @@ export namespace Prisma {
     minNurses: number
     minMidwives: number
     minSeniors: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutShiftInput
   }
 
   export type ShiftUpdateInput = {
@@ -8404,6 +9309,9 @@ export namespace Prisma {
     minNurses?: IntFieldUpdateOperationsInput | number
     minMidwives?: IntFieldUpdateOperationsInput | number
     minSeniors?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssignmentUpdateManyWithoutShiftNestedInput
   }
 
   export type ShiftUncheckedUpdateInput = {
@@ -8415,6 +9323,9 @@ export namespace Prisma {
     minNurses?: IntFieldUpdateOperationsInput | number
     minMidwives?: IntFieldUpdateOperationsInput | number
     minSeniors?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssignmentUncheckedUpdateManyWithoutShiftNestedInput
   }
 
   export type ShiftCreateManyInput = {
@@ -8426,6 +9337,8 @@ export namespace Prisma {
     minNurses: number
     minMidwives: number
     minSeniors: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShiftUpdateManyMutationInput = {
@@ -8436,6 +9349,8 @@ export namespace Prisma {
     minNurses?: IntFieldUpdateOperationsInput | number
     minMidwives?: IntFieldUpdateOperationsInput | number
     minSeniors?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShiftUncheckedUpdateManyInput = {
@@ -8447,6 +9362,8 @@ export namespace Prisma {
     minNurses?: IntFieldUpdateOperationsInput | number
     minMidwives?: IntFieldUpdateOperationsInput | number
     minSeniors?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ScheduleCreateInput = {
@@ -8456,6 +9373,9 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore: number
     generationCount: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssignmentCreateNestedManyWithoutScheduleInput
   }
 
   export type ScheduleUncheckedCreateInput = {
@@ -8466,6 +9386,9 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore: number
     generationCount: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutScheduleInput
   }
 
   export type ScheduleUpdateInput = {
@@ -8475,6 +9398,9 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssignmentUpdateManyWithoutScheduleNestedInput
   }
 
   export type ScheduleUncheckedUpdateInput = {
@@ -8485,6 +9411,9 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssignmentUncheckedUpdateManyWithoutScheduleNestedInput
   }
 
   export type ScheduleCreateManyInput = {
@@ -8495,6 +9424,8 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore: number
     generationCount: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ScheduleUpdateManyMutationInput = {
@@ -8504,6 +9435,8 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ScheduleUncheckedUpdateManyInput = {
@@ -8514,13 +9447,17 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssignmentCreateInput = {
-    scheduleId: number
-    workerId: number
     dayOfMonth: number
-    shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schedule: ScheduleCreateNestedOneWithoutAssignmentsInput
+    worker: WorkerCreateNestedOneWithoutAssignmentsInput
+    shift: ShiftCreateNestedOneWithoutAssignmentsInput
   }
 
   export type AssignmentUncheckedCreateInput = {
@@ -8529,13 +9466,17 @@ export namespace Prisma {
     workerId: number
     dayOfMonth: number
     shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AssignmentUpdateInput = {
-    scheduleId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
     dayOfMonth?: IntFieldUpdateOperationsInput | number
-    shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schedule?: ScheduleUpdateOneRequiredWithoutAssignmentsNestedInput
+    worker?: WorkerUpdateOneRequiredWithoutAssignmentsNestedInput
+    shift?: ShiftUpdateOneRequiredWithoutAssignmentsNestedInput
   }
 
   export type AssignmentUncheckedUpdateInput = {
@@ -8544,6 +9485,8 @@ export namespace Prisma {
     workerId?: IntFieldUpdateOperationsInput | number
     dayOfMonth?: IntFieldUpdateOperationsInput | number
     shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssignmentCreateManyInput = {
@@ -8552,13 +9495,14 @@ export namespace Prisma {
     workerId: number
     dayOfMonth: number
     shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AssignmentUpdateManyMutationInput = {
-    scheduleId?: IntFieldUpdateOperationsInput | number
-    workerId?: IntFieldUpdateOperationsInput | number
     dayOfMonth?: IntFieldUpdateOperationsInput | number
-    shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AssignmentUncheckedUpdateManyInput = {
@@ -8567,17 +9511,21 @@ export namespace Prisma {
     workerId?: IntFieldUpdateOperationsInput | number
     dayOfMonth?: IntFieldUpdateOperationsInput | number
     shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShiftRequestCreateInput = {
-    workerId: number
     date: Date | string
     endDate?: Date | string | null
     type: string
     shiftPref?: string | null
     reason?: string | null
-    status: string
+    status?: string
     rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutShiftRequestsInput
   }
 
   export type ShiftRequestUncheckedCreateInput = {
@@ -8588,12 +9536,13 @@ export namespace Prisma {
     type: string
     shiftPref?: string | null
     reason?: string | null
-    status: string
+    status?: string
     rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShiftRequestUpdateInput = {
-    workerId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     type?: StringFieldUpdateOperationsInput | string
@@ -8601,6 +9550,9 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutShiftRequestsNestedInput
   }
 
   export type ShiftRequestUncheckedUpdateInput = {
@@ -8613,6 +9565,8 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShiftRequestCreateManyInput = {
@@ -8623,12 +9577,13 @@ export namespace Prisma {
     type: string
     shiftPref?: string | null
     reason?: string | null
-    status: string
+    status?: string
     rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ShiftRequestUpdateManyMutationInput = {
-    workerId?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     type?: StringFieldUpdateOperationsInput | string
@@ -8636,6 +9591,8 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ShiftRequestUncheckedUpdateManyInput = {
@@ -8648,6 +9605,8 @@ export namespace Prisma {
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -8686,6 +9645,22 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type WorkerNullableScalarRelationFilter = {
+    is?: WorkerWhereInput | null
+    isNot?: WorkerWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -8698,6 +9673,8 @@ export namespace Prisma {
     fullName?: SortOrder
     role?: SortOrder
     workerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -8712,6 +9689,8 @@ export namespace Prisma {
     fullName?: SortOrder
     role?: SortOrder
     workerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -8721,6 +9700,8 @@ export namespace Prisma {
     fullName?: SortOrder
     role?: SortOrder
     workerId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -8777,6 +9758,20 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -8796,6 +9791,31 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type AssignmentListRelationFilter = {
+    every?: AssignmentWhereInput
+    some?: AssignmentWhereInput
+    none?: AssignmentWhereInput
+  }
+
+  export type ShiftRequestListRelationFilter = {
+    every?: ShiftRequestWhereInput
+    some?: ShiftRequestWhereInput
+    none?: ShiftRequestWhereInput
+  }
+
+  export type AssignmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ShiftRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type WorkerCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -8805,6 +9825,8 @@ export namespace Prisma {
     fixedShift?: SortOrder
     weekendHolidayOff?: SortOrder
     sundayHolidayOff?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WorkerAvgOrderByAggregateInput = {
@@ -8820,6 +9842,8 @@ export namespace Prisma {
     fixedShift?: SortOrder
     weekendHolidayOff?: SortOrder
     sundayHolidayOff?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WorkerMinOrderByAggregateInput = {
@@ -8831,6 +9855,8 @@ export namespace Prisma {
     fixedShift?: SortOrder
     weekendHolidayOff?: SortOrder
     sundayHolidayOff?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type WorkerSumOrderByAggregateInput = {
@@ -8882,6 +9908,8 @@ export namespace Prisma {
     minNurses?: SortOrder
     minMidwives?: SortOrder
     minSeniors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShiftAvgOrderByAggregateInput = {
@@ -8901,6 +9929,8 @@ export namespace Prisma {
     minNurses?: SortOrder
     minMidwives?: SortOrder
     minSeniors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShiftMinOrderByAggregateInput = {
@@ -8912,6 +9942,8 @@ export namespace Prisma {
     minNurses?: SortOrder
     minMidwives?: SortOrder
     minSeniors?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShiftSumOrderByAggregateInput = {
@@ -8946,6 +9978,8 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ScheduleAvgOrderByAggregateInput = {
@@ -8964,6 +9998,8 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ScheduleMinOrderByAggregateInput = {
@@ -8974,6 +10010,8 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ScheduleSumOrderByAggregateInput = {
@@ -8984,12 +10022,35 @@ export namespace Prisma {
     generationCount?: SortOrder
   }
 
+  export type ScheduleScalarRelationFilter = {
+    is?: ScheduleWhereInput
+    isNot?: ScheduleWhereInput
+  }
+
+  export type WorkerScalarRelationFilter = {
+    is?: WorkerWhereInput
+    isNot?: WorkerWhereInput
+  }
+
+  export type ShiftScalarRelationFilter = {
+    is?: ShiftWhereInput
+    isNot?: ShiftWhereInput
+  }
+
+  export type AssignmentScheduleIdWorkerIdDayOfMonthCompoundUniqueInput = {
+    scheduleId: number
+    workerId: number
+    dayOfMonth: number
+  }
+
   export type AssignmentCountOrderByAggregateInput = {
     id?: SortOrder
     scheduleId?: SortOrder
     workerId?: SortOrder
     dayOfMonth?: SortOrder
     shiftId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type AssignmentAvgOrderByAggregateInput = {
@@ -9006,6 +10067,8 @@ export namespace Prisma {
     workerId?: SortOrder
     dayOfMonth?: SortOrder
     shiftId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type AssignmentMinOrderByAggregateInput = {
@@ -9014,6 +10077,8 @@ export namespace Prisma {
     workerId?: SortOrder
     dayOfMonth?: SortOrder
     shiftId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type AssignmentSumOrderByAggregateInput = {
@@ -9022,17 +10087,6 @@ export namespace Prisma {
     workerId?: SortOrder
     dayOfMonth?: SortOrder
     shiftId?: SortOrder
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -9056,6 +10110,8 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     rejectionReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShiftRequestAvgOrderByAggregateInput = {
@@ -9073,6 +10129,8 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     rejectionReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShiftRequestMinOrderByAggregateInput = {
@@ -9085,25 +10143,13 @@ export namespace Prisma {
     reason?: SortOrder
     status?: SortOrder
     rejectionReason?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ShiftRequestSumOrderByAggregateInput = {
     id?: SortOrder
     workerId?: SortOrder
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -9120,16 +10166,28 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type WorkerCreateNestedOneWithoutUserInput = {
+    create?: XOR<WorkerCreateWithoutUserInput, WorkerUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutUserInput
+    connect?: WorkerWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type WorkerUpdateOneWithoutUserNestedInput = {
+    create?: XOR<WorkerCreateWithoutUserInput, WorkerUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutUserInput
+    upsert?: WorkerUpsertWithoutUserInput
+    disconnect?: WorkerWhereInput | boolean
+    delete?: WorkerWhereInput | boolean
+    connect?: WorkerWhereUniqueInput
+    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutUserInput, WorkerUpdateWithoutUserInput>, WorkerUncheckedUpdateWithoutUserInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -9140,12 +10198,150 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserCreateNestedOneWithoutWorkerInput = {
+    create?: XOR<UserCreateWithoutWorkerInput, UserUncheckedCreateWithoutWorkerInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkerInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AssignmentCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<AssignmentCreateWithoutWorkerInput, AssignmentUncheckedCreateWithoutWorkerInput> | AssignmentCreateWithoutWorkerInput[] | AssignmentUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutWorkerInput | AssignmentCreateOrConnectWithoutWorkerInput[]
+    createMany?: AssignmentCreateManyWorkerInputEnvelope
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type ShiftRequestCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<ShiftRequestCreateWithoutWorkerInput, ShiftRequestUncheckedCreateWithoutWorkerInput> | ShiftRequestCreateWithoutWorkerInput[] | ShiftRequestUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: ShiftRequestCreateOrConnectWithoutWorkerInput | ShiftRequestCreateOrConnectWithoutWorkerInput[]
+    createMany?: ShiftRequestCreateManyWorkerInputEnvelope
+    connect?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+  }
+
+  export type UserUncheckedCreateNestedOneWithoutWorkerInput = {
+    create?: XOR<UserCreateWithoutWorkerInput, UserUncheckedCreateWithoutWorkerInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkerInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type AssignmentUncheckedCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<AssignmentCreateWithoutWorkerInput, AssignmentUncheckedCreateWithoutWorkerInput> | AssignmentCreateWithoutWorkerInput[] | AssignmentUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutWorkerInput | AssignmentCreateOrConnectWithoutWorkerInput[]
+    createMany?: AssignmentCreateManyWorkerInputEnvelope
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type ShiftRequestUncheckedCreateNestedManyWithoutWorkerInput = {
+    create?: XOR<ShiftRequestCreateWithoutWorkerInput, ShiftRequestUncheckedCreateWithoutWorkerInput> | ShiftRequestCreateWithoutWorkerInput[] | ShiftRequestUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: ShiftRequestCreateOrConnectWithoutWorkerInput | ShiftRequestCreateOrConnectWithoutWorkerInput[]
+    createMany?: ShiftRequestCreateManyWorkerInputEnvelope
+    connect?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
+  }
+
+  export type UserUpdateOneWithoutWorkerNestedInput = {
+    create?: XOR<UserCreateWithoutWorkerInput, UserUncheckedCreateWithoutWorkerInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkerInput
+    upsert?: UserUpsertWithoutWorkerInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWorkerInput, UserUpdateWithoutWorkerInput>, UserUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type AssignmentUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<AssignmentCreateWithoutWorkerInput, AssignmentUncheckedCreateWithoutWorkerInput> | AssignmentCreateWithoutWorkerInput[] | AssignmentUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutWorkerInput | AssignmentCreateOrConnectWithoutWorkerInput[]
+    upsert?: AssignmentUpsertWithWhereUniqueWithoutWorkerInput | AssignmentUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: AssignmentCreateManyWorkerInputEnvelope
+    set?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    disconnect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    delete?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    update?: AssignmentUpdateWithWhereUniqueWithoutWorkerInput | AssignmentUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: AssignmentUpdateManyWithWhereWithoutWorkerInput | AssignmentUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type ShiftRequestUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<ShiftRequestCreateWithoutWorkerInput, ShiftRequestUncheckedCreateWithoutWorkerInput> | ShiftRequestCreateWithoutWorkerInput[] | ShiftRequestUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: ShiftRequestCreateOrConnectWithoutWorkerInput | ShiftRequestCreateOrConnectWithoutWorkerInput[]
+    upsert?: ShiftRequestUpsertWithWhereUniqueWithoutWorkerInput | ShiftRequestUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: ShiftRequestCreateManyWorkerInputEnvelope
+    set?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    disconnect?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    delete?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    connect?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    update?: ShiftRequestUpdateWithWhereUniqueWithoutWorkerInput | ShiftRequestUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: ShiftRequestUpdateManyWithWhereWithoutWorkerInput | ShiftRequestUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: ShiftRequestScalarWhereInput | ShiftRequestScalarWhereInput[]
+  }
+
+  export type UserUncheckedUpdateOneWithoutWorkerNestedInput = {
+    create?: XOR<UserCreateWithoutWorkerInput, UserUncheckedCreateWithoutWorkerInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkerInput
+    upsert?: UserUpsertWithoutWorkerInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWorkerInput, UserUpdateWithoutWorkerInput>, UserUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type AssignmentUncheckedUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<AssignmentCreateWithoutWorkerInput, AssignmentUncheckedCreateWithoutWorkerInput> | AssignmentCreateWithoutWorkerInput[] | AssignmentUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutWorkerInput | AssignmentCreateOrConnectWithoutWorkerInput[]
+    upsert?: AssignmentUpsertWithWhereUniqueWithoutWorkerInput | AssignmentUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: AssignmentCreateManyWorkerInputEnvelope
+    set?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    disconnect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    delete?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    update?: AssignmentUpdateWithWhereUniqueWithoutWorkerInput | AssignmentUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: AssignmentUpdateManyWithWhereWithoutWorkerInput | AssignmentUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type ShiftRequestUncheckedUpdateManyWithoutWorkerNestedInput = {
+    create?: XOR<ShiftRequestCreateWithoutWorkerInput, ShiftRequestUncheckedCreateWithoutWorkerInput> | ShiftRequestCreateWithoutWorkerInput[] | ShiftRequestUncheckedCreateWithoutWorkerInput[]
+    connectOrCreate?: ShiftRequestCreateOrConnectWithoutWorkerInput | ShiftRequestCreateOrConnectWithoutWorkerInput[]
+    upsert?: ShiftRequestUpsertWithWhereUniqueWithoutWorkerInput | ShiftRequestUpsertWithWhereUniqueWithoutWorkerInput[]
+    createMany?: ShiftRequestCreateManyWorkerInputEnvelope
+    set?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    disconnect?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    delete?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    connect?: ShiftRequestWhereUniqueInput | ShiftRequestWhereUniqueInput[]
+    update?: ShiftRequestUpdateWithWhereUniqueWithoutWorkerInput | ShiftRequestUpdateWithWhereUniqueWithoutWorkerInput[]
+    updateMany?: ShiftRequestUpdateManyWithWhereWithoutWorkerInput | ShiftRequestUpdateManyWithWhereWithoutWorkerInput[]
+    deleteMany?: ShiftRequestScalarWhereInput | ShiftRequestScalarWhereInput[]
+  }
+
+  export type AssignmentCreateNestedManyWithoutShiftInput = {
+    create?: XOR<AssignmentCreateWithoutShiftInput, AssignmentUncheckedCreateWithoutShiftInput> | AssignmentCreateWithoutShiftInput[] | AssignmentUncheckedCreateWithoutShiftInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutShiftInput | AssignmentCreateOrConnectWithoutShiftInput[]
+    createMany?: AssignmentCreateManyShiftInputEnvelope
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type AssignmentUncheckedCreateNestedManyWithoutShiftInput = {
+    create?: XOR<AssignmentCreateWithoutShiftInput, AssignmentUncheckedCreateWithoutShiftInput> | AssignmentCreateWithoutShiftInput[] | AssignmentUncheckedCreateWithoutShiftInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutShiftInput | AssignmentCreateOrConnectWithoutShiftInput[]
+    createMany?: AssignmentCreateManyShiftInputEnvelope
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -9156,12 +10352,134 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type AssignmentUpdateManyWithoutShiftNestedInput = {
+    create?: XOR<AssignmentCreateWithoutShiftInput, AssignmentUncheckedCreateWithoutShiftInput> | AssignmentCreateWithoutShiftInput[] | AssignmentUncheckedCreateWithoutShiftInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutShiftInput | AssignmentCreateOrConnectWithoutShiftInput[]
+    upsert?: AssignmentUpsertWithWhereUniqueWithoutShiftInput | AssignmentUpsertWithWhereUniqueWithoutShiftInput[]
+    createMany?: AssignmentCreateManyShiftInputEnvelope
+    set?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    disconnect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    delete?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    update?: AssignmentUpdateWithWhereUniqueWithoutShiftInput | AssignmentUpdateWithWhereUniqueWithoutShiftInput[]
+    updateMany?: AssignmentUpdateManyWithWhereWithoutShiftInput | AssignmentUpdateManyWithWhereWithoutShiftInput[]
+    deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type AssignmentUncheckedUpdateManyWithoutShiftNestedInput = {
+    create?: XOR<AssignmentCreateWithoutShiftInput, AssignmentUncheckedCreateWithoutShiftInput> | AssignmentCreateWithoutShiftInput[] | AssignmentUncheckedCreateWithoutShiftInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutShiftInput | AssignmentCreateOrConnectWithoutShiftInput[]
+    upsert?: AssignmentUpsertWithWhereUniqueWithoutShiftInput | AssignmentUpsertWithWhereUniqueWithoutShiftInput[]
+    createMany?: AssignmentCreateManyShiftInputEnvelope
+    set?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    disconnect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    delete?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    update?: AssignmentUpdateWithWhereUniqueWithoutShiftInput | AssignmentUpdateWithWhereUniqueWithoutShiftInput[]
+    updateMany?: AssignmentUpdateManyWithWhereWithoutShiftInput | AssignmentUpdateManyWithWhereWithoutShiftInput[]
+    deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type AssignmentCreateNestedManyWithoutScheduleInput = {
+    create?: XOR<AssignmentCreateWithoutScheduleInput, AssignmentUncheckedCreateWithoutScheduleInput> | AssignmentCreateWithoutScheduleInput[] | AssignmentUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutScheduleInput | AssignmentCreateOrConnectWithoutScheduleInput[]
+    createMany?: AssignmentCreateManyScheduleInputEnvelope
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type AssignmentUncheckedCreateNestedManyWithoutScheduleInput = {
+    create?: XOR<AssignmentCreateWithoutScheduleInput, AssignmentUncheckedCreateWithoutScheduleInput> | AssignmentCreateWithoutScheduleInput[] | AssignmentUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutScheduleInput | AssignmentCreateOrConnectWithoutScheduleInput[]
+    createMany?: AssignmentCreateManyScheduleInputEnvelope
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+  }
+
+  export type AssignmentUpdateManyWithoutScheduleNestedInput = {
+    create?: XOR<AssignmentCreateWithoutScheduleInput, AssignmentUncheckedCreateWithoutScheduleInput> | AssignmentCreateWithoutScheduleInput[] | AssignmentUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutScheduleInput | AssignmentCreateOrConnectWithoutScheduleInput[]
+    upsert?: AssignmentUpsertWithWhereUniqueWithoutScheduleInput | AssignmentUpsertWithWhereUniqueWithoutScheduleInput[]
+    createMany?: AssignmentCreateManyScheduleInputEnvelope
+    set?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    disconnect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    delete?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    update?: AssignmentUpdateWithWhereUniqueWithoutScheduleInput | AssignmentUpdateWithWhereUniqueWithoutScheduleInput[]
+    updateMany?: AssignmentUpdateManyWithWhereWithoutScheduleInput | AssignmentUpdateManyWithWhereWithoutScheduleInput[]
+    deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type AssignmentUncheckedUpdateManyWithoutScheduleNestedInput = {
+    create?: XOR<AssignmentCreateWithoutScheduleInput, AssignmentUncheckedCreateWithoutScheduleInput> | AssignmentCreateWithoutScheduleInput[] | AssignmentUncheckedCreateWithoutScheduleInput[]
+    connectOrCreate?: AssignmentCreateOrConnectWithoutScheduleInput | AssignmentCreateOrConnectWithoutScheduleInput[]
+    upsert?: AssignmentUpsertWithWhereUniqueWithoutScheduleInput | AssignmentUpsertWithWhereUniqueWithoutScheduleInput[]
+    createMany?: AssignmentCreateManyScheduleInputEnvelope
+    set?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    disconnect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    delete?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    connect?: AssignmentWhereUniqueInput | AssignmentWhereUniqueInput[]
+    update?: AssignmentUpdateWithWhereUniqueWithoutScheduleInput | AssignmentUpdateWithWhereUniqueWithoutScheduleInput[]
+    updateMany?: AssignmentUpdateManyWithWhereWithoutScheduleInput | AssignmentUpdateManyWithWhereWithoutScheduleInput[]
+    deleteMany?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+  }
+
+  export type ScheduleCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<ScheduleCreateWithoutAssignmentsInput, ScheduleUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: ScheduleCreateOrConnectWithoutAssignmentsInput
+    connect?: ScheduleWhereUniqueInput
+  }
+
+  export type WorkerCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<WorkerCreateWithoutAssignmentsInput, WorkerUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutAssignmentsInput
+    connect?: WorkerWhereUniqueInput
+  }
+
+  export type ShiftCreateNestedOneWithoutAssignmentsInput = {
+    create?: XOR<ShiftCreateWithoutAssignmentsInput, ShiftUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: ShiftCreateOrConnectWithoutAssignmentsInput
+    connect?: ShiftWhereUniqueInput
+  }
+
+  export type ScheduleUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<ScheduleCreateWithoutAssignmentsInput, ScheduleUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: ScheduleCreateOrConnectWithoutAssignmentsInput
+    upsert?: ScheduleUpsertWithoutAssignmentsInput
+    connect?: ScheduleWhereUniqueInput
+    update?: XOR<XOR<ScheduleUpdateToOneWithWhereWithoutAssignmentsInput, ScheduleUpdateWithoutAssignmentsInput>, ScheduleUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type WorkerUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<WorkerCreateWithoutAssignmentsInput, WorkerUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutAssignmentsInput
+    upsert?: WorkerUpsertWithoutAssignmentsInput
+    connect?: WorkerWhereUniqueInput
+    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutAssignmentsInput, WorkerUpdateWithoutAssignmentsInput>, WorkerUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type ShiftUpdateOneRequiredWithoutAssignmentsNestedInput = {
+    create?: XOR<ShiftCreateWithoutAssignmentsInput, ShiftUncheckedCreateWithoutAssignmentsInput>
+    connectOrCreate?: ShiftCreateOrConnectWithoutAssignmentsInput
+    upsert?: ShiftUpsertWithoutAssignmentsInput
+    connect?: ShiftWhereUniqueInput
+    update?: XOR<XOR<ShiftUpdateToOneWithWhereWithoutAssignmentsInput, ShiftUpdateWithoutAssignmentsInput>, ShiftUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type WorkerCreateNestedOneWithoutShiftRequestsInput = {
+    create?: XOR<WorkerCreateWithoutShiftRequestsInput, WorkerUncheckedCreateWithoutShiftRequestsInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutShiftRequestsInput
+    connect?: WorkerWhereUniqueInput
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type WorkerUpdateOneRequiredWithoutShiftRequestsNestedInput = {
+    create?: XOR<WorkerCreateWithoutShiftRequestsInput, WorkerUncheckedCreateWithoutShiftRequestsInput>
+    connectOrCreate?: WorkerCreateOrConnectWithoutShiftRequestsInput
+    upsert?: WorkerUpsertWithoutShiftRequestsInput
+    connect?: WorkerWhereUniqueInput
+    update?: XOR<XOR<WorkerUpdateToOneWithWhereWithoutShiftRequestsInput, WorkerUpdateWithoutShiftRequestsInput>, WorkerUncheckedUpdateWithoutShiftRequestsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -9198,6 +10516,17 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -9271,6 +10600,20 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -9331,17 +10674,6 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | null
@@ -9351,20 +10683,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[]
-    notIn?: Date[] | string[]
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -9379,6 +10697,772 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type WorkerCreateWithoutUserInput = {
+    name: string
+    workerType: string
+    skillLevel: string
+    isActive?: boolean
+    fixedShift?: string | null
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssignmentCreateNestedManyWithoutWorkerInput
+    shiftRequests?: ShiftRequestCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerUncheckedCreateWithoutUserInput = {
+    id?: number
+    name: string
+    workerType: string
+    skillLevel: string
+    isActive?: boolean
+    fixedShift?: string | null
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutWorkerInput
+    shiftRequests?: ShiftRequestUncheckedCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerCreateOrConnectWithoutUserInput = {
+    where: WorkerWhereUniqueInput
+    create: XOR<WorkerCreateWithoutUserInput, WorkerUncheckedCreateWithoutUserInput>
+  }
+
+  export type WorkerUpsertWithoutUserInput = {
+    update: XOR<WorkerUpdateWithoutUserInput, WorkerUncheckedUpdateWithoutUserInput>
+    create: XOR<WorkerCreateWithoutUserInput, WorkerUncheckedCreateWithoutUserInput>
+    where?: WorkerWhereInput
+  }
+
+  export type WorkerUpdateToOneWithWhereWithoutUserInput = {
+    where?: WorkerWhereInput
+    data: XOR<WorkerUpdateWithoutUserInput, WorkerUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WorkerUpdateWithoutUserInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    workerType?: StringFieldUpdateOperationsInput | string
+    skillLevel?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
+    weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssignmentUpdateManyWithoutWorkerNestedInput
+    shiftRequests?: ShiftRequestUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type WorkerUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    workerType?: StringFieldUpdateOperationsInput | string
+    skillLevel?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
+    weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    assignments?: AssignmentUncheckedUpdateManyWithoutWorkerNestedInput
+    shiftRequests?: ShiftRequestUncheckedUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type UserCreateWithoutWorkerInput = {
+    username: string
+    password: string
+    fullName: string
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserUncheckedCreateWithoutWorkerInput = {
+    id?: number
+    username: string
+    password: string
+    fullName: string
+    role?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserCreateOrConnectWithoutWorkerInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWorkerInput, UserUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type AssignmentCreateWithoutWorkerInput = {
+    dayOfMonth: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schedule: ScheduleCreateNestedOneWithoutAssignmentsInput
+    shift: ShiftCreateNestedOneWithoutAssignmentsInput
+  }
+
+  export type AssignmentUncheckedCreateWithoutWorkerInput = {
+    id?: number
+    scheduleId: number
+    dayOfMonth: number
+    shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentCreateOrConnectWithoutWorkerInput = {
+    where: AssignmentWhereUniqueInput
+    create: XOR<AssignmentCreateWithoutWorkerInput, AssignmentUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type AssignmentCreateManyWorkerInputEnvelope = {
+    data: AssignmentCreateManyWorkerInput | AssignmentCreateManyWorkerInput[]
+  }
+
+  export type ShiftRequestCreateWithoutWorkerInput = {
+    date: Date | string
+    endDate?: Date | string | null
+    type: string
+    shiftPref?: string | null
+    reason?: string | null
+    status?: string
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShiftRequestUncheckedCreateWithoutWorkerInput = {
+    id?: number
+    date: Date | string
+    endDate?: Date | string | null
+    type: string
+    shiftPref?: string | null
+    reason?: string | null
+    status?: string
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShiftRequestCreateOrConnectWithoutWorkerInput = {
+    where: ShiftRequestWhereUniqueInput
+    create: XOR<ShiftRequestCreateWithoutWorkerInput, ShiftRequestUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type ShiftRequestCreateManyWorkerInputEnvelope = {
+    data: ShiftRequestCreateManyWorkerInput | ShiftRequestCreateManyWorkerInput[]
+  }
+
+  export type UserUpsertWithoutWorkerInput = {
+    update: XOR<UserUpdateWithoutWorkerInput, UserUncheckedUpdateWithoutWorkerInput>
+    create: XOR<UserCreateWithoutWorkerInput, UserUncheckedCreateWithoutWorkerInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWorkerInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWorkerInput, UserUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type UserUpdateWithoutWorkerInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUncheckedUpdateWithoutWorkerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    username?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentUpsertWithWhereUniqueWithoutWorkerInput = {
+    where: AssignmentWhereUniqueInput
+    update: XOR<AssignmentUpdateWithoutWorkerInput, AssignmentUncheckedUpdateWithoutWorkerInput>
+    create: XOR<AssignmentCreateWithoutWorkerInput, AssignmentUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type AssignmentUpdateWithWhereUniqueWithoutWorkerInput = {
+    where: AssignmentWhereUniqueInput
+    data: XOR<AssignmentUpdateWithoutWorkerInput, AssignmentUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type AssignmentUpdateManyWithWhereWithoutWorkerInput = {
+    where: AssignmentScalarWhereInput
+    data: XOR<AssignmentUpdateManyMutationInput, AssignmentUncheckedUpdateManyWithoutWorkerInput>
+  }
+
+  export type AssignmentScalarWhereInput = {
+    AND?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+    OR?: AssignmentScalarWhereInput[]
+    NOT?: AssignmentScalarWhereInput | AssignmentScalarWhereInput[]
+    id?: IntFilter<"Assignment"> | number
+    scheduleId?: IntFilter<"Assignment"> | number
+    workerId?: IntFilter<"Assignment"> | number
+    dayOfMonth?: IntFilter<"Assignment"> | number
+    shiftId?: IntFilter<"Assignment"> | number
+    createdAt?: DateTimeFilter<"Assignment"> | Date | string
+    updatedAt?: DateTimeFilter<"Assignment"> | Date | string
+  }
+
+  export type ShiftRequestUpsertWithWhereUniqueWithoutWorkerInput = {
+    where: ShiftRequestWhereUniqueInput
+    update: XOR<ShiftRequestUpdateWithoutWorkerInput, ShiftRequestUncheckedUpdateWithoutWorkerInput>
+    create: XOR<ShiftRequestCreateWithoutWorkerInput, ShiftRequestUncheckedCreateWithoutWorkerInput>
+  }
+
+  export type ShiftRequestUpdateWithWhereUniqueWithoutWorkerInput = {
+    where: ShiftRequestWhereUniqueInput
+    data: XOR<ShiftRequestUpdateWithoutWorkerInput, ShiftRequestUncheckedUpdateWithoutWorkerInput>
+  }
+
+  export type ShiftRequestUpdateManyWithWhereWithoutWorkerInput = {
+    where: ShiftRequestScalarWhereInput
+    data: XOR<ShiftRequestUpdateManyMutationInput, ShiftRequestUncheckedUpdateManyWithoutWorkerInput>
+  }
+
+  export type ShiftRequestScalarWhereInput = {
+    AND?: ShiftRequestScalarWhereInput | ShiftRequestScalarWhereInput[]
+    OR?: ShiftRequestScalarWhereInput[]
+    NOT?: ShiftRequestScalarWhereInput | ShiftRequestScalarWhereInput[]
+    id?: IntFilter<"ShiftRequest"> | number
+    workerId?: IntFilter<"ShiftRequest"> | number
+    date?: DateTimeFilter<"ShiftRequest"> | Date | string
+    endDate?: DateTimeNullableFilter<"ShiftRequest"> | Date | string | null
+    type?: StringFilter<"ShiftRequest"> | string
+    shiftPref?: StringNullableFilter<"ShiftRequest"> | string | null
+    reason?: StringNullableFilter<"ShiftRequest"> | string | null
+    status?: StringFilter<"ShiftRequest"> | string
+    rejectionReason?: StringNullableFilter<"ShiftRequest"> | string | null
+    createdAt?: DateTimeFilter<"ShiftRequest"> | Date | string
+    updatedAt?: DateTimeFilter<"ShiftRequest"> | Date | string
+  }
+
+  export type AssignmentCreateWithoutShiftInput = {
+    dayOfMonth: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    schedule: ScheduleCreateNestedOneWithoutAssignmentsInput
+    worker: WorkerCreateNestedOneWithoutAssignmentsInput
+  }
+
+  export type AssignmentUncheckedCreateWithoutShiftInput = {
+    id?: number
+    scheduleId: number
+    workerId: number
+    dayOfMonth: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentCreateOrConnectWithoutShiftInput = {
+    where: AssignmentWhereUniqueInput
+    create: XOR<AssignmentCreateWithoutShiftInput, AssignmentUncheckedCreateWithoutShiftInput>
+  }
+
+  export type AssignmentCreateManyShiftInputEnvelope = {
+    data: AssignmentCreateManyShiftInput | AssignmentCreateManyShiftInput[]
+  }
+
+  export type AssignmentUpsertWithWhereUniqueWithoutShiftInput = {
+    where: AssignmentWhereUniqueInput
+    update: XOR<AssignmentUpdateWithoutShiftInput, AssignmentUncheckedUpdateWithoutShiftInput>
+    create: XOR<AssignmentCreateWithoutShiftInput, AssignmentUncheckedCreateWithoutShiftInput>
+  }
+
+  export type AssignmentUpdateWithWhereUniqueWithoutShiftInput = {
+    where: AssignmentWhereUniqueInput
+    data: XOR<AssignmentUpdateWithoutShiftInput, AssignmentUncheckedUpdateWithoutShiftInput>
+  }
+
+  export type AssignmentUpdateManyWithWhereWithoutShiftInput = {
+    where: AssignmentScalarWhereInput
+    data: XOR<AssignmentUpdateManyMutationInput, AssignmentUncheckedUpdateManyWithoutShiftInput>
+  }
+
+  export type AssignmentCreateWithoutScheduleInput = {
+    dayOfMonth: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    worker: WorkerCreateNestedOneWithoutAssignmentsInput
+    shift: ShiftCreateNestedOneWithoutAssignmentsInput
+  }
+
+  export type AssignmentUncheckedCreateWithoutScheduleInput = {
+    id?: number
+    workerId: number
+    dayOfMonth: number
+    shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentCreateOrConnectWithoutScheduleInput = {
+    where: AssignmentWhereUniqueInput
+    create: XOR<AssignmentCreateWithoutScheduleInput, AssignmentUncheckedCreateWithoutScheduleInput>
+  }
+
+  export type AssignmentCreateManyScheduleInputEnvelope = {
+    data: AssignmentCreateManyScheduleInput | AssignmentCreateManyScheduleInput[]
+  }
+
+  export type AssignmentUpsertWithWhereUniqueWithoutScheduleInput = {
+    where: AssignmentWhereUniqueInput
+    update: XOR<AssignmentUpdateWithoutScheduleInput, AssignmentUncheckedUpdateWithoutScheduleInput>
+    create: XOR<AssignmentCreateWithoutScheduleInput, AssignmentUncheckedCreateWithoutScheduleInput>
+  }
+
+  export type AssignmentUpdateWithWhereUniqueWithoutScheduleInput = {
+    where: AssignmentWhereUniqueInput
+    data: XOR<AssignmentUpdateWithoutScheduleInput, AssignmentUncheckedUpdateWithoutScheduleInput>
+  }
+
+  export type AssignmentUpdateManyWithWhereWithoutScheduleInput = {
+    where: AssignmentScalarWhereInput
+    data: XOR<AssignmentUpdateManyMutationInput, AssignmentUncheckedUpdateManyWithoutScheduleInput>
+  }
+
+  export type ScheduleCreateWithoutAssignmentsInput = {
+    month: number
+    year: number
+    status?: string | null
+    isSelected?: boolean
+    fitnessScore: number
+    generationCount: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduleUncheckedCreateWithoutAssignmentsInput = {
+    id?: number
+    month: number
+    year: number
+    status?: string | null
+    isSelected?: boolean
+    fitnessScore: number
+    generationCount: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduleCreateOrConnectWithoutAssignmentsInput = {
+    where: ScheduleWhereUniqueInput
+    create: XOR<ScheduleCreateWithoutAssignmentsInput, ScheduleUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type WorkerCreateWithoutAssignmentsInput = {
+    name: string
+    workerType: string
+    skillLevel: string
+    isActive?: boolean
+    fixedShift?: string | null
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutWorkerInput
+    shiftRequests?: ShiftRequestCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerUncheckedCreateWithoutAssignmentsInput = {
+    id?: number
+    name: string
+    workerType: string
+    skillLevel: string
+    isActive?: boolean
+    fixedShift?: string | null
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserUncheckedCreateNestedOneWithoutWorkerInput
+    shiftRequests?: ShiftRequestUncheckedCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerCreateOrConnectWithoutAssignmentsInput = {
+    where: WorkerWhereUniqueInput
+    create: XOR<WorkerCreateWithoutAssignmentsInput, WorkerUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type ShiftCreateWithoutAssignmentsInput = {
+    name: string
+    startTime: string
+    endTime: string
+    durationHrs: number
+    minNurses: number
+    minMidwives: number
+    minSeniors: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShiftUncheckedCreateWithoutAssignmentsInput = {
+    id?: number
+    name: string
+    startTime: string
+    endTime: string
+    durationHrs: number
+    minNurses: number
+    minMidwives: number
+    minSeniors: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShiftCreateOrConnectWithoutAssignmentsInput = {
+    where: ShiftWhereUniqueInput
+    create: XOR<ShiftCreateWithoutAssignmentsInput, ShiftUncheckedCreateWithoutAssignmentsInput>
+  }
+
+  export type ScheduleUpsertWithoutAssignmentsInput = {
+    update: XOR<ScheduleUpdateWithoutAssignmentsInput, ScheduleUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<ScheduleCreateWithoutAssignmentsInput, ScheduleUncheckedCreateWithoutAssignmentsInput>
+    where?: ScheduleWhereInput
+  }
+
+  export type ScheduleUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: ScheduleWhereInput
+    data: XOR<ScheduleUpdateWithoutAssignmentsInput, ScheduleUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type ScheduleUpdateWithoutAssignmentsInput = {
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    isSelected?: BoolFieldUpdateOperationsInput | boolean
+    fitnessScore?: FloatFieldUpdateOperationsInput | number
+    generationCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduleUncheckedUpdateWithoutAssignmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    year?: IntFieldUpdateOperationsInput | number
+    status?: NullableStringFieldUpdateOperationsInput | string | null
+    isSelected?: BoolFieldUpdateOperationsInput | boolean
+    fitnessScore?: FloatFieldUpdateOperationsInput | number
+    generationCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerUpsertWithoutAssignmentsInput = {
+    update: XOR<WorkerUpdateWithoutAssignmentsInput, WorkerUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<WorkerCreateWithoutAssignmentsInput, WorkerUncheckedCreateWithoutAssignmentsInput>
+    where?: WorkerWhereInput
+  }
+
+  export type WorkerUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: WorkerWhereInput
+    data: XOR<WorkerUpdateWithoutAssignmentsInput, WorkerUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type WorkerUpdateWithoutAssignmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    workerType?: StringFieldUpdateOperationsInput | string
+    skillLevel?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
+    weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutWorkerNestedInput
+    shiftRequests?: ShiftRequestUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type WorkerUncheckedUpdateWithoutAssignmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    workerType?: StringFieldUpdateOperationsInput | string
+    skillLevel?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
+    weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUncheckedUpdateOneWithoutWorkerNestedInput
+    shiftRequests?: ShiftRequestUncheckedUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type ShiftUpsertWithoutAssignmentsInput = {
+    update: XOR<ShiftUpdateWithoutAssignmentsInput, ShiftUncheckedUpdateWithoutAssignmentsInput>
+    create: XOR<ShiftCreateWithoutAssignmentsInput, ShiftUncheckedCreateWithoutAssignmentsInput>
+    where?: ShiftWhereInput
+  }
+
+  export type ShiftUpdateToOneWithWhereWithoutAssignmentsInput = {
+    where?: ShiftWhereInput
+    data: XOR<ShiftUpdateWithoutAssignmentsInput, ShiftUncheckedUpdateWithoutAssignmentsInput>
+  }
+
+  export type ShiftUpdateWithoutAssignmentsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    durationHrs?: FloatFieldUpdateOperationsInput | number
+    minNurses?: IntFieldUpdateOperationsInput | number
+    minMidwives?: IntFieldUpdateOperationsInput | number
+    minSeniors?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShiftUncheckedUpdateWithoutAssignmentsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    durationHrs?: FloatFieldUpdateOperationsInput | number
+    minNurses?: IntFieldUpdateOperationsInput | number
+    minMidwives?: IntFieldUpdateOperationsInput | number
+    minSeniors?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkerCreateWithoutShiftRequestsInput = {
+    name: string
+    workerType: string
+    skillLevel: string
+    isActive?: boolean
+    fixedShift?: string | null
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutWorkerInput
+    assignments?: AssignmentCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerUncheckedCreateWithoutShiftRequestsInput = {
+    id?: number
+    name: string
+    workerType: string
+    skillLevel: string
+    isActive?: boolean
+    fixedShift?: string | null
+    weekendHolidayOff?: boolean
+    sundayHolidayOff?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserUncheckedCreateNestedOneWithoutWorkerInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutWorkerInput
+  }
+
+  export type WorkerCreateOrConnectWithoutShiftRequestsInput = {
+    where: WorkerWhereUniqueInput
+    create: XOR<WorkerCreateWithoutShiftRequestsInput, WorkerUncheckedCreateWithoutShiftRequestsInput>
+  }
+
+  export type WorkerUpsertWithoutShiftRequestsInput = {
+    update: XOR<WorkerUpdateWithoutShiftRequestsInput, WorkerUncheckedUpdateWithoutShiftRequestsInput>
+    create: XOR<WorkerCreateWithoutShiftRequestsInput, WorkerUncheckedCreateWithoutShiftRequestsInput>
+    where?: WorkerWhereInput
+  }
+
+  export type WorkerUpdateToOneWithWhereWithoutShiftRequestsInput = {
+    where?: WorkerWhereInput
+    data: XOR<WorkerUpdateWithoutShiftRequestsInput, WorkerUncheckedUpdateWithoutShiftRequestsInput>
+  }
+
+  export type WorkerUpdateWithoutShiftRequestsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    workerType?: StringFieldUpdateOperationsInput | string
+    skillLevel?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
+    weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutWorkerNestedInput
+    assignments?: AssignmentUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type WorkerUncheckedUpdateWithoutShiftRequestsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    workerType?: StringFieldUpdateOperationsInput | string
+    skillLevel?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    fixedShift?: NullableStringFieldUpdateOperationsInput | string | null
+    weekendHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    sundayHolidayOff?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUncheckedUpdateOneWithoutWorkerNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutWorkerNestedInput
+  }
+
+  export type AssignmentCreateManyWorkerInput = {
+    id?: number
+    scheduleId: number
+    dayOfMonth: number
+    shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ShiftRequestCreateManyWorkerInput = {
+    id?: number
+    date: Date | string
+    endDate?: Date | string | null
+    type: string
+    shiftPref?: string | null
+    reason?: string | null
+    status?: string
+    rejectionReason?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentUpdateWithoutWorkerInput = {
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schedule?: ScheduleUpdateOneRequiredWithoutAssignmentsNestedInput
+    shift?: ShiftUpdateOneRequiredWithoutAssignmentsNestedInput
+  }
+
+  export type AssignmentUncheckedUpdateWithoutWorkerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    scheduleId?: IntFieldUpdateOperationsInput | number
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentUncheckedUpdateManyWithoutWorkerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    scheduleId?: IntFieldUpdateOperationsInput | number
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShiftRequestUpdateWithoutWorkerInput = {
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    shiftPref?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShiftRequestUncheckedUpdateWithoutWorkerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    shiftPref?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ShiftRequestUncheckedUpdateManyWithoutWorkerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    shiftPref?: NullableStringFieldUpdateOperationsInput | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentCreateManyShiftInput = {
+    id?: number
+    scheduleId: number
+    workerId: number
+    dayOfMonth: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentUpdateWithoutShiftInput = {
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    schedule?: ScheduleUpdateOneRequiredWithoutAssignmentsNestedInput
+    worker?: WorkerUpdateOneRequiredWithoutAssignmentsNestedInput
+  }
+
+  export type AssignmentUncheckedUpdateWithoutShiftInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    scheduleId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentUncheckedUpdateManyWithoutShiftInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    scheduleId?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentCreateManyScheduleInput = {
+    id?: number
+    workerId: number
+    dayOfMonth: number
+    shiftId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AssignmentUpdateWithoutScheduleInput = {
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    worker?: WorkerUpdateOneRequiredWithoutAssignmentsNestedInput
+    shift?: ShiftUpdateOneRequiredWithoutAssignmentsNestedInput
+  }
+
+  export type AssignmentUncheckedUpdateWithoutScheduleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AssignmentUncheckedUpdateManyWithoutScheduleInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    workerId?: IntFieldUpdateOperationsInput | number
+    dayOfMonth?: IntFieldUpdateOperationsInput | number
+    shiftId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
