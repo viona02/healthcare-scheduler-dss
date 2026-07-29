@@ -153,9 +153,9 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
       ahpWeights: AHP_WEIGHTS,
       totalAssignments: assignmentData.length,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Generate schedule error:', error);
-    res.status(500).json({ error: 'Terjadi kesalahan saat generate jadwal' });
+    res.status(500).json({ error: error?.message || 'Terjadi kesalahan saat generate jadwal' });
   }
 });
 
@@ -262,9 +262,9 @@ router.delete('/:id', async (req: AuthRequest, res: Response) => {
       where: { id },
     });
     res.json({ message: 'Jadwal berhasil dihapus' });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Delete schedule error:', error);
-    res.status(500).json({ error: 'Terjadi kesalahan server' });
+    res.status(500).json({ error: error?.message || 'Terjadi kesalahan server' });
   }
 });
 
@@ -308,9 +308,9 @@ router.put('/:id/select', async (req: AuthRequest, res: Response) => {
     });
 
     res.json({ message: 'Jadwal berhasil dipilih sebagai jadwal aktif', schedule });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Select schedule error:', error);
-    res.status(500).json({ error: 'Terjadi kesalahan server' });
+    res.status(500).json({ error: error?.message || 'Terjadi kesalahan server' });
   }
 });
 
