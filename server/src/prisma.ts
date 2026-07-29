@@ -23,15 +23,15 @@ function getSqliteClient(): PrismaClient {
   let sqlitePath = sourcePath;
 
   // On Vercel / serverless environment, /var/task is read-only.
-  // ALWAYS copy/sync dev.db to /tmp/dev.db so all write operations (delete, select, generate) succeed!
+  // Copy dev.db ONCE to /tmp/dev.db if it doesn't exist yet, so write operations succeed without corrupting open handle.
   if (process.env.VERCEL === '1' || process.env.NODE_ENV === 'production' || process.env.AWS_LAMBDA_FUNCTION_NAME) {
     const tmpPath = path.join('/tmp', 'dev.db');
     try {
-      if (fs.existsSync(sourcePath)) {
+      if (!fs.existsSync(tmpPath) && fs.existsSync(sourcePath)) {
         fs.copyFileSync(sourcePath, tmpPath);
-        sqlitePath = tmpPath;
-        console.log('[Prisma] Copied dev.db to /tmp/dev.db for full read/write support on Vercel');
-      } else if (fs.existsSync(tmpPath)) {
+        console.log('[Prisma] Copied dev.db to /tmp/dev.db once for full read/write support on Vercel');
+      }
+      if (fs.existsSync(tmpPath)) {
         sqlitePath = tmpPath;
       }
     } catch (e) {
