@@ -12,14 +12,16 @@ if (!process.env.JWT_SECRET) {
 const globalForPrisma = global as unknown as { prisma?: PrismaClient };
 
 function getSqliteClient(): PrismaClient {
-  let sourcePath = path.resolve(__dirname, '..', 'prisma', 'dev.db');
-  if (!fs.existsSync(sourcePath)) {
-    const cwdPath = path.resolve(process.cwd(), 'server', 'prisma', 'dev.db');
-    if (fs.existsSync(cwdPath)) {
-      sourcePath = cwdPath;
-    }
-  }
+  const possiblePaths = [
+    path.resolve(__dirname, '..', 'prisma', 'dev.db'),
+    path.resolve(__dirname, 'prisma', 'dev.db'),
+    path.resolve(process.cwd(), 'server', 'prisma', 'dev.db'),
+    path.resolve(process.cwd(), 'prisma', 'dev.db'),
+    '/var/task/server/prisma/dev.db',
+    '/var/task/prisma/dev.db',
+  ];
 
+  let sourcePath = possiblePaths.find(p => fs.existsSync(p)) || possiblePaths[0];
   let sqlitePath = sourcePath;
 
   // On Vercel / serverless environment, /var/task is read-only.
@@ -29,7 +31,7 @@ function getSqliteClient(): PrismaClient {
     try {
       if (!fs.existsSync(tmpPath) && fs.existsSync(sourcePath)) {
         fs.copyFileSync(sourcePath, tmpPath);
-        console.log('[Prisma] Copied dev.db to /tmp/dev.db once for full read/write support on Vercel');
+        console.log(`[Prisma] Copied dev.db from ${sourcePath} to /tmp/dev.db once for full read/write support on Vercel`);
       }
       if (fs.existsSync(tmpPath)) {
         sqlitePath = tmpPath;
@@ -38,6 +40,8 @@ function getSqliteClient(): PrismaClient {
       console.warn('[Prisma] Failed to copy dev.db to /tmp:', e);
     }
   }
+
+  console.log(`[Prisma] Using SQLite database at: ${sqlitePath}`);
 
   const sqliteUrl = `file:${sqlitePath}`;
   process.env.SQLITE_DATABASE_URL = sqliteUrl;
