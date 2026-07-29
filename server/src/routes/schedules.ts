@@ -14,6 +14,13 @@ import {
 import { getHolidaysInRange } from '../services/holidayService';
 
 const router = Router();
+
+function getErrorMessage(err: any): string {
+  if (!err) return 'Unknown error';
+  if (typeof err === 'string') return err;
+  if (err.message && typeof err.message === 'string' && err.message.trim() !== '') return err.message;
+  return JSON.stringify(err, Object.getOwnPropertyNames(err));
+}
 import prisma from '../prisma';
 
 // POST /api/schedules/generate - Generate jadwal baru (admin only)
@@ -155,7 +162,7 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
     });
   } catch (error: any) {
     console.error('Generate schedule error:', error);
-    res.status(500).json({ error: error?.message || 'Terjadi kesalahan saat generate jadwal' });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -264,7 +271,7 @@ router.delete('/:id', async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Jadwal berhasil dihapus' });
   } catch (error: any) {
     console.error('Delete schedule error:', error);
-    res.status(500).json({ error: error?.message || 'Terjadi kesalahan server' });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
@@ -310,7 +317,7 @@ router.put('/:id/select', async (req: AuthRequest, res: Response) => {
     res.json({ message: 'Jadwal berhasil dipilih sebagai jadwal aktif', schedule });
   } catch (error: any) {
     console.error('Select schedule error:', error);
-    res.status(500).json({ error: error?.message || 'Terjadi kesalahan server' });
+    res.status(500).json({ error: getErrorMessage(error) });
   }
 });
 
