@@ -314,9 +314,15 @@ interface RunResult {
 }
 
 async function main() {
-  const month = 7;
-  const year = 2026;
-  const periodDates = buildPeriodDates(month, year);
+  // Periode Uji Benchmark: 26 Juni 2026 hingga 27 Juli 2026
+  const startDate = new Date(2026, 5, 26); // 26 Juni 2026
+  const endDate = new Date(2026, 6, 27);   // 27 Juli 2026
+  const periodDates: Date[] = [];
+  const current = new Date(startDate);
+  while (current <= endDate) {
+    periodDates.push(new Date(current));
+    current.setDate(current.getDate() + 1);
+  }
   const periodStart = periodDates[0];
   const periodEnd = periodDates[periodDates.length - 1];
 
@@ -371,7 +377,7 @@ async function main() {
   const requestLookup = buildRequestLookup(requests, periodDates, shifts);
 
   console.log(`📌 Informasi Dataset Testing:`);
-  console.log(`   - Periode: 26 Juni - 25 Juli 2026 (${periodDates.length} hari: ${periodStart.toLocaleDateString('id-ID')} s.d. ${periodEnd.toLocaleDateString('id-ID')})`);
+  console.log(`   - Periode: 26 Juni - 27 Juli 2026 (${periodDates.length} hari: ${periodStart.toLocaleDateString('id-ID')} s.d. ${periodEnd.toLocaleDateString('id-ID')})`);
   console.log(`   - Jumlah Tenaga Kerja Aktif: ${workers.length}`);
   console.log(`   - Jumlah Shift Jaga: ${shifts.length}`);
   console.log(`   - Permintaan Shift Disetujui: ${requests.length}`);

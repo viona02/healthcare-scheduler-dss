@@ -326,9 +326,15 @@ interface AhpRunResult {
 }
 
 async function main() {
-  const month = 7;
-  const year = 2026;
-  const periodDates = buildPeriodDates(month, year);
+  // Periode Uji Benchmark: 26 Juni 2026 hingga 27 Juli 2026
+  const startDate = new Date(2026, 5, 26); // 26 Juni 2026
+  const endDate = new Date(2026, 6, 27);   // 27 Juli 2026
+  const periodDates: Date[] = [];
+  const current = new Date(startDate);
+  while (current <= endDate) {
+    periodDates.push(new Date(current));
+    current.setDate(current.getDate() + 1);
+  }
   const periodStart = periodDates[0];
   const periodEnd = periodDates[periodDates.length - 1];
 
