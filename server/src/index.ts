@@ -134,11 +134,11 @@ async function performSeed() {
 async function ensureDbSeeded() {
   if (isSeeding) return;
   try {
-    const userCount = await prisma.user.count();
-    if (userCount > 0) return;
+    const workerCount = await prisma.worker.count();
+    if (workerCount > 0) return;
 
     isSeeding = true;
-    console.log('🌱 Cloud DB is empty. Running automatic seed...');
+    console.log('🌱 Cloud DB workers table is empty. Running automatic seed...');
     await performSeed();
     console.log('✅ Auto-seed completed successfully.');
   } catch (error) {
