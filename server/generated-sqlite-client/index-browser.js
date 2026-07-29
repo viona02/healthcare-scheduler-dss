@@ -163,6 +163,7 @@ exports.Prisma.ScheduleScalarFieldEnum = {
   isSelected: 'isSelected',
   fitnessScore: 'fitnessScore',
   generationCount: 'generationCount',
+  executionTimeMs: 'executionTimeMs',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

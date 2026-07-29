@@ -4604,6 +4604,7 @@ export namespace Prisma {
     year: number | null
     fitnessScore: number | null
     generationCount: number | null
+    executionTimeMs: number | null
   }
 
   export type ScheduleSumAggregateOutputType = {
@@ -4612,6 +4613,7 @@ export namespace Prisma {
     year: number | null
     fitnessScore: number | null
     generationCount: number | null
+    executionTimeMs: number | null
   }
 
   export type ScheduleMinAggregateOutputType = {
@@ -4622,6 +4624,7 @@ export namespace Prisma {
     isSelected: boolean | null
     fitnessScore: number | null
     generationCount: number | null
+    executionTimeMs: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4634,6 +4637,7 @@ export namespace Prisma {
     isSelected: boolean | null
     fitnessScore: number | null
     generationCount: number | null
+    executionTimeMs: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4646,6 +4650,7 @@ export namespace Prisma {
     isSelected: number
     fitnessScore: number
     generationCount: number
+    executionTimeMs: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4658,6 +4663,7 @@ export namespace Prisma {
     year?: true
     fitnessScore?: true
     generationCount?: true
+    executionTimeMs?: true
   }
 
   export type ScheduleSumAggregateInputType = {
@@ -4666,6 +4672,7 @@ export namespace Prisma {
     year?: true
     fitnessScore?: true
     generationCount?: true
+    executionTimeMs?: true
   }
 
   export type ScheduleMinAggregateInputType = {
@@ -4676,6 +4683,7 @@ export namespace Prisma {
     isSelected?: true
     fitnessScore?: true
     generationCount?: true
+    executionTimeMs?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4688,6 +4696,7 @@ export namespace Prisma {
     isSelected?: true
     fitnessScore?: true
     generationCount?: true
+    executionTimeMs?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4700,6 +4709,7 @@ export namespace Prisma {
     isSelected?: true
     fitnessScore?: true
     generationCount?: true
+    executionTimeMs?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -4799,6 +4809,7 @@ export namespace Prisma {
     isSelected: boolean
     fitnessScore: number
     generationCount: number
+    executionTimeMs: number | null
     createdAt: Date
     updatedAt: Date
     _count: ScheduleCountAggregateOutputType | null
@@ -4830,6 +4841,7 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    executionTimeMs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["schedule"]>
@@ -4842,6 +4854,7 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    executionTimeMs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["schedule"]>
@@ -4854,6 +4867,7 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    executionTimeMs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["schedule"]>
@@ -4866,11 +4880,12 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore?: boolean
     generationCount?: boolean
+    executionTimeMs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "month" | "year" | "status" | "isSelected" | "fitnessScore" | "generationCount" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
+  export type ScheduleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "month" | "year" | "status" | "isSelected" | "fitnessScore" | "generationCount" | "executionTimeMs" | "createdAt" | "updatedAt", ExtArgs["result"]["schedule"]>
 
   export type $SchedulePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Schedule"
@@ -4883,6 +4898,7 @@ export namespace Prisma {
       isSelected: boolean
       fitnessScore: number
       generationCount: number
+      executionTimeMs: number | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["schedule"]>
@@ -5315,6 +5331,7 @@ export namespace Prisma {
     readonly isSelected: FieldRef<"Schedule", 'Boolean'>
     readonly fitnessScore: FieldRef<"Schedule", 'Float'>
     readonly generationCount: FieldRef<"Schedule", 'Int'>
+    readonly executionTimeMs: FieldRef<"Schedule", 'Float'>
     readonly createdAt: FieldRef<"Schedule", 'DateTime'>
     readonly updatedAt: FieldRef<"Schedule", 'DateTime'>
   }
@@ -7898,6 +7915,7 @@ export namespace Prisma {
     isSelected: 'isSelected',
     fitnessScore: 'fitnessScore',
     generationCount: 'generationCount',
+    executionTimeMs: 'executionTimeMs',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -8230,6 +8248,7 @@ export namespace Prisma {
     isSelected?: BoolFilter<"Schedule"> | boolean
     fitnessScore?: FloatFilter<"Schedule"> | number
     generationCount?: IntFilter<"Schedule"> | number
+    executionTimeMs?: FloatNullableFilter<"Schedule"> | number | null
     createdAt?: DateTimeFilter<"Schedule"> | Date | string
     updatedAt?: DateTimeFilter<"Schedule"> | Date | string
   }
@@ -8242,6 +8261,7 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8257,6 +8277,7 @@ export namespace Prisma {
     isSelected?: BoolFilter<"Schedule"> | boolean
     fitnessScore?: FloatFilter<"Schedule"> | number
     generationCount?: IntFilter<"Schedule"> | number
+    executionTimeMs?: FloatNullableFilter<"Schedule"> | number | null
     createdAt?: DateTimeFilter<"Schedule"> | Date | string
     updatedAt?: DateTimeFilter<"Schedule"> | Date | string
   }, "id">
@@ -8269,6 +8290,7 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ScheduleCountOrderByAggregateInput
@@ -8289,6 +8311,7 @@ export namespace Prisma {
     isSelected?: BoolWithAggregatesFilter<"Schedule"> | boolean
     fitnessScore?: FloatWithAggregatesFilter<"Schedule"> | number
     generationCount?: IntWithAggregatesFilter<"Schedule"> | number
+    executionTimeMs?: FloatNullableWithAggregatesFilter<"Schedule"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"Schedule"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Schedule"> | Date | string
   }
@@ -8688,6 +8711,7 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore: number
     generationCount: number
+    executionTimeMs?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8700,6 +8724,7 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore: number
     generationCount: number
+    executionTimeMs?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8711,6 +8736,7 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    executionTimeMs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8723,6 +8749,7 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    executionTimeMs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8735,6 +8762,7 @@ export namespace Prisma {
     isSelected?: boolean
     fitnessScore: number
     generationCount: number
+    executionTimeMs?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8746,6 +8774,7 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    executionTimeMs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8758,6 +8787,7 @@ export namespace Prisma {
     isSelected?: BoolFieldUpdateOperationsInput | boolean
     fitnessScore?: FloatFieldUpdateOperationsInput | number
     generationCount?: IntFieldUpdateOperationsInput | number
+    executionTimeMs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9241,6 +9271,17 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type ScheduleCountOrderByAggregateInput = {
     id?: SortOrder
     month?: SortOrder
@@ -9249,6 +9290,7 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9259,6 +9301,7 @@ export namespace Prisma {
     year?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrder
   }
 
   export type ScheduleMaxOrderByAggregateInput = {
@@ -9269,6 +9312,7 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9281,6 +9325,7 @@ export namespace Prisma {
     isSelected?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -9291,6 +9336,23 @@ export namespace Prisma {
     year?: SortOrder
     fitnessScore?: SortOrder
     generationCount?: SortOrder
+    executionTimeMs?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type AssignmentCountOrderByAggregateInput = {
@@ -9444,6 +9506,14 @@ export namespace Prisma {
 
   export type FloatFieldUpdateOperationsInput = {
     set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -9644,6 +9714,22 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {

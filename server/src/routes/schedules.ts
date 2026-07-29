@@ -129,7 +129,7 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
         fitnessScore: result.fitness,
         generationCount: result.generations,
         executionTimeMs: compTimeMs,
-      },
+      } as any,
     });
 
     // Simpan assignments

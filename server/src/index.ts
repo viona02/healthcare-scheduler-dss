@@ -210,7 +210,7 @@ async function performSeedWithLogs(): Promise<string[]> {
         fitnessScore: result.fitness,
         generationCount: result.generations,
         executionTimeMs: compTimeMs,
-      },
+      } as any,
     });
 
     const assignmentData: Array<{
