@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "seed": "tsx prisma/seed.ts",
     "benchmark": "tsx src/benchmarkRunner.ts",
+    "benchmark:all": "tsx src/benchmarkRunnerAll.ts",
     "benchmark:ahp": "tsx src/benchmarkAhpRunner.ts",
     "log:schedules": "tsx src/viewOnlineLog.ts",
     "db:push": "npx prisma db push",

@@ -9,6 +9,7 @@
     "dev:client": "cd client && npm run dev",
     "log:schedules": "cd server && npm run log:schedules",
     "benchmark": "cd server && npm run benchmark",
+    "benchmark:all": "cd server && npm run benchmark:all",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
     "build": "npx prisma generate --schema=server/prisma/schema.prisma && npx prisma db push --schema=server/prisma/schema.prisma --accept-data-loss && npx tsx server/prisma/seed.ts && cd client && npm install && npm run build"
   },
