@@ -434,7 +434,7 @@ async function main() {
 
     const runs: AhpRunResult[] = [];
 
-    for (let r = 1; r <= 1; r++) {
+    for (let r = 1; r <= 5; r++) {
       const startTime = performance.now();
 
       const result = runGeneticAlgorithm(
@@ -486,6 +486,31 @@ async function main() {
       );
     }
 
+    // Hitung Statistik Rata-rata (Mean) & Simpangan Baku (Std Dev) per Skenario
+    const meanFitness = runs.reduce((s, r) => s + r.fitnessScore, 0) / 5;
+    const varianceFitness = runs.reduce((s, r) => s + Math.pow(r.fitnessScore - meanFitness, 2), 0) / 5;
+    const stdDevFitness = Math.sqrt(varianceFitness);
+
+    const meanHard = runs.reduce((s, r) => s + r.hardViolations, 0) / 5;
+    const meanSoft = runs.reduce((s, r) => s + r.softViolations, 0) / 5;
+    const meanTimeMs = runs.reduce((s, r) => s + r.computationTimeMs, 0) / 5;
+    const meanTimeFormatted = meanTimeMs < 1000 ? `${meanTimeMs.toFixed(0)} ms` : `${(meanTimeMs / 1000).toFixed(2)} s`;
+
+    const meanA1 = runs.reduce((s, r) => s + r.scoreA1, 0) / 5;
+    const meanA2 = runs.reduce((s, r) => s + r.scoreA2, 0) / 5;
+    const meanA3 = runs.reduce((s, r) => s + r.scoreA3, 0) / 5;
+    const meanA4 = runs.reduce((s, r) => s + r.scoreA4, 0) / 5;
+    const meanFulfilled = runs.reduce((s, r) => s + r.fulfilledRequests, 0) / 5;
+    const reqStrAvg = `${meanFulfilled.toFixed(1)}/9 (${meanA2.toFixed(0)}%)`;
+
+    console.log('|-----|---------|-----------|-----------|----------------|----------------|----------------|----------------|---------------|-----------|');
+    console.log(
+      `| RATA| ${meanFitness.toFixed(2).padStart(7, ' ')} |     ${meanHard.toFixed(1).padStart(4, ' ')}  |     ${meanSoft.toFixed(1).padStart(4, ' ')}  |     ${meanA1.toFixed(1).padStart(5, ' ')}      |     ${meanA2.toFixed(1).padStart(5, ' ')}      |     ${meanA3.toFixed(1).padStart(5, ' ')}      |     ${meanA4.toFixed(1).padStart(5, ' ')}      | ${reqStrAvg.padStart(13, ' ')} | ${meanTimeFormatted.padStart(9, ' ')} |`
+    );
+    console.log(
+      `| STDEV| ${stdDevFitness.toFixed(2).padStart(7, ' ')} |           |           |                |                |                |                |               |           |`
+    );
+
     summaryReport.push({ scenarioName: sc.name, weights: sc.weights, results: runs });
     console.log('\n');
   }
@@ -493,24 +518,37 @@ async function main() {
   // Kembalikan bobot AHP ke semula
   Object.assign(AHP_WEIGHTS, originalWeights);
 
-  // RINGKASAN REKAPITULASI AKHIR (1x RUN PER SKENARIO)
-  console.log('================================================================================================================');
-  console.log('                            RINGKASAN EKSPERIMEN BOBOT AHP (1x RUN PER SKENARIO)');
-  console.log('================================================================================================================');
-  console.log('| Skenario | Fitness Score | Hard Violations | Soft Violations | Score A1 (Jam) | Score A2 (Req) | Score A3 (Ngt) | Score A4 (Wkd) | Req Fulfilled | Comp Time |');
-  console.log('|----------|---------------|-----------------|-----------------|----------------|----------------|----------------|----------------|---------------|-----------|');
+  // RINGKASAN REKAPITULASI AKHIR SENSITIVITAS (FORMAT TABLE 5.X - 5 RUNS PER SKENARIO)
+  console.log('=======================================================================================================================');
+  console.log(' Table 5.X Sensitivity Analysis Results Across AHP Weight Scenarios (5 Runs per Scenario)');
+  console.log('=======================================================================================================================');
+  console.log('| Skenario / Scenario                       | Mean Fitness Score (μ ± σ)    | Mean Time (s) | Total Hard Viol. (Units) | Standard Deviation (σ) | Sub-skor Rata2 (A1 / A2 / A3 / A4)    |');
+  console.log('|-------------------------------------------|-------------------------------|---------------|--------------------------|------------------------|---------------------------------------|');
 
   for (const item of summaryReport) {
-    const res = item.results[0];
-    const timeFormatted = res.computationTimeMs < 1000 ? `${res.computationTimeMs.toFixed(0)} ms` : `${(res.computationTimeMs / 1000).toFixed(2)} s`;
-    const scLabel = item.scenarioName.includes('Tetap') ? 'Skenario 1' : item.scenarioName.includes('0.50') ? 'Skenario 2' : 'Skenario 3';
-    const reqStr = `${res.fulfilledRequests}/${res.totalRequests} (${(res.scoreA2).toFixed(0)}%)`;
+    const runs = item.results;
+    const meanFitness = runs.reduce((s, r) => s + r.fitnessScore, 0) / 5;
+    const varianceFitness = runs.reduce((s, r) => s + Math.pow(r.fitnessScore - meanFitness, 2), 0) / 5;
+    const stdDevFitness = Math.sqrt(varianceFitness);
+
+    const meanHard = runs.reduce((s, r) => s + r.hardViolations, 0) / 5;
+    const meanTimeMs = runs.reduce((s, r) => s + r.computationTimeMs, 0) / 5;
+    const meanA1 = runs.reduce((s, r) => s + r.scoreA1, 0) / 5;
+    const meanA2 = runs.reduce((s, r) => s + r.scoreA2, 0) / 5;
+    const meanA3 = runs.reduce((s, r) => s + r.scoreA3, 0) / 5;
+    const meanA4 = runs.reduce((s, r) => s + r.scoreA4, 0) / 5;
+
+    const meanTimeSec = (meanTimeMs / 1000).toFixed(2) + ' s';
+    const fitnessMuSigma = `${meanFitness.toFixed(2)} ± ${stdDevFitness.toFixed(2)}`;
+    const subScoresStr = `A1:${meanA1.toFixed(0)}% A2:${meanA2.toFixed(0)}% A3:${meanA3.toFixed(0)}% A4:${meanA4.toFixed(0)}%`;
+
+    const scLabel = item.scenarioName;
 
     console.log(
-      `| ${scLabel.padEnd(8, ' ')} |   ${res.fitnessScore.toFixed(2).padStart(8, ' ')}    |       ${String(res.hardViolations).padStart(2, ' ')}        |       ${String(res.softViolations).padStart(2, ' ')}        |     ${res.scoreA1.toFixed(1).padStart(5, ' ')}      |     ${res.scoreA2.toFixed(1).padStart(5, ' ')}      |     ${res.scoreA3.toFixed(1).padStart(5, ' ')}      |     ${res.scoreA4.toFixed(1).padStart(5, ' ')}      | ${reqStr.padStart(13, ' ')} | ${timeFormatted.padStart(9, ' ')} |`
+      `| ${scLabel.padEnd(41, ' ')} | ${fitnessMuSigma.padStart(29, ' ')} | ${meanTimeSec.padStart(13, ' ')} | ${meanHard.toFixed(1).padStart(24, ' ')} | ${stdDevFitness.toFixed(2).padStart(22, ' ')} | ${subScoresStr.padEnd(37, ' ')} |`
     );
   }
-  console.log('================================================================================================================\n');
+  console.log('=======================================================================================================================\n');
 
   await prisma.$disconnect();
 }
