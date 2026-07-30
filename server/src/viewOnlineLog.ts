@@ -4,6 +4,7 @@ dotenv.config();
 import prisma from './prisma';
 import {
   buildPeriodDates,
+  buildRequestLookup,
   WorkerData,
   ShiftData,
   ShiftRequestData,
@@ -100,6 +101,7 @@ async function main() {
     }));
 
     const holidays = await getHolidaysInRange(periodStart, periodEnd).catch(() => new Set<string>());
+    const requestLookup = buildRequestLookup(requests, periodDates, shifts);
 
     // Reconstruct Chromosome 3D Matrix [day][shift] = workerIds[]
     const chromosome: Chromosome = Array.from({ length: periodDates.length }, () =>
@@ -114,7 +116,7 @@ async function main() {
       }
     }
 
-    const violations = analyzeViolations(chromosome, workers, shifts, periodDates, holidays, requests);
+    const violations = analyzeViolations(chromosome, workers, shifts, periodDates, holidays, requests, requestLookup);
 
     // Ambil waktu komputasi persis dari database, atau variasikan secara realistis (25s - 45s) jika data lama
     const rawTime = (sc as any).executionTimeMs;
