@@ -307,7 +307,6 @@ interface RunResult {
   hardViolations: number;
   softViolations: number;
   computationTimeMs: number;
-  scheduleId?: number;
 }
 
 async function main() {
@@ -389,25 +388,6 @@ async function main() {
   const allSummary: { name: string; results: RunResult[] }[] = [];
 
   for (const item of testConfigs) {
-    const isMedium = item.name.includes('SEDANG');
-
-    if (isMedium) {
-      console.log('🧹 [Database] Membersihkan data jadwal lama untuk periode 7/2026...');
-      const existingSchedules = await prisma.schedule.findMany({
-        where: { month: 7, year: 2026 },
-        select: { id: true },
-      });
-      const scheduleIds = existingSchedules.map((s) => s.id);
-      if (scheduleIds.length > 0) {
-        await prisma.assignment.deleteMany({
-          where: { scheduleId: { in: scheduleIds } },
-        });
-        await prisma.schedule.deleteMany({
-          where: { id: { in: scheduleIds } },
-        });
-      }
-    }
-
     console.log('------------------------------------------------------------------------');
     console.log(`🔥 TESTING: ${item.name}`);
     console.log(`   Parameter: PopSize=${item.config.populationSize}, MaxGen=${item.config.maxGenerations}, Cr=${item.config.crossoverRate}, Mut=${item.config.mutationRate}, Elit=${item.config.elitismRate}, Tourn=${item.config.tournamentSize}`);
@@ -432,52 +412,6 @@ async function main() {
       const endTime = performance.now();
       const compTimeMs = endTime - startTime;
 
-      let savedScheduleId: number | undefined = undefined;
-
-      if (isMedium) {
-        const createdSchedule = await prisma.schedule.create({
-          data: {
-            month: 7,
-            year: 2026,
-            status: 'published',
-            isSelected: false,
-            fitnessScore: result.fitness,
-            generationCount: result.generations,
-            executionTimeMs: compTimeMs,
-          } as any,
-        });
-
-        savedScheduleId = createdSchedule.id;
-
-        const assignmentData: Array<{
-          scheduleId: number;
-          workerId: number;
-          shiftId: number;
-          dayOfMonth: number;
-        }> = [];
-
-        for (let dayIdx = 0; dayIdx < result.bestSchedule.length; dayIdx++) {
-          const dayGene = result.bestSchedule[dayIdx];
-          for (let sIdx = 0; sIdx < shifts.length; sIdx++) {
-            const shiftId = shifts[sIdx].id;
-            for (const workerId of dayGene[sIdx]) {
-              assignmentData.push({
-                scheduleId: createdSchedule.id,
-                workerId,
-                shiftId,
-                dayOfMonth: dayIdx + 1,
-              });
-            }
-          }
-        }
-
-        if (assignmentData.length > 0) {
-          await prisma.assignment.createMany({
-            data: assignmentData,
-          });
-        }
-      }
-
       const violations = analyzeViolations(
         result.bestSchedule,
         workers,
@@ -494,7 +428,6 @@ async function main() {
         hardViolations: violations.hardViolations,
         softViolations: violations.softViolations,
         computationTimeMs: compTimeMs,
-        scheduleId: savedScheduleId,
       };
 
       runs.push(runData);
@@ -503,18 +436,6 @@ async function main() {
       console.log(
         `|  ${String(run).padStart(2, ' ')}   |   ${runData.fitnessScore.toFixed(2).padStart(8, ' ')}    |       ${String(runData.hardViolations).padStart(2, ' ')}        |       ${String(runData.softViolations).padStart(2, ' ')}        |   ${timeFormatted.padStart(10, ' ')}    |`
       );
-    }
-
-    if (isMedium) {
-      const bestRun = runs.reduce((prev, curr) => (curr.fitnessScore > prev.fitnessScore ? curr : prev), runs[0]);
-      if (bestRun.scheduleId) {
-        await prisma.schedule.update({
-          where: { id: bestRun.scheduleId },
-          data: { isSelected: true },
-        });
-        console.log(`\n💾 [Database] 10 Jadwal Konfigurasi Sedang berhasil disimpan ke Supabase!`);
-        console.log(`   Jadwal terbaik (Run #${bestRun.run}, ID: ${bestRun.scheduleId}, Fitness: ${bestRun.fitnessScore.toFixed(2)}) ditandai sebagai 'isSelected: true'.`);
-      }
     }
 
     allSummary.push({ name: item.name, results: runs });
