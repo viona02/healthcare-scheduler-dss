@@ -193,11 +193,7 @@ async function performSeedWithLogs(): Promise<string[]> {
 
     const holidays = await getHolidaysInRange(periodStart, periodEnd).catch(() => new Set<string>());
     const startTime = performance.now();
-    const result = runGeneticAlgorithm(gaWorkers, gaShifts, periodDates, gaRequests, holidays, {
-      ...DEFAULT_GA_CONFIG,
-      populationSize: 30,
-      maxGenerations: 50,
-    });
+    const result = runGeneticAlgorithm(gaWorkers, gaShifts, periodDates, gaRequests, holidays, DEFAULT_GA_CONFIG);
     const endTime = performance.now();
     const compTimeMs = endTime - startTime;
 

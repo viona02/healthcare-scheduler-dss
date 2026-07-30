@@ -4,6 +4,7 @@ import { AuthRequest } from '../middleware/auth';
 import {
   runGeneticAlgorithm,
   buildPeriodDates,
+  buildRequestLookup,
   WorkerData,
   ShiftData,
   ShiftRequestData,
@@ -102,12 +103,11 @@ router.post('/generate', async (req: AuthRequest, res: Response) => {
     console.log(`[GA] Starting schedule generation for period ${month}/${year} (${periodDates.length} days: ${periodStart.toLocaleDateString()} - ${periodEnd.toLocaleDateString()})`);
     console.log(`[GA] Workers: ${workers.length}, Shifts: ${shifts.length}`);
     console.log(`[GA] AHP Weights:`, AHP_WEIGHTS);
-    console.log(`[GA] Config:`, config);
-
+    const requestLookup = buildRequestLookup(requests, periodDates, shifts);
     const result = runGeneticAlgorithm(workers, shifts, periodDates, requests, holidays, config);
     const compTimeMs = performance.now() - reqStartTime;
 
-    const violations = analyzeViolations(result.bestSchedule, workers, shifts, periodDates, holidays, requests);
+    const violations = analyzeViolations(result.bestSchedule, workers, shifts, periodDates, holidays, requests, requestLookup);
     const timeFormatted = compTimeMs < 1000 ? `${compTimeMs.toFixed(0)} ms` : `${(compTimeMs / 1000).toFixed(2)} s`;
 
     console.log('------------------------------------------------------------------------');
