@@ -393,8 +393,19 @@ async function main() {
 
     if (isMedium) {
       console.log('🧹 [Database] Membersihkan data jadwal lama untuk periode 7/2026...');
-      await prisma.assignment.deleteMany({ where: { schedule: { month: 7, year: 2026 } } });
-      await prisma.schedule.deleteMany({ where: { month: 7, year: 2026 } });
+      const existingSchedules = await prisma.schedule.findMany({
+        where: { month: 7, year: 2026 },
+        select: { id: true },
+      });
+      const scheduleIds = existingSchedules.map((s) => s.id);
+      if (scheduleIds.length > 0) {
+        await prisma.assignment.deleteMany({
+          where: { scheduleId: { in: scheduleIds } },
+        });
+        await prisma.schedule.deleteMany({
+          where: { id: { in: scheduleIds } },
+        });
+      }
     }
 
     console.log('------------------------------------------------------------------------');
