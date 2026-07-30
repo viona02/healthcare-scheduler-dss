@@ -181,17 +181,21 @@ export function analyzeViolations(
 
   // SOFT CONSTRAINTS
   for (const req of requests) {
-    const reqDate = new Date(req.date);
-    const dayIdx = periodDates.findIndex(
-      (d) => d.getFullYear() === reqDate.getFullYear() && d.getMonth() === reqDate.getMonth() && d.getDate() === reqDate.getDate()
-    );
-    if (dayIdx < 0) continue;
+    const reqStart = new Date(req.date);
+    const reqEnd = req.endDate ? new Date(req.endDate) : reqStart;
+    const startStr = toISODate(reqStart);
+    const endStr = toISODate(reqEnd);
 
-    const sIdx = getWorkerShiftIndex(dayIdx, req.workerId);
-    if (req.type === 'off' && sIdx !== -1) {
-      softViolations += 1;
-    } else if (req.type === 'preference' && (sIdx === -1 || shifts[sIdx].name !== req.shiftPref)) {
-      softViolations += 1;
+    for (let dayIdx = 0; dayIdx < totalDays; dayIdx++) {
+      const dStr = toISODate(periodDates[dayIdx]);
+      if (dStr >= startStr && dStr <= endStr) {
+        const sIdx = getWorkerShiftIndex(dayIdx, req.workerId);
+        if (req.type === 'off' && sIdx !== -1) {
+          softViolations += 1;
+        } else if (req.type === 'preference' && (sIdx === -1 || shifts[sIdx].name !== req.shiftPref)) {
+          softViolations += 1;
+        }
+      }
     }
   }
 
